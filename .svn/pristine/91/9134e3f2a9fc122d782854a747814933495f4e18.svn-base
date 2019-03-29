@@ -1,0 +1,136 @@
+.mg(@t:0px,@r:0px,@b:0px,@l:0px) {
+    margin-top: @t;
+    margin-right: @r;
+    margin-bottom: @b;
+    margin-left: @l;
+}
+
+.pd(@t:0px,@r:0px,@b:0px,@l:0px) {
+    padding-top: @t;
+    padding-right: @r;
+    padding-bottom: @b;
+    padding-left: @l;
+}
+
+.Breadcrumb {
+    .mg(@t:6px,@b:8px,@l:20px);
+}
+
+.content {
+    height: ~"calc(100% - 70px)";
+
+    > div {
+        height: 100%;
+    }
+}
+
+.area-search {
+    .btn-search {
+        display: flex;
+        position: relative;
+        justify-content: center;
+        .reg-data {
+            .mg(@t:8px,@b:8px);
+        }
+    }
+}
+
+.hs-input-f {
+    position: relative;
+    left: 20px;
+    width: 90%;
+    display: flex;
+    > div {
+        .mg(@t:5px,@b:5px,@r:20px);
+        div {
+            .mg(@t:6px,@b:6px)
+        }
+    }
+}
+
+.hs-date {
+    .mg(@t:8px,@b:8px);
+    position: relative;
+    left: 20px;
+    width: 90%;
+    .reg-data {
+        .mg(@t:8px,@b:8px);
+    }
+    display: flex;
+    nz-date-picker {
+        .pd(@l:0px,@r:18px)
+    }
+
+}
+
+.area-sort {
+    position: absolute;
+    right: 20px;
+    width: 140px;
+    .pd(@b:20px);
+    nz-select {
+        .mg(@l:25%);
+        width: 75%;
+    }
+}
+
+.area-table {
+    .mg(@t:30px);
+    .pd(@l:20px,@r:20px)
+}
+
+.hs-body {
+    overflow-y: scroll;
+}
+
+.hs-checkin {
+    color: blue;
+    padding-right: 6px;
+}
+
+.buttom-width-80 {
+    width: 80px;
+}
+
+.buttom-width-120 {
+    width: 120px;
+}
+
+.buttom-width-160 {
+    width: 160px;
+}
+
+.hs-title {
+    color: #555;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 30px;
+    .mg(@l:20px,@r:20px,@t:15px)
+}
+
+.line {
+    border-top: 1px dashed #ccc;
+    .pd(@t:15px)
+}
+
+.pagination {
+    .pd(@r:20px,@b:20px,@l:20px,@t:10px);
+}
+
+.hs-edit {
+    padding: 0;
+}
+
+.area-tips {
+    text-align: center;
+    .pd(@t:20px);
+    color: red;
+}
+
+.btn-reset{
+    .mg(@r:20px)
+}
+
+.btn-search{
+    .mg(@l:20px)
+}

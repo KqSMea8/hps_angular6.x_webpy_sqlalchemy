@@ -1,0 +1,97 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped, table_query
+from models.hps.u_user import User
+from utils import json_to_obj, obj_to_json
+from utils.func_api import FuncResult
+from utils.tools import is_null
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        objInput = web.input()
+        print web.data()
+        try:
+            objCondition = json_to_obj(objInput.get('objCondition'))
+            objPageInfo = json_to_obj(objInput.get('objPageInfo'))
+            if is_null(objCondition['nSearchUserIDMust']):
+                return FuncResult(fail='参数\'nSearchUserIDMust\'不能为空')
+            elif is_null(objCondition['sSearchUserNameMust']):
+                return FuncResult(fail='参数\'sSearchUserCodeMust\'不能为空')
+            elif is_null(objCondition):
+                return FuncResult(msg='参数\'objCondition\'不能为空')
+        except Exception, ce:
+            print ce
+            return FuncResult(fail='参数有误!')
+        return self.add_user(objCondition['nSearchUserIDMust'], objCondition['sSearchUserNameMust'], objPageInfo, objCondition)
+
+    def add_user(self, nSearchUserIDMust, sSearchUserNameMust, objPageInfo, objCondition):
+
+        lsParams = []
+        dictParamsValue = {}
+        if objCondition.has_key('nUserID') and objCondition['nUserID']:
+            nUserID = objCondition['nUserID']
+            lsParams.append('UserID = :nUserID')
+            dictParamsValue['nUserID'] = nUserID
+
+        if objCondition.has_key('sUserCode') and objCondition['sUserCode']:
+            sUserCode = objCondition['sUserCode']
+            lsParams.append('UserCode = :sUserCode')
+            dictParamsValue['sUserCode'] = sUserCode
+
+        if objCondition.has_key('sTel') and objCondition['sTel']:
+            sTel = objCondition['sTel']
+            lsParams.append('Tel = :sTel')
+            dictParamsValue['sTel'] = sTel
+
+        if objCondition.has_key('nState') and objCondition['nState']:
+            nState = objCondition['nState']
+            lsParams.append('State = :nState')
+            dictParamsValue['nState'] = nState
+
+        if objCondition.has_key('sWorkCode') and objCondition['sWorkCode']:
+            sWorkCode = objCondition['sWorkCode']
+            lsParams.append('WorkCode = :sWorkCode')
+            dictParamsValue['sWorkCode'] = sWorkCode
+
+        if objCondition.has_key('sUserName') and objCondition['sUserName']:
+            sUserName = objCondition['sUserName']
+            lsParams.append('UserName = :sUserName')
+            dictParamsValue['sUserName'] = sUserName
+
+        if objCondition.has_key('sPost') and objCondition['sPost']:
+            sPost = objCondition['sPost']
+            lsParams.append('Post = :sPost')
+            dictParamsValue['sPost'] = sPost
+
+        if objCondition.has_key('sCreateTimeStart') and objCondition['sCreateTimeStart']:
+            sCreateTimeStart = objCondition['sCreateTimeStart']
+            lsParams.append('CreateTime >= :sCreateTimeStart')
+            dictParamsValue['sCreateTimeStart'] = sCreateTimeStart
+
+        if objCondition.has_key('sCreateTimeEnd') and objCondition['sCreateTimeEnd']:
+            sCreateTimeEnd = objCondition['sCreateTimeEnd']
+            lsParams.append('CreateTime <= :sCreateTimeEnd')
+            dictParamsValue['sCreateTimeEnd'] = sCreateTimeEnd
+
+        objData = table_query(User, lsParams, dictParamsValue, objPageInfo)
+        print objData
+        if objData:
+            dict_data = {
+                'PageNo': objPageInfo['nPageNo'],
+                'PageSize': objPageInfo['nPageSize'],
+                'PageCount': objData.data['pageCount'] if objData.data else 0,
+                'RowCount': objData.data['rowCount'] if objData.data else 0,
+                'DataSet': objData.data['data'] if objData.data else ''
+            }
+            dict_data = obj_to_json(dict_data)
+            return FuncResult(success=True, msg='操作成功！', data=dict_data)
+        else:
+            return FuncResult(msg='无查询结果！')

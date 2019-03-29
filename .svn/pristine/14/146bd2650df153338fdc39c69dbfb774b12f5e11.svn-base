@@ -1,0 +1,18 @@
+import { Component, OnInit } from '@angular/core';
+import { ContextService } from 'src/app/services/context.service';
+
+@Component({
+    selector: 'app-error-bar',
+    templateUrl: './error-bar.component.html',
+    styleUrls: ['./error-bar.component.less']
+})
+export class ErrorBarComponent implements OnInit {
+    m_bIsShow: boolean = this.m_objContextService.m_bErrorIsShow;
+
+    constructor(
+        public m_objContextService: ContextService
+    ) { }
+
+    ngOnInit() {
+    }
+}

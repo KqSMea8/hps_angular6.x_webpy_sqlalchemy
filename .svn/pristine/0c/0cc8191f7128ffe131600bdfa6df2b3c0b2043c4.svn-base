@@ -1,0 +1,74 @@
+# coding: utf-8
+from libs.orm import OrmBase
+from sqlalchemy import Column, Integer, String, DateTime, Float, BigInteger
+from libs import web
+
+
+class GuestCheckIn(OrmBase):
+    # 表名
+    __tablename__ = 'g_guest_checkin'
+    # 表对应的ID
+    TableID = 8
+    # 类字段
+
+    HotelGuestID = Column(BigInteger, primary_key=True, autoincrement=True)
+    HotelDocType = Column(Integer, nullable=True)
+    HotelDocNo = Column(String(100), nullable=True)
+    HotelDocName = Column(String(100), nullable=True)
+    HotelGuestName = Column(String(100), nullable=True)
+    HotelBornDate = Column(DateTime, nullable=True)
+    HotelSex = Column(String(100), nullable=True)
+    HotelNation = Column(String(100), nullable=True)
+    HotelNationality = Column(String(100), nullable=True)
+    HotelAddress = Column(String(100), nullable=True)
+    HotelRemark = Column(String(100), nullable=True)
+    LastModifyTime = Column(DateTime, nullable=True)
+    HotelLastModifyTime = Column(DateTime, nullable=True)
+    HotelTel = Column(String(100), nullable=True)
+    MatchResult = Column(Integer, nullable=True)
+    MatchResultPercent = Column(Float, nullable=True)
+
+    def __init__(self, bind=True):
+        '''数据类初始化
+        '''
+        if bind:
+            self.bind_db()
+
+    def bind_db(self):
+        '''跟数据库绑定
+        '''
+        # 初始化数据类的结构
+        self.metadata.bind = web.cache.db[web.ctx.dbcontext.conn_str].engine
+        # 初始化数据类查询
+        self.query = web.ctx.cur_dbsession.query(GuestCheckIn)
+
+    def save(self, flush=True):
+        '''保存数据(一般的新增和更新都可以在这完成)
+        '''
+        web.ctx.cur_dbsession.add(self)
+
+        # 如果需要立即执行则更新数据库会话
+        if flush:
+            web.ctx.cur_dbsession.flush()
+
+    def copy(self, bind=True):
+        obj_copy = GuestCheckIn(bind)
+
+        obj_copy.HotelGuestID = self.HotelGuestID
+        obj_copy.HotelDocType = self.HotelDocType
+        obj_copy.HotelDocNo = self.HotelDocNo
+        obj_copy.HotelDocName = self.HotelDocName
+        obj_copy.HotelGuestName = self.HotelGuestName
+        obj_copy.HotelBornDate = self.HotelBornDate
+        obj_copy.HotelSex  = self.HotelSex
+        obj_copy.HotelNation = self.HotelNation
+        obj_copy.HotelNationality = self.HotelNationality
+        obj_copy.HotelAddress = self.HotelAddress
+        obj_copy.HotelRemark = self.HotelRemark
+        obj_copy.LastModifyTime = self.LastModifyTime
+        obj_copy.HotelLastModifyTime = self.HotelLastModifyTime
+        obj_copy.HotelTel = self.HotelTel
+        obj_copy.MatchResult = self.MatchResult
+        obj_copy.MatchResultPercent = self.MatchResultPercent
+
+        return obj_copy

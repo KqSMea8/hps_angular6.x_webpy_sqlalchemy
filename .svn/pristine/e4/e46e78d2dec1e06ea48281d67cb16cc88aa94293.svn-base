@@ -1,0 +1,226 @@
+<app-header></app-header>
+<div nz-row class="content">
+    <div nz-col nzSpan="3">
+        <app-sidebar [title]="'旅店登记客人'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div nz-col nzSpan="21">
+        <app-breadcrumb [data]="m_aBreadCrumbList"></app-breadcrumb>
+        <div class="main">
+            <div class="search-bar">
+                <div class="IDCard-info">
+                    <p class="title">按证件信息查询</p>
+                    <ul class="flex">
+                        <li class="flex">
+                            <span>姓名</span>
+                            <input class="input-middle" nz-input placeholder="" nzSize="default" [(ngModel)]="m_objAllGuestCondition.objCondition.sGuestDocNameLike">
+                        </li>
+                        <li class="flex">
+                            <span>证件类型</span>
+                            <nz-select class="input-big" nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="m_objAllGuestCondition.objCondition.nDocType">
+                                <nz-option nzLabel="{{item.name}}" nzValue="{{item.id}}" *ngFor="let item of m_objGuestCheckinService.m_aDocType"></nz-option>
+                            </nz-select>
+                        </li>
+                        <li class="flex">
+                            <span>证件号码</span>
+                            <input class="input-big" nz-input placeholder="" nzSize="default" [(ngModel)]="m_objAllGuestCondition.objCondition.sDocNoLikeL">
+                        </li>
+                        <li class="flex">
+                            <span>国籍</span>
+                            <nz-select class="input-big" nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="m_objAllGuestCondition.objCondition.sNationality">
+                                <nz-option nzLabel="{{item.name}}" nzValue="{{item.id}}" *ngFor="let item of m_objGuestCheckinService.m_aNationality"></nz-option>
+                            </nz-select>
+                        </li>
+                        <li class="flex">
+                            <span>性别</span>
+                            <nz-select class="input-small" nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="m_objAllGuestCondition.objCondition.nSex">
+                                <nz-option nzLabel="{{item.name}}" nzValue="{{item.id}}" *ngFor="let item of m_objGuestCheckinService.m_aSex"></nz-option>
+                            </nz-select>
+                        </li>
+                        <li class="flex">
+                            <span>民族</span>
+                            <nz-select class="input-middle" nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="m_objAllGuestCondition.objCondition.sNation">
+                                <nz-option nzLabel="{{item.name}}" nzValue="{{item.id}}" *ngFor="let item of m_objGuestCheckinService.m_aNation"></nz-option>
+                            </nz-select>
+                        </li>
+                        <li class="flex">
+                            <span>出生日期</span>
+                            <div class="flex birth-picker">
+                                <nz-date-picker class="input-big" [nzFormat]="dateFormat"></nz-date-picker>
+                                <span>至</span>
+                                <nz-date-picker class="input-big" [nzFormat]="dateFormat"></nz-date-picker>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="register-info">
+                    <p class="title">按登记信息查询</p>
+                    <ul class="flex">
+                        <li class="flex">
+                            <span>登记姓名</span>
+                            <input class="input-middle" nz-input placeholder="" nzSize="default" [(ngModel)]="m_objAllGuestCondition.objCondition.sHotelGuestNameLike">
+                        </li>
+                        <li class="flex">
+                            <span>登记证件类型</span>
+                            <nz-select class="input-big" nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="m_objAllGuestCondition.objCondition.nHotelDocType">
+                                <nz-option nzLabel="{{item.name}}" nzValue="{{item.id}}" *ngFor="let item of m_objGuestCheckinService.m_aDocType"></nz-option>
+                            </nz-select>
+                        </li>
+                        <li class="flex">
+                            <span>登记证件号码</span>
+                            <input class="input-big" nz-input placeholder="" nzSize="default" [(ngModel)]="m_objAllGuestCondition.objCondition.sHotelDocNoLikeL">
+                        </li>
+                        <li class="flex">
+                            <span>国籍</span>
+                            <nz-select class="input-middle" nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="m_objAllGuestCondition.objCondition.sNationality">
+                                <nz-option nzLabel="{{item.name}}" nzValue="{{item.id}}" *ngFor="let item of m_objGuestCheckinService.m_aNationality"></nz-option>
+                            </nz-select>
+                        </li>
+                        <li class="flex">
+                            <span>性别</span>
+                            <nz-select class="input-small" nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="m_objAllGuestCondition.objCondition.nSex">
+                                <nz-option nzLabel="{{item.name}}" nzValue="{{item.id}}" *ngFor="let item of m_objGuestCheckinService.m_aSex"></nz-option>
+                            </nz-select>
+                        </li>
+                        <li class="flex">
+                            <span>民族</span>
+                            <nz-select class="input-middle" nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="m_objAllGuestCondition.objCondition.sNation">
+                                <nz-option nzLabel="{{item.name}}" nzValue="{{item.id}}" *ngFor="let item of m_objGuestCheckinService.m_aNation"></nz-option>
+                            </nz-select>
+                        </li>
+                        <li class="flex">
+                            <span>出生日期</span>
+                            <div class="flex">
+                                <nz-date-picker class="input-big" [nzFormat]="dateFormat"></nz-date-picker>
+                                <span>至</span>
+                                <nz-date-picker class="input-big" [nzFormat]="dateFormat"></nz-date-picker>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="hotel-info">
+                    <p class="title">按旅店信息查询</p>
+                    <ul class="flex">
+                        <li class="flex">
+                            <span>旅店名称</span>
+                            <input class="input-big" nz-input placeholder="" nzSize="default" [(ngModel)]="m_objAllGuestCondition.objCondition.sHotelNameLike">
+                        </li>
+                        <li class="flex">
+                            <app-area-choose></app-area-choose>
+                            <!-- <div class="flex">
+                                <nz-select class="input-big" nzShowSearch nzAllowClear nzPlaceHolder="省" [(ngModel)]="m_objAllGuestCondition.objCondition.nProvinceID">
+                                    <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                                    <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                                    <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                                </nz-select>
+                                <nz-select class="input-big" nzShowSearch nzAllowClear nzPlaceHolder="县市" [(ngModel)]="m_objAllGuestCondition.objCondition.nCityID">
+                                    <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                                    <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                                    <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                                </nz-select>
+                                <nz-select class="input-big" nzShowSearch nzAllowClear nzPlaceHolder="区域" [(ngModel)]="m_objAllGuestCondition.objCondition.nDistrictID">
+                                    <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                                    <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                                    <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                                </nz-select>
+                            </div> -->
+                        </li>
+                        <li class="flex">
+                            <span>入住时间范围</span>
+                            <div class="flex">
+                                <nz-date-picker class="input-big" [nzFormat]="dateFormat" [(ngModel)]="m_objAllGuestCondition.objCondition.sCheckInDateTimeStart"></nz-date-picker>
+                                <span>至</span>
+                                <nz-date-picker class="input-big" [nzFormat]="dateFormat" [(ngModel)]="m_objAllGuestCondition.objCondition.sCheckInDateTimeEnd"></nz-date-picker>
+                            </div>
+                        </li>
+                        <li class="flex">
+                            <span>住宿状态</span>
+                            <nz-select class="input-middle" nzShowSearch nzAllowClear nzPlaceHolder="不限" [(ngModel)]="m_objAllGuestCondition.objCondition.sNation">
+                                <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                                <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                                <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                            </nz-select>
+                        </li>
+                    </ul>
+                    <ul class="flex">
+                        <li class="flex">
+                            <span>认证信息</span>
+                            <div>
+                                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                                    [nzIndeterminate]="indeterminate">
+                                    认证匹配
+                                </label>
+                                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                                    [nzIndeterminate]="indeterminate">
+                                    认证异常
+                                </label>
+                                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                                    [nzIndeterminate]="indeterminate">
+                                    无证件
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="flex search-btn">
+                        <li>
+                            <button class="btn-middle" nz-button nzType="primary" (click)="fnSearchGuestCheckinLinst()">
+                                <i nz-icon type="search"></i>
+                                搜索
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="sort-box flex">
+                    <nz-select [(ngModel)]="selectedValue" nzAllowClear nzPlaceHolder="Choose">
+                        <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
+                        <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
+                    </nz-select>
+                </div>
+            </div>
+            <div class="result-bar mt10">
+                <nz-table #basicTable [nzData]="m_aAllGuestCheckinList" [nzFrontPagination]="false"
+                [nzShowPagination]="false" [nzScroll]="{x:'130px'}">
+                    <thead>
+                        <tr>
+                            <th>登记姓名</th>
+                            <th>登记证件类型</th>
+                            <th>登记证件号码</th>
+                            <th>国籍</th>
+                            <th>性别</th>
+                            <th>旅店名称</th>
+                            <th>房号</th>
+                            <th>入住时间</th>
+                            <th>退房时间</th>
+                            <th>证件姓名</th>
+                            <th>证件类型</th>
+                            <th>状态</th>
+                            <th>认证信息</th>
+                            <th>详情</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-row" *ngFor="let item of basicTable.data">
+                            <td>{{item.GuestCheckIn.HotelGuestName}}</td>
+                            <td>{{item.GuestCheckIn.HotelDocType}}</td>
+                            <td>{{item.GuestCheckIn.HotelDocNo}}</td>
+                            <td>中国</td>
+                            <td>{{item.GuestCheckIn.HotelSex}}</td>
+                            <td>{{item.CheckinInfo.HotelID}}</td>
+                            <td>{{item.CheckinInfo.RoomNo}}</td>
+                            <td>{{item.CheckinInfo.CheckInTime}}</td>
+                            <td>{{item.CheckinInfo.CheckOutTime}}</td>
+                            <td>{{item.GuestDoc.GuestName}}</td>
+                            <td>{{item.GuestDoc.DocType}}</td>
+                            <td>{{item.GuestCheckIn.GuestState}}</td>
+                            <td>{{item.GuestCheckIn.MatchResult}}</td>
+                            <td (click)="fnToGuestCheckinDetails(item.CheckinInfo.CheckInID)" class="checkDetails">查看</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+            <div class="pagination-bar mt10">
+                <nz-pagination [(nzPageIndex)]="m_objAllGuestCondition.objPageInfo.nPageNo" [(nzTotal)]="m_nRowCount"
+                [(nzPageSize)]="m_objAllGuestCondition.objPageInfo.nPageSize"></nz-pagination>
+            </div>
+        </div>
+    </div>
+</div>

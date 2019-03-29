@@ -1,0 +1,111 @@
+# coding: utf-8
+from libs.orm import OrmBase
+from sqlalchemy import Column, Integer, String, DateTime
+from libs import web
+
+
+class Hotel(OrmBase):
+    # 表名
+    __tablename__ = 'h_hotel'
+    # 表对应的ID
+    TableID = 11
+    # 类字段
+
+    HotelID = Column(Integer, primary_key=True, autoincrement=True)
+    HotelCode = Column(String(111), nullable=True)
+    HotelName = Column(String(111), nullable=True)
+    HotelAddr = Column(String(111), nullable=True)
+    HotelTel = Column(String(111), nullable=True)
+    LegalTel = Column(String(100), nullable=True)
+    LegalPerson = Column(String(100), nullable=True)
+    LegalDocNo = Column(String(100), nullable=True)
+    Coordinate = Column(String(100), nullable=True)
+    ProvinceID = Column(Integer, nullable=True)
+    Province = Column(String(100), nullable=True)
+    CityID = Column(Integer, nullable=True)
+    CityName = Column(String(100), nullable=True)
+    DistrictID = Column(Integer, nullable=True)
+    District = Column(String(100), nullable=True)
+    State = Column(Integer, nullable=True)
+    HotelType = Column(Integer, nullable=True)
+    CreateUserID = Column(Integer, nullable=True)
+    CreateUserName = Column(String(100), nullable=True)
+    ResponPersonTel = Column(String(111), nullable=True)
+    ResponPerson = Column(String(100), nullable=True)
+    ApplyTime = Column(DateTime(100), nullable=True)
+    AuditTime = Column(DateTime(100), nullable=True)
+    AuditUserID = Column(String(100), nullable=True)
+    AuditUserCode = Column(String(100), nullable=True)
+    RoomCount = Column(Integer, nullable=True)
+    BedCount = Column(Integer, nullable=True)
+    AuditState = Column(Integer, nullable=True)
+    AuditStateName = Column(String(100), nullable=True)
+    BusLicenseCode = Column(String(100), nullable=True)
+    BusLicenseName = Column(String(100), nullable=True)
+    RegStartTime = Column(DateTime, nullable=True)
+    Remark = Column(String(1000), nullable=True)
+    CreateTime = Column(Integer, nullable=True)
+
+    def __init__(self, bind=True):
+        '''数据类初始化
+        '''
+        if bind:
+            self.bind_db()
+
+    def bind_db(self):
+        '''跟数据库绑定
+        '''
+        # 初始化数据类的结构
+        self.metadata.bind = web.cache.db[web.ctx.dbcontext.conn_str].engine
+        # 初始化数据类查询
+        self.query = web.ctx.cur_dbsession.query(Hotel)
+        self.query2 = web.ctx.cur_dbsession.query
+
+    def save(self, flush=True):
+        '''保存数据(一般的新增和更新都可以在这完成)
+        '''
+        web.ctx.cur_dbsession.add(self)
+
+        # 如果需要立即执行则更新数据库会话
+        if flush:
+            web.ctx.cur_dbsession.flush()
+
+    def copy(self, bind=True):
+        obj_copy = Hotel(bind)
+
+        obj_copy.HotelID = self.HotelID
+        obj_copy.HotelCode = self.HotelCode
+        obj_copy.HotelName = self.HotelName
+        obj_copy.HotelAddr = self.HotelAddr
+        obj_copy.HotelTel = self.HotelTel
+        obj_copy.LegalTel = self.LegalTel
+        obj_copy.LegalPerson  = self.LegalPerson
+        obj_copy.LegalDocNo = self.LegalDocNo
+        obj_copy.Coordinate= self.Coordinate
+        obj_copy.ProvinceID = self.ProvinceID
+        obj_copy.Province = self.Province
+        obj_copy.CityID = self.CityID
+        obj_copy.CityName = self.CityName
+        obj_copy.DistrictID = self.DistrictID
+        obj_copy.District = self.District
+        obj_copy.State = self.State
+        obj_copy.HotelType = self.HotelType
+        obj_copy.CreateUserID = self.CreateUserID
+        obj_copy.CreateUserName = self.CreateUserName
+        obj_copy.ResponPersonTel = self.ResponPersonTel
+        obj_copy.ResponPerson = self.ResponPerson
+        obj_copy.ApplyTime = self.ApplyTime
+        obj_copy.AuditTime = self.AuditTime
+        obj_copy.AuditUserID = self.AuditUserID
+        obj_copy.AuditUserCode = self.AuditUserCode
+        obj_copy.RoomCount = self.RoomCount
+        obj_copy.BedCount = self.BedCount
+        obj_copy.AuditState = self.AuditState
+        obj_copy.AuditStateName = self.AuditStateName
+        obj_copy.BusLicenseCode = self.BusLicenseCode
+        obj_copy.BusLicenseName = self.BusLicenseName
+        obj_copy.RegStartTime = self.RegStartTime
+        obj_copy.Remark = self.Remark
+        obj_copy.CreateTime = self.CreateTime
+
+        return obj_copy

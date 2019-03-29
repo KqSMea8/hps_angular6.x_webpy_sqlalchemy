@@ -1,0 +1,60 @@
+@import "styles.less";
+
+.content{
+    height: ~"calc(100% - 70px)";
+
+    >div{
+        height: 100%;
+        background-color: #eaf1f9;
+    }
+
+    .main{
+        padding: @defaultPadding;
+
+        >div{
+            width: 100%;
+            padding: @defaultPadding;
+        }
+
+        .search-bar{
+            background-color: #fff;
+
+            >div{
+                width: 100%;
+
+                .title{
+                    color: #555;
+                    font-size: 16px;
+                    font-weight: bold;
+                    line-height: 30px;
+                    text-align: left;
+                }
+
+                ul.flex{
+                    align-items: center;
+                    justify-content: flex-start;
+
+                    li{
+                        margin: 5px 20px 5px 0;
+
+                        flex-direction: column;
+                        align-items: flex-start;
+                        justify-content: flex-start;
+
+                        span{
+                            white-space: nowrap;
+
+                            color: #777;
+
+                            margin-bottom: 10px;
+                        }
+
+                        input{
+                            padding-left: 10px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

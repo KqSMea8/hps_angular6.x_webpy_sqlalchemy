@@ -1,0 +1,39 @@
+import { Component, OnInit } from '@angular/core';
+import { RouterState, Router } from '@angular/router';
+import { ContextService } from 'src/app/services/context.service';
+
+@Component({
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.less']
+})
+export class HeaderComponent implements OnInit {
+
+
+    public m_aTabList = [
+        {tabName: '旅客入住查询', tabIcon: 'guest-checkin.png', routeName: '/main/GuestCheckinList'},
+        {tabName: '旅店开房查询', tabIcon: 'hotel-checkin.png', routeName: '/main/SearchCheckinList'},
+        {tabName: '旅店管理', tabIcon: 'hotel-manage.png', routeName: '/main/Hotel'},
+        {tabName: '系统管理', tabIcon: 'system-manage.png', routeName: '/main/SystemManagement'}
+
+    ];
+
+    public m_sRoutePath: string;
+
+    constructor(
+        public m_objRouter: Router,
+        public m_objContextService: ContextService,
+    ) {
+        const objRouterState: RouterState = m_objRouter.routerState;
+        const aPathList: Array<string> = objRouterState.snapshot.url.split('/').splice(0, 3);
+        this.m_sRoutePath = aPathList.join('/');
+    }
+
+    ngOnInit() {
+    }
+
+    /**跳转到个人信息/系统管理界面 */
+    fnGoSystemManage(): void {
+        this.m_objRouter.navigate(['/main/SystemManagement']);
+    }
+}

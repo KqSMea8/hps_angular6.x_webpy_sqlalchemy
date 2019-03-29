@@ -1,0 +1,98 @@
+import {Component, NgModule, OnInit} from '@angular/core';
+import {ApiService} from '../../../../services/api.service';
+import {SearchHotelListCondition} from '../../../../class/searchHotelListCondition';
+import {SearchCondition} from '../../../../class/searchCondition';
+// import {MyHeaderComponent} from '../../../../components/my-header/my-header.component';
+import {FormsModule} from '@angular/forms';
+import {Subtab, Subbtn} from 'src/app/class/sidebar';
+import {BrowserModule} from '@angular/platform-browser';
+import {SearchHotelList} from '../../../../class/searchHotelList';
+import {NzMessageService} from 'ng-zorro-antd';
+import {Pagination} from '../../../../class/pagination';
+import {HotelCheckinLogList} from '../../../../class/hotelCheckinLogList';
+import {Router} from '@angular/router';
+import {ToolsService} from "../../../../services/tools.service";
+
+
+@Component({
+    selector: 'app-hotel-search,nz-demo-select-search,nz-demo-input-basic,nz-demo-date-picker-start-end,nz-demo-button-basic,' +
+        'nz-demo-breadcrumb-separator,nz-demo-table-basic',
+    templateUrl: './hotel-verify.component.html',
+    styleUrls: ['./hotel-verify.component.less'],
+
+})
+@NgModule({
+    imports: [
+        FormsModule
+    ],
+})
+
+export class HotelVerifyComponent implements OnInit {
+    m_objHotelListCondition: SearchCondition<SearchHotelListCondition>;
+    m_listHotelList: SearchHotelList;
+    m_listHotelLists: Array<any>;
+    private m_objMessage: NzMessageService;
+    public m_objSubtab: Array<Subtab> = [
+            {subtabName: '旅店查询', subtabIcon: 'guest-checkin.png', routerName: '/main/Hotel/HotelSearch'},
+            {subtabName: '待审核', subtabIcon: 'guest-checkin.png', routerName: '/main/Hotel/Verify'},
+            {subtabName: '未通过', subtabIcon: 'guest-checkin.png', routerName: '/main/Hotel/Offline'},
+            {subtabName: '添加酒店', subtabIcon: 'guest-checkin.png', routerName: '/main/Hotel/HotelAdd'},
+    ];
+    // private m_objMessage:Array<Subtab> =[
+    //     {}
+    // ]
+    public m_lsDataSet: Array<any> = [
+        {name: 'aa', index: '1'},
+        {name: 'bb', index: '2'},
+        {name: 'cc', index: '3'}
+    ];
+    private nRowCount: number;
+
+    constructor(
+        private m_objApiService: ApiService,
+        private m_objRouter: Router,
+        private m_objToolsService: ToolsService,
+
+    ) {
+        this.m_objHotelListCondition = new SearchCondition<SearchHotelListCondition>(SearchHotelListCondition)
+    }
+
+    ngOnInit() {
+        this.m_objHotelListCondition.objPageInfo.nPageNo = 1;
+        this.m_objHotelListCondition.objPageInfo.nPageSize = 10;
+        this.m_objHotelListCondition.objPageInfo.nSort = 0;
+        this.nRowCount = 0;
+        this.fnSearch()
+
+    }
+
+     fnSearch(): void {
+        this.m_objHotelListCondition.objCondition.nSearchUserIDMust = 1;
+        this.m_objHotelListCondition.objCondition.sSearchUserNameMust = 'aa';
+        this.m_objHotelListCondition.objCondition.nAuditState = 0;
+        this.m_objApiService.fnSearchHotelList(this.m_objHotelListCondition).subscribe(data => {
+            if (data.Code === 200) {
+                console.log(data.Data);
+                this.m_listHotelLists = data.Data.DataSet;
+                this.nRowCount = data.Data.RowCount;
+                if(this.m_listHotelLists.length == 0){
+                    this.m_objToolsService.fnErrorReturnTips(data.Msg);
+                    this.nRowCount = 0
+                }
+            } else {
+                this.m_listHotelLists = [];
+                this.m_objToolsService.fnErrorReturnTips(data.Msg);
+                this.m_objMessage.create('error', data.Msg);
+                this.nRowCount = 0
+            }
+        });
+    }
+
+    /**每页条数的改变 */
+    fnPageSizeChange(): void {
+        this.m_objHotelListCondition.objPageInfo.nPageNo = 1;
+        this.fnSearch();
+    }
+
+
+}

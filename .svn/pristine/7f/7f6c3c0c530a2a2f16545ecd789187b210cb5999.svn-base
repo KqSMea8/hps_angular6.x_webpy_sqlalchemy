@@ -1,0 +1,3 @@
+<p *ngIf="m_objContextService.m_bErrorIsShow">
+    {{m_objContextService.m_sError}}
+</p>

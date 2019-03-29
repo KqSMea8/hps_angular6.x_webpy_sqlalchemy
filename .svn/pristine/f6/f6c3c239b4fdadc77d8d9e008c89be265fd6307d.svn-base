@@ -1,0 +1,160 @@
+<app-header></app-header>
+<div class="content flex">
+    <div class="hs-sider g-side">
+        <app-sidebar [title]="'系统管理'" [subtab]="m_objSubtab" [subbtn]="m_objSubbtn"></app-sidebar>
+    </div>
+    <div class="ha-body g-main">
+        <app-loading *ngIf=""></app-loading>
+        <app-breadcrumb [data]="m_lsBreadCrumbList"></app-breadcrumb>
+        <div class="ha-area-add">
+            <div class="add-title" *ngIf="boonIsEdit === 'true'">
+                <div>
+                    <span>登记:</span>
+                    <span>{{this.m_strCreateUserName}}</span>
+                </div>
+                <div>
+                    <span>状态:</span>
+                    <span>{{this.stateName}}</span>
+                </div>
+            </div>
+            <div class="add-body">
+                <div class="add-body-f1">
+                    <div class="add-body-f">
+                        <div>酒店编号 <span class="color-red">*</span></div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.sHotelCode">
+                    </div>
+                    <div class="add-body-f">
+                        <div>酒店名称 <span class="color-red">*</span></div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.sHotelName">
+                    </div>
+                    <div class="add-body-f">
+                        <div>执照名称 <span class="color-red">*</span></div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.sBusLicenseCode">
+                    </div>
+                    <div class="add-body-f">
+                        <div>执照编号 <span class="color-red">*</span></div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.sBusLicenseName">
+                    </div>
+                    <div class="add-body-f">
+                        <div>类型 <span class="color-red">*</span></div>
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="" class="buttom-width-160"
+                                   [(ngModel)]="this.objAddHotelCondition.nHotelType">
+                            <nz-option nzLabel={{item.CodeName}} nzValue={{item.CodeNo}}
+                                       *ngFor="let item of m_objContextService.m_objAllDict.hotel_type;let i = index">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                    <div class="add-body-f">
+                        <div>前台电话 <span class="color-red">*</span></div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.sHotelTel">
+                    </div>
+
+                </div>
+                <div class="add-body-s">
+                    <div>
+                        <div>法人姓名 <span class="color-red">*</span></div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.sLegalPerson">
+                    </div>
+                    <div class="id-no">
+                        <div>法人证件号 <span class="color-red">*</span></div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.sLegalDocNo">
+                    </div>
+                    <div>
+                        <div>法人联系电话 <span class="color-red">*</span></div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.sLegalTel">
+                    </div>
+                    <div>
+                        <div>责任人 <span class="color-red">*</span></div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.sResponPerson">
+                    </div>
+                    <!--<div class="id-no">
+                        <div>责任人证件号</div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.sLegalDocNo">
+                    </div>-->
+                    <div class="">
+                        <div>联系电话 <span class="color-red">*</span></div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.sResponPersonTel">
+                    </div>
+                </div>
+                <div class="add-body-th">
+                    <div>
+                        <div>客房数(间) <span class="color-red">*</span></div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.nRoomCount">
+                    </div>
+                    <div>
+                        <div>床位数(个) <span class="color-red">*</span></div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="this.objAddHotelCondition.nBedCount">
+                    </div>
+                </div>
+                <div class="add-body-th">
+                    <span class="color-red position">*</span>
+                    <app-area-choose (m_objCurrentInfo)="fnGetCurrentArea($event)"></app-area-choose>
+                    <div>
+                        <div class="reg-data">登记时间 <span class="color-red">*</span></div>
+                        <nz-date-picker
+                            [nzDisabledDate]="m_objContextService.fnDisabledDate" nzShowTime nzFormat="yyyy-MM-dd "
+                            [(ngModel)]="this.objAddHotelCondition.sRegStartTime"
+                            nzPlaceHolder="">
+                        </nz-date-picker>
+                    </div>
+                </div>
+                <div class="add-body-fif">
+                    <div>具体地址 <span class="color-red">*</span></div>
+                    <input nz-input placeholder="" class="buttom-width-500"
+                           [(ngModel)]="this.objAddHotelCondition.sHotelAddr">
+                </div>
+                <div class="add-body-fif">
+                    <div>备注 </div>
+                    <textarea rows="5" nz-input class="buttom-width-500"
+                              [(ngModel)]="this.objAddHotelCondition.sRemark"></textarea>
+                </div>
+            </div>
+            <div class="ha-area-btn">
+                <div class="btn-verify" *ngIf="this.stateName !== '审核通过' && boonIsEdit === 'true'">
+                    <button nz-button nzType="danger" (click)="fnVerifyHotel()">审核</button>
+                </div>
+                <div class="btn-verify btn-logoff" *ngIf="boonIsEdit === 'true' && this.nHotelState === 0">
+                    <button nz-button nzType="danger" (click)="fnOfflineHotel()">注销</button>
+                </div>
+                <div class="btn-verify btn-submit">
+                    <button nz-button nzType="primary" (click)="fnAddOrUpdata()">提交</button>
+                </div>
+                <div class="btn-verify btn-cencel">
+                    <button nz-button nzType="default">取消</button>
+                </div>
+            </div>
+        </div>
+        <div class="ha-dash-line" ></div>
+        <div class="ha-upload">
+            <div class="add-body-f">
+                <div>营业执照</div>
+                <app-upload></app-upload>
+            </div>
+            <div class="add-body-f">
+                <div>特种行业经营许可证</div>
+                <app-upload></app-upload>
+            </div>
+            <div class="add-body-f">
+                <div>公共场所卫生许可证</div>
+                <app-upload></app-upload>
+            </div>
+            <div class="add-body-f">
+                <div>消防许可证</div>
+                <app-upload></app-upload>
+            </div>
+        </div>
+    </div>
+</div>

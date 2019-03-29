@@ -1,0 +1,95 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.l_loperating_log import OperatingLog
+from models.hps.u_user import User
+from utils import obj_to_json
+from sqlalchemy import and_, or_
+from utils.func_api import FuncResult
+from utils.tools import to_datetime
+from sqlalchemy import and_, or_, text
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        obj_input = web.input()
+        try:
+            int_search_user_id = obj_input.get('nSearchUserIDMust')
+            int_search_user_Code = obj_input.get('nSearchUserIDMust')
+            int_userID = obj_input.get('nUserID')
+            str_work_code = obj_input.get('sWorkCode')
+            str_user_code = obj_input.get('sUserCode')
+            str_user_name = obj_input.get('sUserName')
+            int_opera_type = obj_input.get('nOperaType')
+            str_Post = obj_input.get('sPost')
+            date_date_start = obj_input.get('sDateStart')
+            date_date_start = to_datetime(date_date_start)
+            date_date_end = obj_input.get('sDateEnd')
+            date_date_end = to_datetime(date_date_end)
+
+        except Exception, ce:
+            print Exception, ce
+            return FuncResult(fail='参数有误!')
+
+        return self.search_log_list(int_userID, str_work_code, str_user_code, str_user_name, int_opera_type, str_Post,
+                                    date_date_start, date_date_end)
+
+    def search_log_list(self, int_userID, str_work_code, str_user_code, str_user_name, int_opera_type, str_Post,
+                        date_date_start, date_date_end):
+        list_params = []
+        obj_params_value = {}
+
+        str_sql = '''
+                Select
+                    l_loperating_log.* , u_user.*
+                From
+                    l_loperating_log INNER JOIN u_user ON l_loperating_log.UserID = u_user.UserID
+                WHERE 1=1
+                '''
+
+        if int_userID:
+            str_sql = str_sql + 'AND l_loperating_log.UserID = :int_userID '
+            list_params.append('l_loperating_log.UserID = :int_userID')
+            obj_params_value['int_userID'] = int_userID
+        if str_work_code:
+            str_sql = str_sql + 'AND l_loperating_log.WorkCode = :str_work_code '
+            list_params.append('l_loperating_log.WorkCode = :str_work_code')
+            obj_params_value['str_work_code'] = str_work_code
+        # if str_user_code:
+        #         sql = sql + 'AND l_loperating_log.UserCode = :str_UserCode '
+        #         params.append('l_loperating_log.UserCode = :str_UserCode')
+        #         params_value['str_user_code'] = str_user_code
+        if str_user_name:
+            str_sql = str_sql + 'AND l_loperating_log.UserName = :str_user_name '
+            list_params.append('l_loperating_log.UserName = :str_user_name')
+            obj_params_value['str_user_name'] = str_user_name
+        if int_opera_type:
+            str_sql = str_sql + 'AND l_loperating_log.OperaType = :int_opera_type '
+            list_params.append('l_loperating_log.OperaType = :int_opera_type')
+            obj_params_value['int_opera_type'] = int_opera_type
+        # if str_Post:
+        #         sql = sql + 'AND l_loperating_log.Post = :str_Post '
+        #         params.append('l_loperating_log.Post = :str_Post')
+        #         params_value['str_Post'] = str_Post
+        if date_date_start:
+            str_sql = str_sql + 'AND l_loperating_log.CreateTime >= :date_date_start '
+            list_params.append('l_loperating_log.CreateTime = :date_date_start')
+            obj_params_value['date_date_start'] = date_date_start
+        if date_date_end:
+            str_sql = str_sql + 'AND l_loperating_log.CreateTime <= :date_date_end '
+            list_params.append('l_loperating_log.CreateTime = :date_date_end')
+            obj_params_value['date_date_end'] = date_date_end
+
+        # if obj_page:
+        #     sql += ' Limit %s, %s ' % ((obj_page['nPageNo'] - 1) * obj_page['nPageSize'], obj_page['nPageSize'])
+        query_data = web.ctx.cur_dbconn.execute(text(str_sql), **obj_params_value).fetchall()
+
+        return FuncResult(success=True, msg='操作成功！')

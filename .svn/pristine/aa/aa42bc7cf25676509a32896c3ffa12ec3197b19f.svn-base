@@ -1,0 +1,26 @@
+export class GuestCheckinInfo {
+    HotelGuestID: number; // (旅客信息ID)
+    HotelDocType: number; // (证件分类)
+    HotelDocTypeName: string; // (证件类型名称)
+    HotelDocNo: string; // (证件号码)
+    HotelDocName: string; // (证件姓名)
+    HotelGuestName: string; // (姓名)
+    HotelBornDate: string; // (出生日期)
+    HotelSex: string; // (性别)
+    HotelSexName: string; // (性别名称)
+    HotelNation: string; // (民族)
+    HotelAddress: string; // (地址)
+    HotelRemark: string; // (备注)
+    LastModifyTime: string; // (新建时间)
+    HotelLastModifyTime: string; // (PMS时间)
+    HotelTel: string; // (手机号)
+    MatchResult: number; // (人脸匹配结果)
+    MatchResultName: string; // （人脸匹配结果名称）
+    MatchResultPercent: number; // (人脸匹配结果比率)
+    CheckInTime: string; // 入住时间
+    CheckOutTime: string; // 离店时间
+    GusetState: number; // 状态
+    GusetStateName: string; // 状态名称
+    HotelNationality: number; // 国籍编码
+    HotelNationalityName: string; // 国籍名称
+}

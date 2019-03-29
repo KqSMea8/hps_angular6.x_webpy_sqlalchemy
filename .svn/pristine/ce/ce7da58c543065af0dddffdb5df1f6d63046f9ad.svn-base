@@ -1,0 +1,7 @@
+
+export class Province<T> {
+    ProvinceID: number;
+    Province: string;
+    TableID: number;
+    CitySet: T[];
+}

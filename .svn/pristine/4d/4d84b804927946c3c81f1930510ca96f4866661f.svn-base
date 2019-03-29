@@ -1,0 +1,9 @@
+import { District } from './district';
+
+export class City {
+    CityID: number;
+    CityName: string;
+    ProvinceID: number;
+    IsCapitalCity: number;
+    DistrictSet: Array<District> = [];
+}

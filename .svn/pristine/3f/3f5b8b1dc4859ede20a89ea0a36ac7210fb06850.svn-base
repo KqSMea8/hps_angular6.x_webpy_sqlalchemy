@@ -1,0 +1,181 @@
+<app-header></app-header>
+<div class="content flex">
+    <div class="g-side">
+        <app-sidebar [title]="'系统管理'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div class="user-info g-main">
+        <app-breadcrumb [data]="m_lsBreadCrumbList"></app-breadcrumb>
+        <div class="user-content">
+            <div class="item">
+                <h3 nz-col nzSpan="11">用户信息</h3>
+                <span nz-col nzSpan="11">用户ID：{{m_objUser.UserID}}</span>
+            </div>
+            <ul class="info">
+                <li nz-col nzSpan="8">
+                    <span>账号：</span>
+                    <span>{{m_objUser.UserCode}}</span>
+                </li>
+                <li nz-col nzSpan="8">
+                    <span>岗位：</span>
+                    <span>{{m_objUser.Post}}</span>
+                </li>
+                <li nz-col nzSpan="8">
+                    <span>状态：</span>
+                    <span [ngClass]="{'green': m_objUser.State == 1}">{{m_objUser.StateName}}</span>
+                </li>
+                <li nz-col nzSpan="8">
+                    <span>姓名：</span>
+                    <span>{{m_objUser.UserName}}</span>
+                </li>
+                <li nz-col nzSpan="8">
+                    <span>联系方式：</span>
+                    <span>{{m_objUser.Tel}}</span>
+                </li>
+                <li nz-col nzSpan="8">
+                    <span>备注：</span>
+                    <span>{{m_objUser.Remark}}</span>
+                </li>
+            </ul>
+            <ul class="operation">
+                <li nz-col nzSpan="4">
+                    <button class="btn-middle" nz-button nzType="primary" (click)="fnShowModal(1)">
+                        <span>编辑</span>
+                    </button>
+                    <nz-modal [(nzVisible)]="m_isEditVisible" [nzTitle]="modalTitle" [nzContent]="modalContent"
+                        [nzFooter]="modalFooter" [nzWidth]=600 (nzOnCancel)="fnHandleCancel()">
+                        <ng-template #modalTitle>
+                            编辑
+                        </ng-template>
+
+                        <ng-template #modalContent>
+                            <ul>
+                                <li class="fl text">
+                                    <span>账号:</span>
+                                    <span class="userCode">{{m_objUser.UserCode}}</span>
+                                </li>
+                                <li class="fl text">
+                                    <span>姓名:</span>
+                                    <span class="userCode">{{m_objUser.UserName}}</span>
+                                </li>
+                                <li class="fl text">
+                                    <span>岗位:</span>
+                                    <span class="userCode"> 1{{m_objUser.Post}}</span>
+                                </li>
+                                <li class="clear">
+                                    <span>联系方式</span>
+                                    <input nz-input placeholder="输入联系方式" [(ngModel)]="m_objUpdateUserCondition.sTel">
+                                </li>
+                                <li>
+                                    <span>备注</span>
+                                    <textarea nz-input placeholder="输入备注信息" [(ngModel)]="m_objUpdateUserCondition.sRemark" [nzAutosize]="{ minRows: 3, maxRows: 6 }"></textarea>
+                                </li>
+                            </ul>
+                        </ng-template>
+
+                        <ng-template #modalFooter>
+                            <button nz-button nzType="primary" (click)="fnUpdateUser()">保存</button>
+                            <button nz-button nzType="default" (click)="fnHandleCancel()">取消</button>
+                            <p><app-error-bar></app-error-bar></p>
+                        </ng-template>
+                    </nz-modal>
+                </li>
+                <li nz-col nzSpan="4">
+                    <button class="btn-middle" nz-button nzType="primary" (click)="fnShowModal(2)">
+                        <span>权限编辑</span>
+                    </button>
+                    <nz-modal [(nzVisible)]="m_isRoleVisible" [nzTitle]="modalRoleTitle" [nzContent]="modalRoleContent"
+                        [nzFooter]="modalRoleFooter" [nzWidth]=700 (nzOnCancel)="fnHandleCancel()">
+                        <ng-template #modalRoleTitle>
+                            权限编辑
+                        </ng-template>
+
+                        <ng-template #modalRoleContent>
+                            <nz-tabset>
+                                <nz-tab nzTitle="功能权限">
+                                    <div class="area">
+                                        <nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="fnHandleRole(m_lsFuncRoleList,1)">
+                                            <div nz-row>
+                                                <div nz-col nzSpan="6" *ngFor="let objRole of m_lsFuncRoleList">
+                                                    <label nz-checkbox nzValue="objRole.value" [(ngModel)]="objRole.checked">{{objRole.label}}</label>
+                                                </div>
+                                            </div>
+                                        </nz-checkbox-wrapper>
+                                    </div>
+                                </nz-tab>
+                                <nz-tab nzTitle="数据权限">
+                                    <div class="area">
+                                        <p>请选择可查询的范围</p>
+                                        <nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="fnHandleRole(m_lsDataRoleList,2)">
+                                            <div nz-row>
+                                                <div nz-col nzSpan="12" *ngFor="let objRole of m_lsDataRoleList">
+                                                    <label nz-checkbox nzValue="objRole.value" [(ngModel)]="objRole.checked">{{objRole.label}}</label>
+                                                </div>
+                                            </div>
+                                        </nz-checkbox-wrapper>
+                                    </div>
+                                </nz-tab>
+                            </nz-tabset>
+                        </ng-template>
+
+                        <ng-template #modalRoleFooter>
+                            <button nz-button nzType="primary" (click)="fnUpdateRole()">保存</button>
+                            <button nz-button nzType="default" (click)="fnHandleCancel()">取消</button>
+                            <p class="errorInfo"></p>
+                        </ng-template>
+                    </nz-modal>
+                </li>
+                <li nz-col nzSpan="4">
+                    <button class="btn-middle" nz-button nzType="primary" (click)="fnShowModal(3)">
+                        <span>修改密码</span>
+                    </button>
+                    <nz-modal [(nzVisible)]="m_isUpdatePwdVisible" [nzTitle]="pwdModalTitle" [nzContent]="pwdModalContent"
+                        [nzFooter]="pwdModalFooter" [nzWidth]=600 (nzOnCancel)="fnHandleCancel()">
+                        <ng-template #pwdModalTitle>
+                            修改密码
+                        </ng-template>
+
+                        <ng-template #pwdModalContent>
+                            <ul class="updatePwd">
+                                <li>
+                                    <span><i class="red">*</i> 旧密码</span>
+                                    <input nz-input placeholder="旧密码" [(ngModel)]="m_sOldPassword">
+                                </li>
+                                <li>
+                                    <span><i class="red">*</i> 新密码</span>
+                                    <input nz-input placeholder="新密码" [(ngModel)]="m_sNewPassword">
+                                </li>
+                                <li>
+                                    <span><i class="red">*</i> 确认新密码</span>
+                                    <input nz-input placeholder="确认新密码" [(ngModel)]="m_sNewPasswordnd">
+                                </li>
+                            </ul>
+                        </ng-template>
+
+                        <ng-template #pwdModalFooter>
+                            <button nz-button nzType="primary" (click)="fnUpdatePassword()">保存</button>
+                            <button nz-button nzType="default" (click)="fnHandleCancel()">取消</button>
+                            <p><app-error-bar></app-error-bar></p>
+                        </ng-template>
+                    </nz-modal>
+                </li>
+                <li nz-col nzSpan="4">
+                    <button class="btn-middle" nz-button nzType="primary" [ngClass]="{'disabled': m_objUser.State == 2}"
+                        [disabled]="m_objUser.State == 2" (click)="fnShowForbidConfirm()">
+                        <span>禁用账户</span>
+                    </button>
+                </li>
+                <li nz-col nzSpan="4">
+                    <button class="btn-middle" nz-button nzType="primary" (click)="fnShowRecoveryConfirm()">
+                        <span>恢复账户</span>
+                    </button>
+                </li>
+                <li nz-col nzSpan="4">
+                    <button class="btn-middle" nz-button nzType="primary" [ngClass]="{'disabled': m_objUser.State == 0}"
+                        [disabled]="m_objUser.State == 0" (click)="fnShowRemoveConfirm()">
+                        <span>关闭账户</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

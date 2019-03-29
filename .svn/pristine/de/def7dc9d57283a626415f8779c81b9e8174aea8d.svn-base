@@ -1,0 +1,23 @@
+# coding: utf-8
+'''
+Created on 2013-11-12
+
+@author: Administrator
+'''
+import os
+from libs import web
+from core.log.operate_log import write_operate_log
+ 
+
+class handler(object):      
+    def GET(self):
+        write_operate_log()
+        #如果没登录则跳转到登录界面
+        if web.ctx.path.split('/')[-1:][0] != 'index' and not web.ctx.session.login:
+            print 12344
+            raise web.seeother('/index')
+    
+        if hasattr(web.config.render, web.ctx.path):
+            return getattr(web.config.render, web.ctx.path)()
+        else: 
+            return web.notfound("Sorry, the page you were looking for was not found.")

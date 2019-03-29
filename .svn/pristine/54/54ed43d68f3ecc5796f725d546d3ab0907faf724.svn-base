@@ -1,0 +1,19 @@
+<div class="header flex">
+    <div class="header-logo-tabs flex">
+        <div class="header-logo flex" routerLink="/home">
+            <img src="assets/img/logo.png" alt="广州穗通金融服务有限公司" title="广州穗通金融服务有限公司">
+            <p>旅馆业治安管理系统</p>
+        </div>
+        <div class="header-tab flex">
+            <div class="flex" *ngFor="let item of m_aTabList" [ngClass]="{'selected':item.routeName===m_sRoutePath}"
+                routerLink="{{item.routeName}}">
+                <img src="assets/img/{{item.tabIcon}}" alt="" title="{{item.tabName}}">
+                <p>{{item.tabName}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="header-info flex">
+        <a href="javascript" (click)="fnGoSystemManage()">{{m_objContextService.m_objUserInfo.UserName}}</a>
+        <a (click)="m_objContextService.fnLogout()">注销</a>
+    </div>
+</div>

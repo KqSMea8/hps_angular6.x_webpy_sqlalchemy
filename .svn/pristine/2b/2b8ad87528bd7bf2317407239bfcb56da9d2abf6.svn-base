@@ -1,0 +1,145 @@
+@import "styles.less";
+
+.mg(@t:0px,@r:0px,@b:0px,@l:0px) {
+    margin-top: @t;
+    margin-right: @r;
+    margin-bottom: @b;
+    margin-left: @l;
+}
+
+.pd(@t:0px,@r:0px,@b:0px,@l:0px) {
+    padding-top: @t;
+    padding-right: @r;
+    padding-bottom: @b;
+    padding-left: @l;
+}
+
+.ha-breadcrumb {
+    .mg(@t:6px,@b:8px);
+}
+
+.ha-area-add {
+    .pd(@l:20px);
+    border: 20px solid #eaf1f9;
+    .add-title {
+        .pd(@t:10px);
+        display: flex;
+        div {
+            /*width: 30%;*/
+            span {
+                .pd(@l:6px,@r:6px,@t:6px)
+            }
+        }
+    }
+    .line {
+        position: relative;
+        .mg(@t:6px,@b:40px);
+        height: 1px;
+        width: 95%;
+        background-color: #ccc;
+    }
+    .add-body-f1 {
+        display: flex;
+        .add-body-f {
+            .mg(@t:5px,@b:5px,@r:20px);
+            > div {
+                .mg(@t:6px,@b:6px)
+            }
+        }
+    }
+
+    .add-body-s {
+        display: flex;
+        > div {
+            .mg(@t:5px,@b:5px,@r:20px);
+            > div {
+                .pd(@t:6px,@b:6px)
+            }
+        }
+    }
+    .add-body-th {
+        display: flex;
+        > div {
+            .mg(@t:5px,@b:5px,@r:20px);
+            > div {
+                .pd(@t:6px,@b:6px)
+            }
+        }
+        .th-tel {
+            width: 30%;
+
+        }
+    }
+    .add-body-fif {
+        .mg(@t:14px,@b:14px);
+        div {
+             .mg(@t:5px,@b:5px,@r:20px);
+            > div {
+                .pd(@t:6px,@b:6px)
+            }
+        }
+    }
+}
+
+.ha-area-btn {
+    display: flex;
+    width: 100%;
+    .pd(@r:10%);
+    background-color: #eaf1f9;
+    border-bottom: 40px solid #eaf1f9;
+    border-left: 40px solid #eaf1f9;
+    .btn-verify {
+        width: 8%;
+        .mg(@l:5%,@r:5%);
+        button {
+
+        }
+    }
+    .btn-logoff {
+        button {
+        }
+    }
+    .btn-submit {
+        button {
+        }
+    }
+    .btn-cencel {
+        button {
+        }
+    }
+}
+
+nz-select {
+    width: 50%;
+}
+
+.ha-body {
+    overflow-y: scroll;
+    height: 100%;
+}
+
+.buttom-width-80 {
+    width: 80px;
+}
+
+.buttom-width-120 {
+    width: 120px;
+}
+
+.buttom-width-160 {
+    width: 160px;
+}
+
+.buttom-width-500 {
+    width: 500px;
+}
+
+
+
+
+
+
+
+
+
+

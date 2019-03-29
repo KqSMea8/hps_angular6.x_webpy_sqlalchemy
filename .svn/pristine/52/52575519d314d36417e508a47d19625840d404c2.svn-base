@@ -1,0 +1,15 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-foreign-guest',
+  templateUrl: './foreign-guest.component.html',
+  styleUrls: ['./foreign-guest.component.less']
+})
+export class ForeignGuestComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}

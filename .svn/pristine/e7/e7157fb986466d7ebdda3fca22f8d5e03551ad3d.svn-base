@@ -1,0 +1,8 @@
+<div class="layer-content flex">
+    <div class="layer-side">
+        <app-sidebar [title]="title" [subtab]="m_lsTabsList"></app-sidebar>
+    </div>
+    <div class="layer-main overflow-y">
+        <router-outlet></router-outlet>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+import { Component, OnInit } from '@angular/core';
+import { Subtab } from 'src/app/class/sidebar';
+import { SystemManagementService } from 'src/app/services/system-management.service';
+
+@Component({
+    selector: 'app-user-info',
+    templateUrl: './user-info.component.html',
+    styleUrls: ['./user-info.component.less']
+})
+export class UserInfoComponent implements OnInit {
+
+    public m_objSubtab: Array<Subtab>;
+    constructor(
+        public m_objSysService: SystemManagementService
+        ) { }
+
+    ngOnInit() {
+        this.m_objSubtab = this.m_objSysService.m_objSubtab;
+    }
+
+}

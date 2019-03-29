@@ -1,0 +1,55 @@
+import { Injectable } from '@angular/core';
+import { Subtab } from '../class/sidebar';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class GuestCheckinService {
+
+    m_objSubtab: Array<Subtab> = [
+        {subtabName: '所有住客查询', subtabIcon: 'guest-checkin.png', routerName: '/main/GuestCheckinList/allGuest'},
+        {subtabName: '境外住客查询', subtabIcon: 'guest-checkin.png', routerName: '/main/GuestCheckinList/foreignGuest'},
+    ];
+    // 证件类型
+    m_aDocType: Array<any> = [
+        {name: '身份证', id: 0},
+        {name: '护照', id: 1},
+        {name: '户口本', id: 2},
+        {name: '军人证', id: 3},
+        {name: '居住证', id: 4},
+    ];
+    // 国籍
+    m_aNationality: Array<any> = [
+        {name: '中国', id: 0},
+        {name: '美国', id: 1},
+        {name: '俄罗斯', id: 2},
+        {name: '英国', id: 3},
+        {name: '法国', id: 4},
+    ];
+
+    // 性别
+    m_aSex: Array<any> = [
+        {name: '男', id: 0},
+        {name: '女', id: 1}
+    ];
+
+    // 民族
+    m_aNation: Array<any> = [
+        {name: '汉族', id: 0},
+        {name: '壮族', id: 1},
+        {name: '满族', id: 2},
+        {name: '羌族', id: 3},
+        {name: '蒙古族', id: 4}
+    ];
+    // 签证类型
+    m_aVisa: Array<any> = [
+        {name: '外交签证', id: 0},
+        {name: '公务签证', id: 1},
+        {name: '普通签证', id: 2},
+    ];
+    // 旅客入住详情类型
+    m_nGuestType: number;
+    // 旅客ID
+    m_nGuestID: number;
+    constructor() { }
+}

@@ -1,0 +1,75 @@
+# coding: utf-8
+import datetime
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.u_user import User
+from utils.tools import is_null
+from utils.func_api import FuncResult
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        '''
+        获取请求参数
+        '''
+        input = web.input()
+        try:
+            nAddUserIDMust = input.get('nAddUserIDMust')
+            sAdduserNameMust = input.get('sAdduserNameMust')
+            sUserCode = input.get('sUserCode')
+            sPassword = input.get('sPassword')
+            if not nAddUserIDMust :
+                return FuncResult(fail='参数\'nAddUserIDMust\'不能为空')
+            elif not sAdduserNameMust :
+                return FuncResult(fail='参数\'sAdduserNameMust\'不能为空')
+            elif not sUserCode:
+                return FuncResult(fail='参数\'sUserCode\'不能为空')
+            elif not sPassword:
+                return FuncResult(fail='参数\'sPassword\'不能为空')
+            obj_userCode = User().query.filter(User.UserCode == sUserCode) \
+                .first()
+            if obj_userCode:
+                return FuncResult(msg='该用户名已存在，请重新输入!')
+            sTel = input.get('sTel')
+            sWorkCode = input.get('sWorkCode')
+            sUserName = input.get('sUserName')
+            sPost = input.get('sPost')
+            sRemark = input.get('sRemark')
+
+        except Exception, ce:
+            # 异常处理
+            return FuncResult(fail='参数有误!')
+
+        return self.add_user(nAddUserIDMust, sAdduserNameMust, sUserCode,
+                             sPassword, sTel, sWorkCode, sUserName, sPost, sRemark)
+
+    def add_user(self, nAddUserIDMust, sAdduserNameMust, sUserCode, sPassword,
+                 sTel, sWorkCode, sUserName, sPost, sRemark):
+        # 新增数据
+        obj_user = User()
+        obj_user.UserCode = sUserCode
+        obj_user.Password = sPassword
+        # 0为关闭，1为正常，2为已禁用
+        obj_user.State = 1
+        if not is_null(sTel):
+            obj_user.Tel = sTel
+        if not is_null(sWorkCode):
+            obj_user.WorkCode = sWorkCode
+        if not is_null(sUserName):
+            obj_user.UserName = sUserName
+        if not is_null(sPost):
+            obj_user.Post = sPost
+        if not is_null(sRemark):
+            obj_user.Remark = sRemark
+        obj_user.CreateTime = datetime.datetime.now()
+        # 保存更改到数据库
+        obj_user.save()
+
+        return FuncResult(success=True, msg='操作成功！')

@@ -1,0 +1,52 @@
+# coding: utf-8
+
+import web
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.h_hotel import Hotel
+from utils import obj_to_json
+from utils.func_api import FuncResult
+from utils.tools import is_null
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        obj_input = web.input()
+        try:
+            int_hotelID_must = obj_input.get('nHotelIDMust')
+            if is_null(int_hotelID_must):
+                return FuncResult(fail='参数：nHotelIDMust不能为空')
+
+            int_offLine_userID_must = obj_input.get('nOffLineUserIDMust')
+            if is_null(int_offLine_userID_must):
+                return FuncResult(fail='参数：nOffLineUserIDMust不能为空')
+
+            str_offLine_userCode_must = obj_input.get('sOffLineUserCodeMust')
+            if is_null(str_offLine_userCode_must):
+                return FuncResult(fail='参数：sOffLineUserCodeMust不能为空')
+
+            str_offLine_dateTime_must = obj_input.get('sOffLineDateTimeMust')
+            if is_null(str_offLine_dateTime_must):
+                return FuncResult(fail='参数：sOffLineDateTimeMust不能为空')
+
+            str_remark = obj_input.get('sRemark')
+
+        except Exception, ce:
+            return FuncResult(fail='参数有误!')
+
+        return self.offline_hotel(int_hotelID_must, int_offLine_userID_must, str_offLine_userCode_must, str_offLine_dateTime_must, str_remark)
+
+    def offline_hotel(self, int_hotelID_must, int_offLine_userID_must, str_offLine_userCode_must, str_offLine_dateTime_must, str_remark):
+        # 查找酒店
+        obj_hotel = Hotel().query.filter(Hotel.HotelID == int_hotelID_must).first()
+        # 0：正常营业，1：已下线
+        obj_hotel.State = 1
+        obj_hotel.Remark = str_remark
+        # 保存到数据库
+        obj_hotel.save()
+        return FuncResult(success=True, msg='旅店注销成功!')
+

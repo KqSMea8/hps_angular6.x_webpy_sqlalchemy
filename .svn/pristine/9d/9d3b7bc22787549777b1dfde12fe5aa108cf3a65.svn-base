@@ -1,0 +1,222 @@
+<app-header></app-header>
+<div class="content flex">
+    <div class="g-side">
+        <app-sidebar [title]="'系统管理'" [subtab]="m_objContextService.m_objSideTabList.systemManagement"></app-sidebar>
+    </div>
+    <div class="parameter-config g-main">
+        <app-breadcrumb [data]="m_lsBreadCrumbList"></app-breadcrumb>
+        <app-loading [m_bShowLoading]="m_bShowLoading"></app-loading>
+        <ul [ngSwitch]="m_objSystemManagementService.m_nIsShowTypeID" class="config-list">
+            <li *ngSwitchCase="'0'">
+                <div class="cont pt0">
+                    <p class="title mb10">
+                        境内证件类型配置
+                        <button class="btn-small" nz-button nzType="primary" (click)="fnShowHideAddPop(0)">新增</button>
+                    </p>
+                    <nz-table #basicTable [nzShowPagination]="false" [nzData]="m_objHaveData">
+                        <thead>
+                            <tr>
+                                <th>类型名称</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of m_objContextService.m_objAllDict.doc_type">
+                                <td>{{item.CodeName}}</td>
+                                <td>
+                                    <a href="javascript:;" (click)="fnModifyPop(0,item)">编辑</a>
+                                    <a href="javascript:;" (click)="fnUpdateStatePop(item)">{{item.Flag
+                                        === 1 ? '禁用' : '启用'}}</a>
+                                    <a href="javascript:;" (click)="fnRemovePop(item)">删除</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <nz-modal [(nzVisible)]="m_lsIsShow[0]" nzTitle="类型名称编辑" (nzOnCancel)="fnShowHidePop(0)"
+                            (nzOnOk)="fnUpdate()" [nzOkLoading]="m_bIsOkLoading">
+                            <div class='cont type-name'>
+                                <p>修改类型名称：</p>
+                                <input nz-input class="input-big" [(ngModel)]="m_objUpdateDict.sCodeName">
+                            </div>
+                        </nz-modal>
+                        <nz-modal [(nzVisible)]="m_lsIsShowAdd[0]" nzTitle="新增类型" (nzOnCancel)="fnShowHideAddPop(0)"
+                            (nzOnOk)="fnAddDict(0)" [nzOkLoading]="m_bIsOkLoading">
+                            <div class='cont type-name'>
+                                <p>新增类型名称：</p>
+                                <input nz-input class="input-big" [(ngModel)]="m_objAddDict.sCodeName">
+                            </div>
+                        </nz-modal>
+                    </nz-table>
+                </div>
+            </li>
+            <li *ngSwitchCase="'1'">
+                <div class="cont pt0">
+                    <p class="title mb10">
+                        外籍旅客证件类型配置
+                        <button class="btn-small" nz-button nzType="primary" (click)="fnShowHideAddPop(1)">新增</button>
+                    </p>
+                    <nz-table #basicTable [nzShowPagination]="false" [nzData]="m_objHaveData">
+                        <thead>
+                            <tr>
+                                <th>类型名称</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of m_objContextService.m_objAllDict.foreigner_doc">
+                                <td>{{item.CodeName}}</td>
+                                <td>
+                                    <a href="javascript:;" (click)="fnModifyPop(1,item)">编辑</a>
+                                    <a href="javascript:;" (click)="fnUpdateStatePop(item)">{{item.Flag
+                                        === 1 ? '禁用' : '启用'}}</a>
+                                    <a href="javascript:;" (click)="fnRemovePop(item)">删除</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <nz-modal [(nzVisible)]="m_lsIsShow[1]" nzTitle="类型名称编辑" (nzOnCancel)="fnShowHidePop(1)"
+                            (nzOnOk)="fnUpdate()" [nzOkLoading]="m_bIsOkLoading">
+                            <div class='cont type-name'>
+                                <p>修改类型名称：</p>
+                                <input nz-input class="input-big" [(ngModel)]="m_objUpdateDict.sCodeName">
+                            </div>
+                        </nz-modal>
+                        <nz-modal [(nzVisible)]="m_lsIsShowAdd[1]" nzTitle="新增类型" (nzOnCancel)="fnShowHideAddPop(1)"
+                            (nzOnOk)="fnAddDict(1)" [nzOkLoading]="m_bIsOkLoading">
+                            <div class='cont type-name'>
+                                <p>新增类型名称：</p>
+                                <input nz-input class="input-big" [(ngModel)]="m_objAddDict.sCodeName">
+                            </div>
+                        </nz-modal>
+                    </nz-table>
+                </div>
+            </li>
+            <li *ngSwitchCase="'2'">
+                <div class="cont pt0">
+                    <p class="title mb10">
+                        旅店类型配置
+                        <button class="btn-small" nz-button nzType="primary" (click)="fnShowHideAddPop(2)">新增</button>
+                    </p>
+                    <nz-table #basicTable [nzShowPagination]="false" [nzData]="m_objHaveData">
+                        <thead>
+                            <tr>
+                                <th>类型名称</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of m_objContextService.m_objAllDict.hotel_type">
+                                <td>{{item.CodeName}}</td>
+                                <td>
+                                    <a href="javascript:;" (click)="fnModifyPop(2,item)">编辑</a>
+                                    <a href="javascript:;" (click)="fnUpdateStatePop(item)">{{item.Flag
+                                        === 1 ? '禁用' : '启用'}}</a>
+                                    <a href="javascript:;" (click)="fnRemovePop(item)">删除</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <nz-modal [(nzVisible)]="m_lsIsShow[2]" nzTitle="类型名称编辑" (nzOnCancel)="fnShowHidePop(2)"
+                            (nzOnOk)="fnUpdate()" [nzOkLoading]="m_bIsOkLoading">
+                            <div class='cont type-name'>
+                                <p>修改类型名称：</p>
+                                <input nz-input class="input-big" [(ngModel)]="m_objUpdateDict.sCodeName">
+                            </div>
+                        </nz-modal>
+                        <nz-modal [(nzVisible)]="m_lsIsShowAdd[2]" nzTitle="新增类型" (nzOnCancel)="fnShowHideAddPop(2)"
+                            (nzOnOk)="fnAddDict(2)" [nzOkLoading]="m_bIsOkLoading">
+                            <div class='cont type-name'>
+                                <p>新增类型名称：</p>
+                                <input nz-input class="input-big" [(ngModel)]="m_objAddDict.sCodeName">
+                            </div>
+                        </nz-modal>
+                    </nz-table>
+                </div>
+            </li>
+            <li *ngSwitchCase="'3'">
+                <div class="cont pt0">
+                    <p class="title mb10">
+                        省份配置
+                    </p>
+                    <nz-table #basicTable [nzShowPagination]="false" [nzData]="m_objHaveData">
+                        <thead>
+                            <tr>
+                                <th>类型名称</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of m_objContextService.m_lsProvince">
+                                <td>{{item.Province}}</td>
+                                <td>
+                                    <a href="javascript:;" (click)="fnUpdateAreaStatePop(1, item)">{{item.IsFlag
+                                        === 1 ? '禁用' : '启用'}}</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <nz-modal [(nzVisible)]="m_lsIsShow[3]" nzTitle="类型名称编辑" (nzOnCancel)="fnShowHidePop(3)"
+                            (nzOnOk)="fnUpdateAreaState(1,1)" [nzOkLoading]="m_bIsOkLoading">
+                            <div class='cont type-name'>
+                                <p>修改类型名称：</p>
+                                <input nz-input class="input-big" [(ngModel)]="m_objUpdateArea.nProvinceID">
+                            </div>
+                        </nz-modal>
+                    </nz-table>
+                </div>
+            </li>
+            <li *ngSwitchCase="'4'">
+                <div class="cont pt0">
+                    <p class="title mb10">
+                        州市县配置
+                    </p>
+                    <p>
+                        选择上级单位：
+                        <app-area-choose (m_lsCurrentCityList)="fnGetCurrentProvince($event)" [m_lsIsShowAreaType]="m_lsIsShowProvinceType"></app-area-choose>
+                    </p>
+                    <nz-table #basicTable [nzShowPagination]="false" [nzData]="m_objHaveData">
+                        <thead>
+                            <tr>
+                                <th>类型名称</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of m_lsCurrentCityList">
+                                <td>{{item.CityName}}</td>
+                                <td>
+                                    <a href="javascript:;" (click)="fnUpdateAreaStatePop(2, item)">{{item.IsFlag
+                                        === 1 ? '禁用' : '启用'}}</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </li>
+            <li *ngSwitchCase="'5'">
+                <div class="cont pt0">
+                    <p class="title mb10">
+                        行政区配置
+                    </p>
+                    <p>
+                        选择上级单位：
+                        <app-area-choose (m_lsCurrentDistrictList)="fnGetCurrentProvince($event)" [m_lsIsShowAreaType]="m_lsIsShowAreaType"></app-area-choose>
+                    </p>
+                    <nz-table #basicTable [nzShowPagination]="false" [nzData]="m_objHaveData">
+                        <thead>
+                            <tr>
+                                <th>类型名称</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of m_lsCurrentCityList">
+                                <td>{{item.CityName}}</td>
+                                <td>
+                                    <a href="javascript:;" (click)="fnUpdateAreaStatePop(2, item)">{{item.IsFlag
+                                        === 1 ? '禁用' : '启用'}}</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

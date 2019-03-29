@@ -1,0 +1,70 @@
+<app-header></app-header>
+<div nz-row class="content">
+    <div nz-col nzSpan="3">
+        <app-sidebar [title]="'系统管理'" [subtab]="m_objSystemManagementService.m_objSubtab"></app-sidebar>
+    </div>
+    <div nz-col nzSpan="21" class="parameter-config">
+        <app-breadcrumb [data]="m_lsBreadCrumbList"></app-breadcrumb>
+        <div class="cont">
+            <p class="title">字典数据配置</p>
+            <nz-table #basicTable [nzShowPagination]="false" [nzData]="m_lsSearchLogList">
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>类型</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>境内证件类型</td>
+                        <td>身份证、港澳居民来往内地通行证</td>
+                        <td>
+                            <a href="javascript:;" (click)="alert(1)"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>境外证件类型</td>
+                        <td>护照、外国人永久居留证</td>
+                        <td>
+                            <a href="javascript:;" (click)="alert(1)"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>旅店类型</td>
+                        <td>连锁旅店、独立经营、民宿、青年旅社</td>
+                        <td>
+                            <a href="javascript:;" (click)="alert(1)"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>省份类型</td>
+                        <td>北京市、天津市、贵州省、广东省</td>
+                        <td>
+                            <a href="javascript:;" (click)="alert(1)"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>州市类型</td>
+                        <td>
+                            上级单位：
+                            <nz-select>
+                                <nz-option></nz-option>
+                            </nz-select>
+                        </td>
+                        <td>
+                            <a href="javascript:;" (click)="alert(1)"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>境内证件类型</td>
+                        <td>身份证、港澳居民来往内地通行证</td>
+                        <td>
+                            <a href="javascript:;" (click)="alert(1)"></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>

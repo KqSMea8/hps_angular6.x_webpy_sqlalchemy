@@ -1,0 +1,81 @@
+import { Component, OnInit } from '@angular/core';
+import { Subtab } from 'src/app/class/sidebar';
+import { SystemManagementService } from 'src/app/services/system-management.service';
+import { ApiService } from 'src/app/services/api.service';
+import { RemoveUserCondition } from 'src/app/class/removeUserCondition';
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
+import { UpdateUserCondition } from 'src/app/class/updateUserCondition';
+
+@Component({
+    selector: 'app-user-info',
+    templateUrl: './user-info.component.html',
+    styleUrls: ['./user-info.component.less']
+})
+export class UserInfoComponent implements OnInit {
+
+    m_objSubtab: Array<Subtab>;
+    m_nBtnState: number = 0;
+    m_objRemoveUserCondition: RemoveUserCondition = new RemoveUserCondition();
+    m_objUpdateUserCondition: UpdateUserCondition = new UpdateUserCondition();
+    constructor(
+        public m_objSysService: SystemManagementService,
+        public m_objApiService: ApiService,
+        private m_objMessage: NzMessageService,
+        private modalService: NzModalService
+    ) { }
+
+    ngOnInit() {
+        this.m_objSubtab = this.m_objSysService.m_objSubtab;
+    }
+
+    //更改用户状态，禁用、恢复
+    fnUpdateUser(nState: number): void {
+        this.m_objUpdateUserCondition.nUpdateUserIDMust = 1;
+        this.m_objUpdateUserCondition.sUpdateUserNameMust = "张三";
+        this.m_objUpdateUserCondition.nUserID = 1;
+        this.m_objUpdateUserCondition.sRemark = "修改用户状态";
+        this.m_objUpdateUserCondition.nState = nState;
+        this.m_objApiService.fnUpdateUserState(this.m_objUpdateUserCondition).subscribe(data => {
+            if (data.Code === 200) {
+                this.m_nBtnState = 1;
+                this.m_objMessage.create('info', "操作成功！");
+            } else {
+                this.m_objMessage.create('error', "操作失败！");
+            }
+        })
+    }
+
+    //关闭账户
+    fnRemoveUser(): void {
+        this.m_objRemoveUserCondition.nRemoveUserIDMust = 1;
+        this.m_objRemoveUserCondition.sRemoveUserCodeMust = "张三";
+        this.m_objRemoveUserCondition.nUserID = 26;
+        this.m_objRemoveUserCondition.sRemark = "关闭用户";
+        this.m_objApiService.fnRemoveUser(this.m_objRemoveUserCondition).subscribe(data => {
+            if (data.Code === 200) {
+                this.m_nBtnState = 2;
+                this.m_objMessage.create('info', "账户关闭成功！");
+            }else{
+                this.m_objMessage.create('error', "操作失败！")
+            }
+        })
+    }
+
+    //关闭账户弹窗
+    fnShowForbidConfirm(): void {
+        this.modalService.confirm({
+            nzTitle: "提示",
+            nzContent: "确定禁用该账户？",
+            nzOnOk: () => this.fnUpdateUser(2)
+        });
+    }
+
+    //恢复账户弹窗
+    fnShowRecoveryConfirm(): void {
+        this.modalService.confirm({
+            nzTitle: "提示",
+            nzContent: "确定恢复账户使用？",
+            nzOnOk: () => this.fnUpdateUser(1)
+        });
+    }
+}

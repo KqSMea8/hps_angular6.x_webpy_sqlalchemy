@@ -1,0 +1,82 @@
+# coding: utf-8
+
+import web
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.l_loperating_log import OperatingLog
+from models.hps.u_user import User
+from utils import obj_to_json
+from sqlalchemy import and_, or_
+from utils.func_api import FuncResult
+from utils.tools import to_datetime, result_data, obj_to_dict
+from sqlalchemy import and_, or_, text
+import json
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        objInput = web.input()
+        try:
+            nSearchUserID = objInput.get('nSearchUserIDMust')
+            nSearchUserCode = objInput.get('nSearchUserIDMust')
+            nUserID = objInput.get('nUserID')
+            sWorkCode = objInput.get('sWorkCode')
+            sUserCode = objInput.get('sUserCode')
+            sUserName = objInput.get('sUserName')
+            nOperaType = objInput.get('nOperaType')
+            sPost = objInput.get('sPost')
+            dtDateStart = objInput.get('sDateStart')
+            if dtDateStart:
+                dtDateStart = to_datetime(dtDateStart)
+            dtDateEnd = objInput.get('sDateEnd')
+            if dtDateEnd:
+                dtDateEnd = to_datetime(dtDateEnd)
+            objPageInfo = objInput.get('objPageInfo')
+            objPageInfo = json.loads(objPageInfo)
+        except Exception, ce:
+            print Exception, ce
+            return FuncResult(fail='参数有误!')
+        return self.search_log_list(objPageInfo, nUserID, sWorkCode, sUserCode, sUserName,
+                                    nOperaType, sPost,
+                                    dtDateStart, dtDateEnd)
+
+    def search_log_list(self, objPageInfo, nUserID, sWorkCode, sUserCode, sUserName, nOperaType,
+                        sPost, dtDateStart, dtDateEnd):
+        strSql = OperatingLog().query2(OperatingLog, User.UserCode).join(User, OperatingLog.UserID == User.UserID)
+        if  nUserID !="":
+            strSql = strSql.filter(OperatingLog.UserID == nUserID)
+        if sWorkCode != "":
+            strSql = strSql.filter(OperatingLog.WorkCode == sWorkCode)
+        if sUserName != "":
+            strSql = strSql.filter(OperatingLog.UserName == sUserName)
+        if nOperaType != "":
+            strSql = strSql.filter(OperatingLog.OperaType == nOperaType)
+        if dtDateStart != "":
+            strSql = strSql.filter(OperatingLog.CreateTime >= dtDateStart)
+        if dtDateEnd != "":
+            strSql = strSql.filter(OperatingLog.CreateTime <= dtDateEnd)
+        lsQueryData = strSql.limit(
+            objPageInfo['nPageSize']).offset((objPageInfo['nPageNo'] - 1) * objPageInfo['nPageSize']).all()
+        lsDataSet = []
+        for objQueryData in lsQueryData:
+            distData = web.storage(**obj_to_dict(objQueryData[0].copy(bind=False)))
+            distData['UserCode'] = objQueryData[1]
+            distData['KeyWord'] = json.loads(objQueryData[0].KeyWord)
+            lsDataSet.append(distData)
+        PageCount = len(lsQueryData)
+        Data = result_data(objPageInfo['nPageNo'], objPageInfo['nPageSize'], PageCount, lsDataSet)
+        return FuncResult(success=True, msg='操作成功！', data=Data)
+
+    def order_by(self, nSort):
+        sOrderBy = ""
+        if nSort == "UserID":
+            sOrderBy = "order by l_operating_log.UserID desc"
+        elif nSort == "":
+            sOrderBy = ""
+        return sOrderBy
+

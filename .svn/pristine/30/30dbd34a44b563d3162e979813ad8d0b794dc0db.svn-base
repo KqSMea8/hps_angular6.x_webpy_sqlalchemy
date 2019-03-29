@@ -1,0 +1,39 @@
+import { RouteReuseStrategy, ActivatedRouteSnapshot, DetachedRouteHandle } from '@angular/router';
+
+export class MyRouteReuseStrategy implements RouteReuseStrategy {
+
+    /**路由快照缓存数组 */
+    public _cacheRoutes: { [key: string]: any } = {};
+
+    /** 表示对所有路由允许复用 默认对所有路由复用，该项目给路由配置项增加data:{keep: true}来选择是否复用 */
+    public shouldDetach(route: ActivatedRouteSnapshot): boolean {
+        if (route.data.keep) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /** 当路由离开时会触发。按path作为key存储路由快照&组件当前实例对象 */
+    public store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle): void {
+        this._cacheRoutes[route.routeConfig.path] = handle;
+    }
+
+    /** 若 path 在缓存中有的都认为允许还原路由 */
+    public shouldAttach(route: ActivatedRouteSnapshot): boolean {
+        return !!route.routeConfig && !!this._cacheRoutes[route.routeConfig.path];
+    }
+
+    /** 从缓存中获取快照，若无则返回nul */
+    public retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle {
+        if (!route.routeConfig) {
+            return null;
+        }
+        return this._cacheRoutes[route.routeConfig.path];
+    }
+
+    /** 进入路由触发，判断是否同一路由 */
+    public shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
+        return future.routeConfig === curr.routeConfig;
+    }
+}

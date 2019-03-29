@@ -1,0 +1,199 @@
+# coding: utf-8
+
+import web
+
+from sqlalchemy import text
+
+from core.modules.module_handle import api_handle
+from utils import json_to_obj, to_datetime, obj_to_dict
+from utils.func_api import FuncResult
+
+
+class handler(object):
+    '''外籍旅客入住查询'''
+
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    def data_handle(self):
+        obj_input = web.input()
+        obj_condition = json_to_obj(obj_input.get('objCondition'))
+        obj_page = json_to_obj(obj_input.get('objPageInfo'))
+
+        if not obj_condition:
+            print obj_condition
+            return FuncResult(msg='未输入查询条件')
+        else:
+            if not obj_condition.has_key('nSearchUserIDMust') or not obj_condition['nSearchUserIDMust']:
+                return FuncResult(fail='操作用户ID为必传参数')
+            if not obj_condition.has_key('sSearchUserCodeMust') or not obj_condition['sSearchUserCodeMust']:
+                return FuncResult(fail='操作用户为必传参数')
+
+        return self.search_foreign_checkin(obj_condition, obj_page)
+
+    def search_foreign_checkin(self, obj_condition, obj_page):
+
+        str_sql = '''select
+                       SQL_CALC_FOUND_ROWS
+                       h_relation_checkin.*, g_guest_checkin.*, g_foreigner.*
+                    from
+                        g_guest_doc g
+                        inner join g_foreigner on g.GuestDocID = g_foreigner.GuestDocID,
+                        h_relation_checkin
+                        inner join h_checkin on h_relation_checkin.CheckInID = h_checkin.CheckInID
+                        inner join g_guest_checkin on h_relation_checkin.HotelGuestID = g_guest_checkin.HotelGuestID,
+                        h_checkin checkin
+                        inner join h_hotel on checkin.HotelID = h_hotel.HotelID
+              '''
+
+        if len(obj_condition) > 2:
+            str_sql = str_sql + ' where '
+
+        lst_params = []
+        dict_params_value = {}
+
+        # 入住出示证件信息
+        if obj_condition.has_key('sGuestDocNameLike') and obj_condition['sGuestDocNameLike']:
+            str_guest_docname = obj_condition['sGuestDocNameLike']
+            str_sql += ' And g_guest_checkin.GuestDocName = :str_guest_docname '
+            lst_params.append('g_guest_checkin.GuestDocName = :str_guest_docname')
+            dict_params_value['str_guest_docname'] = str_guest_docname
+
+        if obj_condition.has_key('sDocNoLikeL') and obj_condition['sDocNoLikeL']:
+            str_docNo = obj_condition['sDocNoLikeL']
+            str_sql += ' And g_guest_checkin.DocNo = :str_docNo '
+            lst_params.append('g_guest_checkin.DocNo = :str_docNo')
+            dict_params_value['str_docNo'] = str_docNo
+
+        if obj_condition.has_key('nSex') and obj_condition['nSex']:
+            int_sex = obj_condition['nSex']
+            str_sql += ' And g_guest_checkin.Sex = :int_sex '
+            lst_params.append('g_guest_checkin.Sex = :int_sex')
+            dict_params_value['int_sex'] = int_sex
+
+        if obj_condition.has_key('sBornDateStart') and obj_condition['sBornDateStart']:
+            str_born_date_start = to_datetime(obj_condition['sBornDateStart'])
+            str_sql += ' And g_guest_checkin.BornDate > :str_born_date_start '
+            lst_params.append('g_guest_checkin.BornDateStart = :str_born_date_start')
+            dict_params_value['str_born_date_start'] = str_born_date_start
+
+        if obj_condition.has_key('sBornDateEnd') and obj_condition['sBornDateEnd']:
+            str_born_date_end = to_datetime(obj_condition['BornDateEnd'])
+            str_sql += ' And g_guest_checkin.BornDate <= :str_born_date_end '
+            lst_params.append('g_guest_checkin.BornDateEnd = :str_born_date_end')
+            dict_params_value['str_born_date_end'] = str_born_date_end
+
+        # 酒店入住信息
+        if obj_condition.has_key('sHotelNameLike') and obj_condition['sHotelNameLike']:
+            str_hotel_name = obj_condition['sHotelNameLike']
+            str_sql += ' h_hotel.HotelName Like :str_hotel_name '
+            lst_params.append('h_hotel.HotelName Like :str_hotel_name')
+            dict_params_value['str_hotel_name'] = str_hotel_name
+
+        if obj_condition.has_key('nProvinceID') and obj_condition['nProvinceID']:
+            int_provinceID = obj_condition['nProvinceID']
+            str_sql += ' And h_hotel.ProvinceID = :int_provinceID '
+            lst_params.append('h_hotel.ProvinceID = :int_provinceID')
+            dict_params_value['int_provinceID'] = int_provinceID
+
+        if obj_condition.has_key('nCityID') and obj_condition['nCityID']:
+            int_cityID = obj_condition['nCityID']
+            str_sql += ' And CityID = :int_cityID '
+            lst_params.append('h_hotel.CityID = :int_cityID')
+            dict_params_value['int_cityID'] = int_cityID
+
+        if obj_condition.has_key('nDistrictID') and obj_condition['nDistrictID']:
+            int_districtID = obj_condition['nDistrictID']
+            str_sql += ' And DistrictID = :int_districtID '
+            lst_params.append('h_hotel.DistrictID = :int_districtID')
+            dict_params_value['int_districtID'] = int_districtID
+
+        if obj_condition.has_key('sRoomNo') and obj_condition['sRoomNo']:
+            str_roomNo = obj_condition['sRoomNo']
+            str_sql += ' And RoomNo = :str_roomNo '
+            lst_params.append('h_hotel.RoomNo = :str_roomNo')
+            dict_params_value['str_roomNo'] = str_roomNo
+
+        if obj_condition.has_key('sCheckInDateTimeStart') and obj_condition['sCheckInDateTimeStart']:
+            date_checkin_datetime_start = to_datetime(obj_condition['sCheckInDateTimeStart'])
+            str_sql += ' And h_checkin.CheckInTime > :date_checkin_datetime_start '
+            lst_params.append('h_checkin.CheckInTime > :date_checkin_datetime_start')
+            dict_params_value['date_checkin_datetime_start'] = date_checkin_datetime_start
+
+        if obj_condition.has_key('sCheckInDateTimeEnd') and obj_condition['sCheckInDateTimeEnd']:
+            date_checkin_datetime_end = to_datetime(obj_condition['sCheckInDateTimeEnd'])
+            str_sql += ' And h_checkin.CheckInTime <= :date_checkin_datetime_end '
+            lst_params.append('h_checkin.CheckInTime <= :date_checkin_datetime_end')
+            dict_params_value['date_checkin_datetime_end'] = date_checkin_datetime_end
+
+        if obj_condition.has_key('sNationality') and obj_condition['sNationality']:
+            str_nationality = obj_condition['Nationality']
+            str_sql += ' And g.Nationality = :str_nationality '
+            lst_params.append('g.Nationality = :str_nationality')
+            dict_params_value['str_nationality'] = str_nationality
+
+        if obj_condition.has_key('sDepartureTimeStart') and obj_condition['sDepartureTimeStart']:
+            date_departure_time_start = to_datetime(obj_condition['sDepartureTimeStart'])
+            str_sql += ' And g_foreigner.DepartureTime > :date_departure_time_start '
+            lst_params.append('g_foreigner.DepartureTime > :date_departure_time_start')
+            dict_params_value['date_departure_time_start'] = date_departure_time_start
+
+        if obj_condition.has_key('sDepartureTimeEnd') and obj_condition['sDepartureTimeEnd']:
+            date_departure_time_end = to_datetime(obj_condition['sDepartureTimeEnd'])
+            str_sql += ' And g_foreigner.DepartureTime <= :date_departure_time_end '
+            lst_params.append('g_foreigner.DepartureTime <= :date_departure_time_end')
+            dict_params_value['date_departure_time_end'] = date_departure_time_end
+
+        if obj_condition.has_key('sEntryTimeStart') and obj_condition['sEntryTimeStart']:
+            date_entry_time_start = to_datetime(obj_condition['sEntryTimeStart'])
+            str_sql += ' And g_foreigner.EntryTime > :date_entry_time_start '
+            lst_params.append('g_foreigner.EntryTime > :date_entry_time_start')
+            dict_params_value['date_entry_time_start'] = date_entry_time_start
+
+        if obj_condition.has_key('sEntryTimeEnd') and obj_condition['sEntryTimeEnd']:
+            date_entry_time_end = to_datetime(obj_condition['sDepartureTimeEnd'])
+            str_sql += ' And g_foreigner.EntryTime <= :date_entry_time_end '
+            lst_params.append('g_foreigner.EntryTime <= :date_entry_time_end')
+            dict_params_value['date_entry_time_end'] = date_entry_time_end
+
+        if obj_condition.has_key('sEntryPlace') and obj_condition['sEntryPlace']:
+            str_entry_place = obj_condition['sEntryPlace']
+            str_sql += ' And g_foreigner.EntryPlace = :str_entry_place '
+            lst_params.append('g_foreigner.EntryPlace = :str_entry_place')
+            dict_params_value['str_entry_place'] = str_entry_place
+
+        if obj_condition.has_key('sDeparturePlace') and obj_condition['sDeparturePlace']:
+            str_departure_place = obj_condition['sDeparturePlace']
+            str_sql += ' And g_foreigner.DeparturePlace = :str_departure_place '
+            lst_params.append('g_foreigner.DeparturePlace = :str_departure_place')
+            dict_params_value['str_departure_place'] = str_departure_place
+
+        if obj_condition.has_key('sVisaType') and obj_condition['sVisaType']:
+            str_visa_type = obj_condition['sVisaType']
+            str_sql += ' And g_foreigner.VisaType = :str_visa_type '
+            lst_params.append('g_foreigner.VisaType = :str_visa_type')
+            dict_params_value['str_visa_type'] = str_visa_type
+
+        if obj_condition.has_key('sVisaDeadline') and obj_condition['sVisaDeadline']:
+            date_visa_deadline = to_datetime(obj_condition['sVisaDeadline'])
+            str_sql += ' And g_foreigner.VisaDeadline = :date_visa_deadline '
+            lst_params.append('g_foreigner.VisaDeadline = :date_visa_deadline')
+            dict_params_value['date_visa_deadline'] = date_visa_deadline
+
+        if obj_page:
+            str_sql += ' Limit %s, %s ' % ((obj_page['nPageNo'] - 1) * obj_page['nPageSize'], obj_page['nPageSize'])
+            lst_rows_count = web.ctx.cur_dbconn.execute(text('SELECT FOUND_ROWS()')).fetchone()
+            if lst_rows_count and len(lst_rows_count) > 0:
+                int_total_count = lst_rows_count[0]
+
+        lst_query_data = web.ctx.cur_dbconn.execute(text(str_sql),
+                                                **dict_params_value).fetchall()
+
+        lst_data = []
+        for obj_data in lst_query_data:
+            lst_data.append(web.storage(**obj_to_dict(obj_data.copy(bind=False))))
+
+        return FuncResult(success=True, data={'PageNo':obj_page['nPageNo'], 'PageSize':obj_page['nPageSize'],
+                                              'PageCount':int_total_count, 'DataList':lst_data})
+

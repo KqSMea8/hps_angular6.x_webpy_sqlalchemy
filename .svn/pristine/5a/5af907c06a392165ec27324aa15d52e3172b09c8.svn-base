@@ -1,0 +1,44 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.u_user import User
+from utils import obj_to_json
+from utils.func_api import FuncResult
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        input = web.input()
+        try:
+            add_user_id = input.get('nAddUserIDMust')
+            add_user_Code = input.get('sAdduserCodeMust')
+            usercode = input.get('sUserCode')
+            password = input.get('sPassword')
+            state = input.get('nState')
+            tel = input.get('sTel')
+            work_code = input.get('sWorkCode')
+            username = input.get('sUserName')
+            post = input.get('sPost')
+            role_list = input.get('sRoleList')
+            remark = input.get('sRemark')
+
+        except Exception, ce:
+            return FuncResult(fail='参数有误!')
+
+        return self.add_user(add_user_id, add_user_Code, usercode, password, state, tel, work_code, username, post, role_list, remark)
+
+    def add_user(self, usercode, password):
+        obj_user = User()
+        obj_user.UserCode = usercode
+        obj_user.Password = password
+        obj_user.save()
+        return FuncResult(success=True,Msg='操作成功！')
+

@@ -1,0 +1,199 @@
+<div class="Breadcrumb">
+    <nz-breadcrumb nzSeparator=">">
+        <nz-breadcrumb-item>
+            Home
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a>Application List</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            An Application
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+</div>
+<div class="area-search">
+    <div class="hs-input-f">
+        <div>
+            <div>旅店编号</div>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder=""
+                       [(ngModel)]="selectedValue">
+                <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+            </nz-select>
+        </div>
+        <div>
+            <div>旅店名称</div>
+            <input nz-input placeholder="" [(ngModel)]="value">
+        </div>
+        <div>
+            <div>前台电话</div>
+            <input nz-input placeholder="" [(ngModel)]="value">
+        </div>
+        <div>
+            <div>房间数</div>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder=""
+                       [(ngModel)]="selectedValue">
+                <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+            </nz-select>
+        </div>
+        <div>
+            <div>责任人</div>
+            <input nz-input placeholder="" [(ngModel)]="value">
+        </div>
+
+
+    </div>
+    <div class="hs-input-f">
+        <div>
+            <div>责任人电话</div>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder=""
+                       [(ngModel)]="selectedValue">
+                <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+            </nz-select>
+        </div>
+        <div>
+            <div>法人姓名</div>
+            <input nz-input placeholder="" [(ngModel)]="value">
+        </div>
+        <div>
+            <div>法人证件号</div>
+            <input nz-input placeholder="" [(ngModel)]="value">
+        </div>
+        <div>
+            <div>法人联系电话</div>
+            <input nz-input placeholder="" [(ngModel)]="value">
+        </div>
+        <div style="visibility:hidden">
+        </div>
+    </div>
+    <div class="hs-input-f">
+        <div>
+            <div>省</div>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder=""
+                       [(ngModel)]="selectedValue">
+                <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+            </nz-select>
+        </div>
+        <div>
+            <div>市/县</div>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder=""
+                       [(ngModel)]="selectedValue">
+                <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+            </nz-select>
+        </div>
+        <div>
+            <div>区</div>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder=""
+                       [(ngModel)]="selectedValue">
+                <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+            </nz-select>
+        </div>
+        <div style="visibility:hidden">
+        </div>
+        <div style="visibility:hidden">
+        </div>
+    </div>
+    <div class="hs-input-f">
+        <div>
+            <div>状态</div>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder=""
+                       [(ngModel)]="selectedValue">
+                <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+            </nz-select>
+        </div>
+        <div>
+            <div>登记人</div>
+            <input nz-input placeholder="" [(ngModel)]="value">
+        </div>
+        <div style="visibility:hidden">
+            <div>法人证件号</div>
+            <input nz-input placeholder="" [(ngModel)]="value">
+        </div>
+        <div style="visibility:hidden">
+            <div>法人联系电话</div>
+            <input nz-input placeholder="" [(ngModel)]="value">
+        </div>
+        <div style="visibility:hidden">
+        </div>
+    </div>
+    <div class="hs-date">
+        <div>
+            <div>登记时间</div>
+            <span>从</span>
+            <nz-date-picker
+                [nzDisabledDate]="disabledStartDate" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss" [(ngModel)]="startValue"
+                nzPlaceHolder="" (ngModelChange)="onStartChange($event)"
+                (nzOnOpenChange)="handleStartOpenChange($event)">
+            </nz-date-picker>
+        </div>
+        <div>
+            <div style="visibility:hidden">区</div>
+            <span>至</span>
+            <nz-date-picker [nzDisabledDate]="disabledEndDate" nzShowTime nzFormat="yyyy-MM-dd HH:mm:ss"
+                            [(ngModel)]="endValue" nzPlaceHolder="" [nzOpen]="endOpen"
+                            (ngModelChange)="onEndChange($event)" (nzOnOpenChange)="handleEndOpenChange($event)">
+            </nz-date-picker>
+        </div>
+        <div class="btn-search">
+            <div style="visibility:hidden">Search</div>
+            <button nz-button nzType="primary">Primary</button>
+        </div>
+        <div style="visibility:hidden">
+        </div>
+    </div>
+</div>
+<div class="area-sort">
+    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="默认排序"
+               [(ngModel)]="selectedValue">
+        <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+        <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+        <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+    </nz-select>
+</div>
+<div class="area-table">
+    <nz-table #basicTable [nzData]="dataSet">
+        <thead>
+        <tr>
+            <th>酒店编号</th>
+            <th>酒店名称</th>
+            <th>省</th>
+            <th>市/县</th>
+            <th>酒店地址</th>
+            <th>房间数</th>
+            <th>责任人</th>
+            <th>联系电话</th>
+            <th>前台电话</th>
+            <th>登记人</th>
+            <th>登记时间</th>
+            <th>状态</th>
+            <th>详情</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of basicTable.data">
+            <td>{{data.name}}</td>
+            <td>{{data.age}}</td>
+            <td>{{data.address}}</td>
+            <td>
+                <a>Action 一 {{data.name}}</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a>Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </nz-table>
+</div>
+

@@ -1,0 +1,103 @@
+<app-header></app-header>
+<div nz-row class="content">
+    <div nz-col nzSpan="3">
+        <app-sidebar [title]="'开房信息查询'" [subtab]="m_objCheckinService.m_objSubtab"></app-sidebar>
+    </div>
+    <div nz-col nzSpan="21" class="checkin-log-list">
+        <div class="hotel-info">
+            <div class="hotel-name">
+                <h2>{{m_objCheckinService.m_sHotelName}}</h2>
+                <span>最终数据上传时间：{{m_lsHotelCheckinList.LastDate.Date}}</span>
+            </div>
+            <ul class="data-list">
+                <li>
+                    <img src="/assets/img/checkin-log-list.png">
+                    <div>
+                        <h2>房间总数（间）</h2>
+                        <p>{{m_lsHotelCheckinList.LastDate.RoomCount}}</p>
+                    </div>
+                </li>
+                <li>
+                    <img src="/assets/img/checkin-log-list.png">
+                    <div>
+                        <h2>床位总数（个）</h2>
+                        <p>{{m_lsHotelCheckinList.LastDate.BedCount}}</p>
+                    </div>
+                </li>
+                <li>
+                    <img src="/assets/img/checkin-log-list.png">
+                    <div>
+                        <h2>在住房（间）</h2>
+                        <p>{{m_lsHotelCheckinList.LastDate.SumCheckInRoom}}</p>
+                    </div>
+                </li>
+                <li>
+                    <img src="/assets/img/checkin-log-list.png">
+                    <div>
+                        <h2>在住人数（个）</h2>
+                        <p>{{m_lsHotelCheckinList.LastDate.SumCheckInGuest}}</p>
+                    </div>
+                </li>
+            </ul>
+            <div class="search-condition">
+                <h2>详细数据</h2>
+                <ul>
+                    <li>
+                        <span>日期查询范围</span>
+                        <nz-date-picker [nzDisabledDate]="m_objContextService.fnDisabledDate" [nzFormat]="this.m_objContextService.m_sDateFormat"
+                            [(ngModel)]="m_objHotelCheckinCondition.objCondition.sCheckInStartDate"></nz-date-picker>
+                        <span>至</span>
+                        <nz-date-picker [nzDisabledDate]="m_objContextService.fnDisabledDate" [nzFormat]="this.m_objContextService.m_sDateFormat"
+                            [(ngModel)]="m_objHotelCheckinCondition.objCondition.sCheckInEndDate"></nz-date-picker>
+                    </li>
+                    <li>
+                        <span>选择</span>
+                        <nz-radio-group [(ngModel)]="m_sPeriod" (ngModelChange)="fnChangePeriod()">
+                            <label nz-radio nzValue="0">今天</label>
+                            <label nz-radio nzValue="1">一周</label>
+                            <label nz-radio nzValue="2">一个月</label>
+                        </nz-radio-group>
+                        <button nz-button nzType="primary" (click)="fnSearchHotelCheckinLog()">查询</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="filter-button">
+            <nz-dropdown [nzTrigger]="'click'">
+                <button nz-button nz-dropdown>
+                    <span>默认排序</span>
+                    <i nz-icon type="down"></i>
+                </button>
+                <ul nz-menu>
+                    <li nz-menu-item>1</li>
+                    <li nz-menu-item>2</li>
+                    <li nz-menu-item>3</li>
+                </ul>
+            </nz-dropdown>
+        </div>
+        <div class="search-data-list">
+            <nz-table #basicTable [nzData]="m_lsSearchLogList">
+                <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>房间总数</th>
+                        <th>总开房次数</th>
+                        <th>总入住登记人次</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of m_lsHotelCheckinList.DateSet">
+                        <td>{{item.Date}}</td>
+                        <td>{{item.RoomCount}}</td>
+                        <td>{{item.SumCheckInRoom}}</td>
+                        <td>{{item.SumCheckInGuest}}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+        <div class="pagination">
+            <nz-pagination [nzPageIndex]="m_objHotelCheckinCondition.objPageInfo.nPageNo" [nzTotal]="m_lsHotelCheckinList.PageCount"
+                nzShowSizeChanger [nzPageSize]="m_objHotelCheckinCondition.objPageInfo.nPageSize"></nz-pagination>
+        </div>
+    </div>
+</div>

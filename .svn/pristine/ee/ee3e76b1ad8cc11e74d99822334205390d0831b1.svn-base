@@ -1,0 +1,40 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.u_func_role import FunRole
+from utils.func_api import FuncResult
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        '''
+        获取请求参数
+        '''
+        obj_input = web.input()
+        try:
+            str_update_userID_must = obj_input.get('sUpdateUserIDMust')
+            str_Update_user_code_must = obj_input.get('sUpdateUserCodeMust')
+            if not str_update_userID_must:
+                return FuncResult(fail='参数\'sUpdateUserIDMust\'不能为空')
+            elif not str_Update_user_code_must:
+                return FuncResult(fail='参数\'sUpdateUserCodeMust\'不能为空')
+
+        except Exception, ce:
+            # 异常处理
+            return FuncResult(fail='参数有误!')
+
+        return self.get_func_role_list()
+
+    def get_func_role_list(self):
+        # list_dateSet = FunRole().query.all()
+        list_dateSet = FunRole().query.limit(10).offset(1)
+
+        return FuncResult(success=True, msg='操作成功！')

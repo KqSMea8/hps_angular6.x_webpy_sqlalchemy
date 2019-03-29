@@ -1,0 +1,9 @@
+export class DataRole {
+    DataRoleID: number;  // (权限ID)
+    DataTypeID: number;  // (权限名ID)
+    DataTypeName: string;  // (权限名，表名)
+    Fields: string;  // (权限，对应的字段)
+    FieldType: number;  // (权限类型，字段的类型)
+    FieldTypeName: string;  // (权限类型名称，字段的类型)
+    Remark: string;  // (备注)
+}

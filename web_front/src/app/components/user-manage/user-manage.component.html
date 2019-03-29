@@ -1,0 +1,173 @@
+<!-- <app-header></app-header>
+<div nz-row class="content flex">
+    <div class="g-side">
+        <app-sidebar [title]="'系统管理'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div class="user-manage g-main">
+
+    </div>
+</div> -->
+
+<app-loading [m_bShowLoading]="m_bShowLoading"></app-loading>
+<app-breadcrumb [data]="m_lsBreadCrumbList"></app-breadcrumb>
+<div class="manage">
+    <ul class="search">
+        <li>
+            <p>用户ID</p>
+            <input class="input-big" nz-input placeholder="用户ID"
+                [(ngModel)]="m_objSearchUserCondition.objCondition.nUserID">
+        </li>
+        <li>
+            <p>账号</p>
+            <input class="input-big" nz-input placeholder="账号"
+                [(ngModel)]="m_objSearchUserCondition.objCondition.sUserCode">
+        </li>
+        <li>
+            <p>姓名</p>
+            <input class="input-big" nz-input placeholder="姓名"
+                [(ngModel)]="m_objSearchUserCondition.objCondition.sUserName">
+        </li>
+        <li>
+            <p>用户岗位</p>
+            <nz-select style="width: 152px" [(ngModel)]="m_objSearchUserCondition.objCondition.sPost" nzAllowClear
+                nzPlaceHolder="用户岗位">
+                <nz-option nzValue="超级管理员" nzLabel="超级管理员"></nz-option>
+                <nz-option nzValue="市局管理员" nzLabel="市局管理员"></nz-option>
+                <nz-option nzValue="分局管理员" nzLabel="分局管理员"></nz-option>
+                <nz-option nzValue="派出所管理员" nzLabel="派出所管理员"></nz-option>
+                <nz-option nzValue="市局责任民警" nzLabel="市局责任民警"></nz-option>
+                <nz-option nzValue="分局责任民警" nzLabel="分局责任民警"></nz-option>
+                <nz-option nzValue="派出所责任民警" nzLabel="派出所责任民警"></nz-option>
+                <nz-option nzValue="出入境管理员" nzLabel="出入境管理员"></nz-option>
+                <nz-option nzValue="旅店管理员" nzLabel="旅店管理员"></nz-option>
+                <nz-option nzValue="旅店前台从业人员" nzLabel="旅店前台从业人员"></nz-option>
+            </nz-select>
+        </li>
+    </ul>
+    <ul class="searchButton">
+        <li class="button">
+            <button class="btn-middle btn-reset" nz-button nzType="defaults" (click)="fnReset()">
+                重置
+            </button>
+        </li>
+        <li class="button">
+            <button class="btn-middle" nz-button nzType="primary" (click)="fnGetUserList()">
+                <i nz-icon type="search" class="fl mt3"></i>
+                查询
+            </button>
+        </li>
+        <li class="button">
+            <button class="btn-middle" nz-button nzType="primary" (click)="fnShowModal()">
+                <span>新增</span>
+            </button>
+        </li>
+        <li class="sort">
+            <nz-select nzAllowClear nzPlaceHolder="默认排序" [(ngModel)]="m_objSearchUserCondition.objPageInfo.nSort"
+                (ngModelChange)="fnGetUserList()">
+                <nz-option nzLabel={{item.CodeName}} nzValue={{item.CodeNo}}
+                    *ngFor="let item of m_lsSort;let i = index">
+                </nz-option>
+            </nz-select>
+        </li>
+    </ul>
+    <div class="table mt10">
+        <nz-table #basicTable class="table-header-bg" [nzData]="m_objUserList.DataSet" nzShowPagination=false
+            nzSize="small">
+            <thead>
+                <tr>
+                    <th>用户ID</th>
+                    <th>账号</th>
+                    <th>姓名</th>
+                    <th>用户岗位</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>详情</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-row" *ngFor="let data of m_objUserList.DataSet" (dblclick)="fnToUserInfo(data.UserID)">
+                    <td>{{data.UserID}}</td>
+                    <td>{{data.UserCode}}</td>
+                    <td>{{data.UserName}}</td>
+                    <td>{{data.Post}}</td>
+                    <td [ngClass]="{'green': data.State == 1}">{{data.StateName}}</td>
+                    <td>{{data.CreateTime}}</td>
+                    <td>
+                        <a (click)="fnToUserInfo(data.UserID)">查看</a>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+
+    <div class="pagination">
+        <nz-pagination [(nzPageIndex)]="m_objSearchUserCondition.objPageInfo.nPageNo" [(nzTotal)]="m_nRowcount"
+            nzShowSizeChanger [(nzPageSize)]="m_objSearchUserCondition.objPageInfo.nPageSize"
+            (nzPageIndexChange)="fnGetUserList()" (nzPageSizeChange)="fnPageSizeChange()"></nz-pagination>
+    </div>
+</div>
+
+<div class="addUserModal">
+    <nz-modal [(nzVisible)]="m_isVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+        [nzWidth]=600 (nzOnCancel)="fnHandleCancel()">
+        <ng-template #modalTitle>
+            新增用户
+        </ng-template>
+
+        <ng-template #modalContent>
+            <div>
+                <ul>
+                    <li>
+                        <span><i class="red">*</i> 账号</span>
+                        <input spellcheck="false" nz-input placeholder="账号"
+                            [(ngModel)]="m_objAddUserCondition.sUserCode">
+                    </li>
+                    <li>
+                        <span>姓名</span>
+                        <input nz-input placeholder="姓名" [(ngModel)]="m_objAddUserCondition.sUserName">
+                    </li>
+                    <li>
+                        <span><i class="red">*</i>密码</span>
+                        <input type="password" nz-input placeholder="密码长度不少于6位" [(ngModel)]="m_sPassword">
+                    </li>
+                    <li>
+                        <span><i class="red">*</i>确认密码</span>
+                        <input type="password" nz-input placeholder="请确认密码" [(ngModel)]="m_sPasswordnd">
+                    </li>
+                    <li>
+                        <span><i class="red">*</i>联系方式</span>
+                        <input nz-input placeholder="联系方式" [(ngModel)]="m_objAddUserCondition.sTel">
+                    </li>
+                    <li>
+                        <span>岗位</span>
+                        <nz-select [(ngModel)]="m_objAddUserCondition.sPost" nzAllowClear nzSize="large"
+                            nzPlaceHolder="岗位">
+                            <nz-option nzValue="超级管理员" nzLabel="超级管理员"></nz-option>
+                            <nz-option nzValue="市局管理员" nzLabel="市局管理员"></nz-option>
+                            <nz-option nzValue="分局管理员" nzLabel="分局管理员"></nz-option>
+                            <nz-option nzValue="派出所管理员" nzLabel="派出所管理员"></nz-option>
+                            <nz-option nzValue="市局责任民警" nzLabel="市局责任民警"></nz-option>
+                            <nz-option nzValue="分局责任民警" nzLabel="分局责任民警"></nz-option>
+                            <nz-option nzValue="派出所责任民警" nzLabel="派出所责任民警"></nz-option>
+                            <nz-option nzValue="出入境管理员" nzLabel="出入境管理员"></nz-option>
+                            <nz-option nzValue="旅店管理员" nzLabel="旅店管理员"></nz-option>
+                            <nz-option nzValue="旅店前台从业人员" nzLabel="旅店前台从业人员"></nz-option>
+                        </nz-select>
+                    </li>
+                    <li>
+                        <span>备注</span>
+                        <input nz-input placeholder="备注" [(ngModel)]="m_objAddUserCondition.sRemark">
+                    </li>
+                </ul>
+            </div>
+        </ng-template>
+
+        <ng-template #modalFooter>
+            <button nz-button nzType="primary" (click)="fnAddUser()">确定</button>
+            <button nz-button nzType="default" (click)="fnHandleCancel()">取消</button>
+            <p>
+                <app-error-bar [(msg)]="m_sErrorMsg" [(isShow)]="m_isShow"></app-error-bar>
+            </p>
+        </ng-template>
+    </nz-modal>
+</div>

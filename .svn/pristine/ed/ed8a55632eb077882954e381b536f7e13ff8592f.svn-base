@@ -1,0 +1,62 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.u_user import User
+from utils.func_api import FuncResult
+from utils.tools import is_null
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        '''
+        获取请求参数
+        '''
+        obj_input = web.input()
+        try:
+            nUpdateUserIDMust = obj_input.get('nUpdateUserIDMust')
+            sUpdateUserNameMust = obj_input.get('sUpdateUserNameMust')
+            nUserID = obj_input.get('nUserID')
+            sTel = obj_input.get('sTel')
+            sWorkCode = obj_input.get('sWorkCode')
+            sUserName = obj_input.get('sUserName')
+            sPost = obj_input.get('sPost')
+            sRemark = obj_input.get('sRemark')
+            if is_null(nUpdateUserIDMust) :
+                return FuncResult(fail='参数\'nUpdateUserIDMust\'不能为空')
+            elif is_null(sUpdateUserNameMust) :
+                return FuncResult(fail='参数\'sUpdateUserNameMust\'不能为空')
+            elif is_null(nUserID) :
+                return FuncResult(fail='参数\'nUserID\'不能为空')
+        except Exception, ce:
+            # 异常处理
+            return FuncResult(fail='参数有误!')
+
+        return self.add_user(nUserID, sTel, sWorkCode, sUserName, sPost, sRemark)
+
+    def add_user(self, nUserID, sTel, sWorkCode, sUserName, sPost, sRemark):
+        # 新增数据
+        obj_user = User().query.filter(User.UserID == nUserID) \
+            .first()
+
+        if not is_null(sTel):
+            obj_user.Tel = sTel
+        if not is_null(sWorkCode):
+            obj_user.WorkCode = sWorkCode
+        if not is_null(sUserName):
+            obj_user.UserName = sUserName
+        if not is_null(sPost):
+            obj_user.Post = sPost
+        if not is_null(sRemark):
+            obj_user.Remark = sRemark
+        # 保存更改到数据库
+        obj_user.save()
+
+        return FuncResult(success=True, msg='资料修改成功！')

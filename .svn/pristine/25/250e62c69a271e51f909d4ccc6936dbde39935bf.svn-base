@@ -1,0 +1,145 @@
+# coding: utf-8
+
+import web
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped, table_query
+from models.hps.h_hotel import Hotel
+from utils.tools import obj_to_json, json_to_obj, is_null
+from utils.func_api import FuncResult
+import json
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        objInput = web.input()
+        print objInput
+        print web.data()
+        try:
+            objCondition = json_to_obj(objInput.get('objCondition'))
+            objPageInfo = json_to_obj(objInput.get('objPageInfo'))
+            if is_null(objCondition):
+                return FuncResult(msg='参数\'objCondition\'不能为空')
+            elif is_null(objCondition['nSearchUserIDMust']):
+                return FuncResult(fail='参数\'nSearchUserIDMust\'不能为空')
+            elif is_null(objCondition['sSearchUserNameMust']):
+                return FuncResult(fail='参数\'sSearchUserNameMust\'不能为空')
+        except Exception, ce:
+            print ce
+            return FuncResult(fail='参数有误!')
+        return self.search_hotel(objPageInfo, objCondition)
+
+    def search_hotel(self, objPageInfo, objCondition):
+
+        lsParams = []
+        dictParamsValue = {}
+        if 'nHotelID' in objCondition and objCondition['nHotelID']:
+            nHotelID = objCondition['nHotelID']
+            lsParams.append('HotelID = :nHotelID')
+            dictParamsValue['nHotelID'] = nHotelID
+
+        if 'sHotelCodeLikeL' in objCondition and objCondition['sHotelCodeLikeL']:
+            sHotelCodeLikeL = objCondition['sHotelCodeLikeL']
+            lsParams.append('HotelCode Like :sHotelCodeLikeL')
+            dictParamsValue['sHotelCodeLikeL'] = sHotelCodeLikeL
+
+        if 'sHotelNameLike' in objCondition and objCondition['sHotelNameLike']:
+            sHotelNameLike = objCondition['sHotelNameLike']
+            lsParams.append('HotelName Like :sHotelNameLike')
+            dictParamsValue['sHotelNameLike'] = sHotelNameLike
+
+        if 'sHotelTel' in objCondition and objCondition['sHotelTel']:
+            sHotelTel = objCondition['sHotelTel']
+            lsParams.append('HotelTel = :sHotelTel')
+            dictParamsValue['sHotelTel'] = sHotelTel
+
+        if 'nRoomCountStart' in objCondition and objCondition['nRoomCountStart']:
+            nRoomCountStart = objCondition['nRoomCountStart']
+            lsParams.append('RoomCountStart = :nRoomCountStart')
+            dictParamsValue['nRoomCountStart'] = nRoomCountStart
+
+        if 'nRoomCountEnd' in objCondition and objCondition['nRoomCountEnd']:
+            nRoomCountEnd = objCondition['nRoomCountEnd']
+            lsParams.append('RoomCountEnd = :nRoomCountEnd')
+            dictParamsValue['nRoomCountEnd'] = nRoomCountEnd
+
+        if 'sResponPerson' in objCondition and objCondition['sResponPerson']:
+            sResponPerson = objCondition['sResponPerson']
+            lsParams.append('ResponPerson = :sResponPerson')
+            dictParamsValue['sResponPerson'] = sResponPerson
+
+        if 'sResponPersonTel' in objCondition and objCondition['sResponPersonTel']:
+            sResponPersonTel = objCondition['sResponPersonTel']
+            lsParams.append('ResponPersonTel = :sResponPersonTel')
+            dictParamsValue['sResponPersonTel'] = sResponPersonTel
+
+        if 'sLegalPerson' in objCondition and objCondition['sLegalPerson']:
+            sLegalPerson = objCondition['sLegalPerson']
+            lsParams.append('LegalPerson = :sLegalPerson')
+            dictParamsValue['sLegalPerson'] = sLegalPerson
+
+        if 'sLegalPersonNo' in objCondition and objCondition['sLegalPersonNo']:
+            sLegalPersonNo = objCondition['sLegalPersonNo']
+            lsParams.append('LegalPersonNo = :sLegalPersonNo')
+            dictParamsValue['sLegalPersonNo'] = sLegalPersonNo
+
+        if 'sLegalPersonMobile' in objCondition and objCondition['sLegalPersonMobile']:
+            sLegalPersonMobile = objCondition['sLegalPersonMobile']
+            lsParams.append('LegalPersonMobile = :sLegalPersonMobile')
+            dictParamsValue['sLegalPersonMobile'] = sLegalPersonMobile
+
+        if 'nProvinceID' in objCondition and objCondition['nProvinceID']:
+            nProvinceID = objCondition['nProvinceID']
+            lsParams.append('ProvinceID = :nProvinceID')
+            dictParamsValue['nProvinceID'] = nProvinceID
+
+        if 'nCityID' in objCondition and objCondition['nCityID']:
+            nCityID = objCondition['nCityID']
+            lsParams.append('CityID = :nCityID')
+            dictParamsValue['nCityID'] = nCityID
+
+        if 'nDistrictID' in objCondition and objCondition['nDistrictID']:
+            nDistrictID = objCondition['nDistrictID']
+            lsParams.append('DistrictID = :nDistrictID')
+            dictParamsValue['nDistrictID'] = nDistrictID
+
+        if 'dtRegStartTime' in objCondition and objCondition['dtRegStartTime']:
+            dtRegStartTime = objCondition['dtRegStartTime']
+            lsParams.append('RegStartTime >= :dtRegStartTime')
+            dictParamsValue['dtRegStartTime'] = dtRegStartTime
+
+        if 'dtRegEndTime' in objCondition and objCondition['dtRegEndTime']:
+            dtRegEndTime = objCondition['dtRegEndTime']
+            lsParams.append('RegEndTime <= :dtRegEndTime')
+            dictParamsValue['dtRegEndTime'] = dtRegEndTime
+
+        if 'nState' in objCondition and objCondition['nState']:
+            nState = objCondition['nState']
+            lsParams.append('State = :nState')
+            dictParamsValue['nState'] = nState
+
+        if 'nAuditState' in objCondition and objCondition['nAuditState']:
+            nAuditState = objCondition['nAuditState']
+            lsParams.append('AuditState = :nAuditState')
+            dictParamsValue['nAuditState'] = nAuditState
+
+        if 'sCreateUserCode' in objCondition and objCondition['sCreateUserCode']:
+            sCreateUserCode = objCondition['sCreateUserCode']
+            lsParams.append('CreateUserCode = :sCreateUserCode')
+            dictParamsValue['sCreateUserCode'] = sCreateUserCode
+
+        objData = table_query(Hotel, lsParams, dictParamsValue, objPageInfo)
+        if objData:
+            dict_data = {
+                'PageNo': objPageInfo['nPageNo'],
+                'PageSize': objPageInfo['nPageSize'],
+                'PageCount': objData.data['pageCount'] if objData.data else 0,
+                'RowCount': objData.data['rowCount'] if objData.data else 0,
+                'DataSet': objData.data['data'] if objData.data else ''
+            }
+            return FuncResult(success=True, msg='操作成功！', data=dict_data)
+        else:
+            return FuncResult(msg='无查询结果！')

@@ -1,0 +1,89 @@
+@import "styles.less";
+.checkin-log-list {
+    ul {
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+
+    h2 {
+        font-weight: bold !important;
+        margin-bottom: @defaultPadding;
+    }
+    
+    overflow: hidden;
+    background: #eaf1f9;
+
+    .hotel-info {
+        background: #fff;
+        margin: @defaultPadding @defaultPadding 0 @defaultPadding;
+        height: 496px;
+
+        .hotel-name {
+            margin: @defaultPadding;
+            padding: @defaultPadding;
+
+            border-bottom: 1px dashed #c3c3c3;
+        }
+
+        .search-condition {
+            margin: @defaultPadding;
+            padding: @defaultPadding;
+
+            ul {
+                overflow: hidden;
+
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                li {
+                    span {
+                        margin: 0 @defaultPadding;
+                    }
+                }
+            }
+        }
+    }
+
+    .margin {
+        margin: 10px @defaultPadding 0 @defaultPadding;
+    }
+
+    .filter-button {
+        display: flex;
+        justify-content: flex-end;
+
+        .margin;
+    }
+    .search-data-list {
+        .margin;
+        overflow: hidden;
+        background: #fff;
+
+        .data-list-item {
+            ul {
+                display: flex;
+                align-items: center;
+
+                li {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    width: 25%;
+                    height: 36px;
+                    
+                }
+            }
+            
+            &:nth-child(2n) {
+                background:#f4f7fc;
+            }
+        }
+    }
+    .pagination {
+        margin: @defaultPadding;
+    }
+}
+
+

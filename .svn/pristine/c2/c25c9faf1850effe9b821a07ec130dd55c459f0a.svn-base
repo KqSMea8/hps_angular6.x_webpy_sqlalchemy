@@ -1,0 +1,70 @@
+@import "../../../../../styles.less";
+.checkin-log-list {
+    h2 {
+        font-weight: bold !important;
+    }
+    overflow: hidden;
+    background: #eaf1f9;
+
+    .hotel-info {
+        background: #fff;
+        margin: @defaultPadding;
+        height: 360px;
+
+        .hotel-name {
+            margin: @defaultPadding;
+            padding: @defaultPadding;
+
+            border-bottom: 1px dashed #c3c3c3;
+        }
+
+        .data-list {
+            overflow: hidden;
+            display: flex;
+            
+
+            padding: @defaultPadding;
+
+            li {
+                position: relative;
+                
+                width: 23%;
+                height: 164px;
+
+                .absolute {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+
+                img {
+                    .absolute;
+                    z-index: 0;
+                    width: 100%;
+                }
+
+                div {
+                    .absolute;
+                    z-index: 1;
+
+                    padding: 30px;
+                    color: #fff;
+
+                    h2 {
+                        color: #fff;
+                    }
+
+                    p{
+                        font-size: 48px;
+                        font-weight: bold;
+
+                        margin-top: 26px;
+
+                    }
+                }
+            }
+        }
+    }
+}
+
+

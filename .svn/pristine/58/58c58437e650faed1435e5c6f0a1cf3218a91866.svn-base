@@ -1,0 +1,102 @@
+@import "styles.less";
+
+.sidebar{
+    width: 100%;
+    height: 100%;
+
+    background-color: @themeColor-light;
+
+    .title{
+        width: 100%;
+        padding: @defaultPadding;
+
+        font-size: 18px;
+        font-weight: bold;
+        color: #fff;
+        text-align: center;
+    }
+
+    .subtab-list{
+        &>li{
+            width: 100%;
+            min-width: 180px;
+
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: column;
+
+            color: #fff;
+            font-size: 14px;
+
+            cursor: pointer;
+
+            .side-row{
+                width: inherit;
+                padding: 10px 30px;
+                min-width: 180px;
+
+                align-items: center;
+                justify-content: space-between;
+
+                &:hover{
+                    background-color: #fff3;
+                }
+
+                div{
+                    align-items: center;
+                    justify-content: flex-start;
+
+                    i{
+                        margin-right: 10px;
+                        font-weight: bolder;
+                        font-size: 18px;
+                    }
+                }
+            }
+
+            
+            ul {
+                width: 100%;
+                
+                &>li {
+                    padding:5px 0 5px 65px;
+                    &:hover {
+                        background-color: #fff3;
+                    }
+                }
+            }
+        }
+    }
+
+    .subbtn{
+        width: 100%;
+        padding: 0 20px;
+        margin-top: 60px;
+
+        color: #fff;
+        font-size: 14px;
+
+        li{
+            width: 100%;
+            height: 42px;
+            
+            border: 2px solid #fff;
+            border-radius: 5px;
+
+            align-items: center;
+            justify-content: center;
+
+            background-color: #fff3;
+
+            cursor: pointer;
+
+            img{
+                margin-left: 10px;
+            }
+        }
+    }
+}
+
+.actived{
+    background-color: #fff3;
+}

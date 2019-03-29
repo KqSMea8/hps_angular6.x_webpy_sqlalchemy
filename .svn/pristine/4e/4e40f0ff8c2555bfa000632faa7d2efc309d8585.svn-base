@@ -1,0 +1,72 @@
+import { Component, OnInit } from '@angular/core';
+import {AddHotelCondition} from '../../../../class/addHotelCondition';
+import {ApiService} from '../../../../services/api.service';
+
+@Component({
+  selector: 'app-hotel-add,,nz-demo-input-basic,nz-demo-date-picker-start-end,nz-demo-button-basic,\' +\n' +
+      '        \'nz-demo-breadcrumb-separator,nz-demo-table-basic,nz-demo-input-textarea',
+  templateUrl: './hotel-add.component.html',
+  styleUrls: ['./hotel-add.component.less']
+})
+export class HotelAddComponent implements OnInit {
+    nAddUserIDMust: number; //  操作者id
+    sAddUserCodeMust: string; //  操作者姓名
+    sHotelCode: string; // 酒店编号
+    sHotelName: string; // 酒店名  *
+    sHotelAddr: string; // 酒店地址  *
+    sHotelTel: string; // 前台电话
+    sLegalTel: string; // 法人电话
+    sLegalPerson: string; // 法人姓名
+    sLegalDocNo: string; //  (法人证件号码)
+    sCoordinate: string; // 坐标
+    nProvinceID: number; // 省份ID  *
+    nCityID: number; // 城市ID  *
+    nDistrictID: number; // 地区ID  *
+    nHotelType: number; //  (酒店类型)
+    nCreatUserID: number; //  (登记人ID,数据库关联UserID),
+    sCreatuserCode: string; //  (登记人),
+    sResponPersonTel: string; //  (责任人联系电话),
+    sResponPerson: string; //  (责任人)
+    nRoomCount: number; //  (房间数量)
+    nBedCount: number; //  (床位数量)
+    sBusLicenseCode: string; //  (营业执照号)
+    sBusLicenseName: string; //  (营业执照名称)
+    sRegStartTime: string; //  (登记时间)
+    sRemark: string; //  (备注)
+
+    objAddHotelCondition: AddHotelCondition;
+
+  constructor(private m_objApiService: ApiService) { }
+
+  ngOnInit() {
+  }
+
+  fnAdd(): void {
+      this.objAddHotelCondition.nAddUserIDMust = this.nAddUserIDMust;
+      this.objAddHotelCondition.sAddUserCodeMust = this.sAddUserCodeMust;
+      this.objAddHotelCondition.sHotelCode = this.sHotelCode;
+      // this.objAddHotelCondition.sHotelName = this.sHotelName;
+      this.objAddHotelCondition.sHotelAddr = this.sHotelAddr;
+      this.objAddHotelCondition.sHotelTel = this.sHotelTel;
+      this.objAddHotelCondition.sLegalTel = this.sLegalTel;
+      this.objAddHotelCondition.sLegalPerson = this.sLegalPerson;
+      this.objAddHotelCondition.sLegalDocNo = this.sLegalDocNo;
+      this.objAddHotelCondition.nProvinceID = this.nProvinceID;
+      this.objAddHotelCondition.nCityID = this.nCityID;
+      this.objAddHotelCondition.nDistrictID = this.nDistrictID;
+      this.objAddHotelCondition.nHotelType = this.nHotelType;
+      this.objAddHotelCondition.nCreatUserID = this.nCreatUserID;
+      this.objAddHotelCondition.sCreatuserCode = this.sCreatuserCode;
+      this.objAddHotelCondition.sResponPersonTel = this.sResponPersonTel;
+      this.objAddHotelCondition.sResponPerson = this.sResponPerson;
+      this.objAddHotelCondition.nRoomCount = this.nRoomCount;
+      this.objAddHotelCondition.nBedCount = this.nBedCount;
+      this.objAddHotelCondition.sBusLicenseCode = this.sBusLicenseCode;
+      this.objAddHotelCondition.sBusLicenseName = this.sBusLicenseName;
+      this.objAddHotelCondition.sRegStartTime = this.sRegStartTime;
+      this.objAddHotelCondition.sRemark = this.sRemark;
+      console.log(this.objAddHotelCondition);
+
+  }
+
+}

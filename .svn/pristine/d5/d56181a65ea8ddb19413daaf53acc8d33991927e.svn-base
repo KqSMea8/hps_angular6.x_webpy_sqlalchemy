@@ -1,0 +1,21 @@
+export class GuestDocInfo {
+    GuestDocID: number; // 旅客ID
+    GuestType: number; // 旅客类型
+    DocType: number; // 证件类型
+    DocNo: string; // 证件号码
+    DocName: string; // 证件姓名
+    GuestName: string; // 姓名
+    Address: string;  // 登记住址
+    BornDate: string; // 出生日期
+    Sex: number; // 性别
+    NativePlace: string; // 籍贯
+    Nation: string;  // 民族
+    ResAddress: string;	// 籍贯地址
+    state: number; // 旅客状态
+    CertiOffice: string; // 发证机关
+    CertiEffStartTime: string; // 证件有效开始时间
+    CertiEffEndTime: string; // 证件有效结束时间
+    DocPhotoURL: string; // 证件照片地址
+    Remark: string; // 备注
+    CreateTime: string; // 创建时间
+}

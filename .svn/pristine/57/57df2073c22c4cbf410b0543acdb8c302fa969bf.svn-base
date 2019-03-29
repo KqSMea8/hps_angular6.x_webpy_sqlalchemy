@@ -1,0 +1,24 @@
+import { Component, Input, OnInit } from '@angular/core';
+
+@Component({
+    selector: 'app-breadcrumb',
+    templateUrl: './breadcrumb.component.html',
+    styleUrls: ['./breadcrumb.component.less']
+})
+export class BreadcrumbComponent implements OnInit {
+
+    @Input()data: Array<BreadcrumbClass> = [];
+    m_aDataList: Array<BreadcrumbClass> = [];
+    m_objDataLastItem: BreadcrumbClass = new BreadcrumbClass();
+
+    ngOnInit(): void {
+        this.m_aDataList = this.data.splice(0, this.data.length - 1);
+        this.m_objDataLastItem = this.data.pop();
+    }
+
+}
+
+class BreadcrumbClass {
+    name: string;
+    routelink: string;
+}

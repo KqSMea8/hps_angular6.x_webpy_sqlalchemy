@@ -1,0 +1,65 @@
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { ContextService } from 'src/app/services/context.service';
+import { City } from 'src/app/class/City';
+import { District } from 'src/app/class/district';
+import { AreaChooseOutput } from 'src/app/class/areaChooseOutput';
+
+@Component({
+    selector: 'app-area-choose',
+    templateUrl: './area-choose.component.html',
+    styleUrls: ['./area-choose.component.less']
+})
+export class AreaChooseComponent implements OnInit {
+    @Output()  private m_objCurrentInfo = new EventEmitter();
+    @Output()  m_lsCurrentCityList = new EventEmitter();
+    @Output()  m_lsCurrentDistrictList = new EventEmitter();
+
+    @Input()  m_lsIsShowAreaType: boolean[];
+    /**当前选中的省市区ID */
+    m_objAreaChooseOutput: AreaChooseOutput = new AreaChooseOutput();
+    /**当前选中的省市区列表 */
+    m_lsCurrentCity: City[] = [];
+    m_lsCurrentDistrict: District[] = [];
+    constructor(
+        public m_objContextService: ContextService
+    ) { }
+
+    ngOnInit() {
+        if (this.m_lsIsShowAreaType !== undefined && this.m_lsIsShowAreaType.length !== 0) {
+            return;
+        } else {
+            this.m_lsIsShowAreaType = [true, true, true];
+        }
+    }
+
+    /**省市联动 */
+    fnCurrentProvinceChange(): void {
+        this.m_lsCurrentCity = [];
+        this.m_objAreaChooseOutput.CurrentCityID = null;
+        this.m_lsCurrentDistrict = [];
+        this.m_objAreaChooseOutput.CurrentDistrictID = null;
+        for (const cityItem of this.m_objContextService.m_lsCity) {
+            if (this.m_objAreaChooseOutput.CurrentProvinceID === cityItem.ProvinceID) {
+                this.m_lsCurrentCity.push(cityItem);
+            }
+        }
+        this.fnSendMessage();
+    }
+    /**市区联动 */
+    fnCurrentCityChange(): void {
+        this.m_lsCurrentDistrict = [];
+        this.m_objAreaChooseOutput.CurrentDistrictID = null;
+        for (const districtItem of this.m_objContextService.m_lsDistrict) {
+            if (this.m_objAreaChooseOutput.CurrentCityID === districtItem.CityID) {
+                this.m_lsCurrentDistrict.push(districtItem);
+            }
+        }
+        this.fnSendMessage();
+    }
+    /**向父组件发送消息 */
+    fnSendMessage(): void {
+        this.m_objCurrentInfo.emit(this.m_objAreaChooseOutput);
+        this.m_lsCurrentCityList.emit(this.m_lsCurrentCity);
+        this.m_lsCurrentDistrictList.emit(this.m_lsCurrentDistrict);
+    }
+}

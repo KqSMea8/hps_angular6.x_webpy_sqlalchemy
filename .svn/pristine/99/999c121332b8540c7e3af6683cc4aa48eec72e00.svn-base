@@ -1,0 +1,203 @@
+<app-header></app-header>
+<div nz-row class="content">
+    <div nz-col nzSpan="3">
+        <app-sidebar [title]="'旅店登记客人'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div nz-col nzSpan="21" class="main">
+        <div class="search-bar">
+            <div class="basic-info">
+                <!-- <p class="title">按证件信息查询</p> -->
+                <ul class="flex">
+                    <li class="flex">
+                        <span>姓名</span>
+                        <input style="width: 150px;" nz-input placeholder="姓名" nzSize="default">
+                    </li>
+                    <li class="flex">
+                        <span>性别</span>
+                        <nz-select style="width: 100px;" nzShowSearch nzAllowClear nzPlaceHolder="性别" [(ngModel)]="m_objAllGuestCondition.objCondition.nSex">
+                            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                        </nz-select>
+                    </li>
+                    <li class="flex">
+                        <span>出生日期</span>
+                        <div class="flex">
+                            <nz-date-picker [nzFormat]="dateFormat"></nz-date-picker>
+                            <span>至</span>
+                            <nz-date-picker [nzFormat]="dateFormat"></nz-date-picker>
+                        </div>
+                    </li>
+                    <li class="flex">
+                        <span>国籍</span>
+                        <nz-select style="width: 200px;" nzShowSearch nzAllowClear nzPlaceHolder="国籍" [(ngModel)]="m_objAllGuestCondition.objCondition.sNationality">
+                            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                        </nz-select>
+                    </li>
+                    <li class="flex">
+                        <span>证件类型</span>
+                        <nz-select style="width: 200px;" nzShowSearch nzAllowClear nzPlaceHolder="证件类型" [(ngModel)]="m_objAllGuestCondition.objCondition.sNationality">
+                            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                        </nz-select>
+                    </li>
+                    <li class="flex">
+                        <span>证件号码</span>
+                        <input style="width: 200px;" nz-input placeholder="证件号码" nzSize="default">
+                    </li>
+                    <li class="flex">
+                        <span>签证类型</span>
+                        <nz-select style="width: 200px;" nzShowSearch nzAllowClear nzPlaceHolder="签证类型" [(ngModel)]="m_objAllGuestCondition.objCondition.sNationality">
+                            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                        </nz-select>
+                    </li>
+                    <li class="flex">
+                        <span>签证失效日期</span>
+                        <nz-date-picker [nzFormat]="dateFormat"></nz-date-picker>
+                    </li>
+                </ul>
+            </div>
+            <div class="exit-entry-info">
+                <ul class="flex">
+                    <li class="flex">
+                        <span>入境口岸</span>
+                        <input style="width: 150px;" nz-input placeholder="入境口岸" nzSize="default">
+                    </li>
+                    <li class="flex">
+                        <span>入境日期</span>
+                        <nz-date-picker [nzFormat]="dateFormat"></nz-date-picker>
+                    </li>
+                    <li class="flex">
+                        <span>离境口岸</span>
+                        <input style="width: 150px;" nz-input placeholder="离境口岸" nzSize="default">
+                    </li>
+                    <li class="flex">
+                        <span>离境日期</span>
+                        <nz-date-picker [nzFormat]="dateFormat"></nz-date-picker>
+                    </li>
+                </ul>
+            </div>
+            <div class="hotel-info">
+                <!-- <p class="title">按旅店信息查询</p> -->
+                <ul class="flex">
+                    <li class="flex">
+                        <span>旅店名称</span>
+                        <input nz-input placeholder="旅店名称" nzSize="default">
+                    </li>
+                    <li class="flex">
+                        <span>位置范围</span>
+                        <div class="flex">
+                            <nz-select style="width: 200px;" nzShowSearch nzAllowClear nzPlaceHolder="省" [(ngModel)]="m_objAllGuestCondition.objCondition.sNation">
+                                <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                                <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                                <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                            </nz-select>
+                            <nz-select style="width: 200px;" nzShowSearch nzAllowClear nzPlaceHolder="县市" [(ngModel)]="m_objAllGuestCondition.objCondition.sNation">
+                                <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                                <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                                <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                            </nz-select>
+                            <nz-select style="width: 200px;" nzShowSearch nzAllowClear nzPlaceHolder="区域" [(ngModel)]="m_objAllGuestCondition.objCondition.sNation">
+                                <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                                <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                                <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                            </nz-select>
+                        </div>
+                    </li>
+                    <li class="flex">
+                        <span>入住时间范围</span>
+                        <div class="flex">
+                            <nz-date-picker [nzFormat]="dateFormat"></nz-date-picker>
+                            <span>至</span>
+                            <nz-date-picker [nzFormat]="dateFormat"></nz-date-picker>
+                        </div>
+                    </li>
+                    <!-- <li class="flex">
+                        <span>住宿状态</span>
+                        <nz-select style="width: 200px;" nzShowSearch nzAllowClear nzPlaceHolder="不限" [(ngModel)]="m_objAllGuestCondition.objCondition.sNation">
+                            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                        </nz-select>
+                    </li> -->
+                </ul>
+                <ul class="flex">
+                    <li class="flex ">
+                        <span>认证信息</span>
+                        <div>
+                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                                [nzIndeterminate]="indeterminate">
+                                Check all
+                            </label>
+                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                                [nzIndeterminate]="indeterminate">
+                                Check all
+                            </label>
+                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                                [nzIndeterminate]="indeterminate">
+                                Check all
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="flex search-btn">
+                    <li>
+                        <button nz-button nzType="primary"><i nz-icon type="search"></i>搜索</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="sort-bar flex">
+            <nz-select [(ngModel)]="selectedValue" nzAllowClear nzPlaceHolder="Choose">
+                <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
+                <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
+            </nz-select>
+        </div>
+        <div class="result-bar">
+            <nz-table #basicTable [nzData]="dataSet">
+                <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>国籍</th>
+                        <th>签证类型</th>
+                        <th>证件号码</th>
+                        <th>性别</th>
+                        <th>出生日期</th>
+                        <th>旅店名称</th>
+                        <th>旅店地址</th>
+                        <th>房号</th>
+                        <th>数据上传时间</th>
+                        <th>入住时间</th>
+                        <th>退房时间</th>
+                        <th>状态</th>
+                        <th>认证信息</th>
+                        <th>详情</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Bob</td>
+                        <td>US</td>
+                        <td>P</td>
+                        <td>1456465412318</td>
+                        <td>男</td>
+                        <td>2018-01-01</td>
+                        <td>七天连锁酒店</td>
+                        <td>贵州省都匀市七七七七七七七</td>
+                        <td>1001</td>
+                        <td>2018-12-01 10:20</td>
+                        <td>2018-12-01</td>
+                        <td>2018-12-01</td>
+                        <td>在住</td>
+                        <td>匹配</td>
+                        <td>查看</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>

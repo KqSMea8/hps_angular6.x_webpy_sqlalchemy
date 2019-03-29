@@ -1,0 +1,8 @@
+export class VerifyHotelCondition {
+    nHotelID: number; //酒店编号
+    nVerifyUserIDMust: number; //审核人ID
+    sVerifyuserCodeMust: string; //审核人姓名
+    sVerifyDateTimeMust: string; //审核时间
+    nState: number; //酒店状态
+    sRemark: string; //备注
+}

@@ -1,0 +1,15 @@
+import { Injectable } from '@angular/core';
+import { Subtab } from '../class/sidebar';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class SystemManagementService {
+    m_objSubtab: Array<Subtab> = [
+        { subtabName: '我的信息', subtabIcon: 'guest-checkin.png', routerName: '/main/SystemManagement/UserInfo' },
+        { subtabName: '用户管理', subtabIcon: 'guest-checkin.png', routerName: '/main/SystemManagement/UserManage' },
+        { subtabName: '操作日志', subtabIcon: 'guest-checkin.png', routerName: '/main/SystemManagement/Log' },
+        { subtabName: '参数配置', subtabIcon: 'guest-checkin.png', routerName: '/main/SystemManagement/UserInfo' }
+    ];
+    constructor() { }
+}

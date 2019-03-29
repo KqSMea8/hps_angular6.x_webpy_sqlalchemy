@@ -1,0 +1,101 @@
+@import 'styles.less';
+
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+tbody {
+    a:not(:last-child) {
+        margin-right: 10px;
+    }
+}
+
+.type-name {
+    display: flex;
+    align-items: center;
+
+}
+.overflow-box {
+    overflow: auto;
+
+    .config-list {
+        height: 100%;
+        width: 600px;
+        padding-bottom: @defaultPadding;
+    }
+}
+
+.cont {
+    padding: 20px 20px 48px 20px;
+}
+
+nz-modal {
+    li {
+        width: 80%;
+        margin: 0 auto @defaultPadding;
+        text-align: center;
+        font-size: 16px;
+
+        span {
+            display: inline-block;
+            width: 15%;
+            text-align: right;
+            margin-right: @defaultPadding;
+        }
+
+        .userCode {
+            width: 60%;
+            height: 40px;
+            margin: 0;
+            text-align: left;
+        }
+
+        input {
+            width: 60%;
+            height: 40px;
+        }
+
+        textarea {
+            width: 60%;
+            vertical-align: middle;
+            padding: 10px;
+        }
+
+        nz-select {
+            width: 60%;
+            height: 42px;
+        }
+
+        .ant-select-lg {
+            font-size: 14px;
+        }
+    }
+
+    .updatePwd {
+        span {
+            width: 30%;
+        }
+    }
+
+    .area {
+        min-height: 100px;
+
+        p {
+            margin-bottom: @defaultPadding;
+        }
+    }
+
+    .errorInfo {
+        color: red;
+        font-size: 12px;
+        width: 95%;
+        word-break: break-all;
+    }
+
+    .red {
+        color: red;
+    }
+
+}

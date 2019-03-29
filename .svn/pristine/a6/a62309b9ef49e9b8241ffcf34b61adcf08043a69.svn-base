@@ -1,0 +1,106 @@
+# coding: utf-8
+
+import web
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.l_loperating_log import OperatingLog
+from models.hps.u_user import User
+from utils import obj_to_json
+from sqlalchemy import and_, or_
+from utils.func_api import FuncResult
+from utils.tools import to_datetime, result_data, obj_to_dict
+from sqlalchemy import and_, or_, text
+import json
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        objInput = web.input()
+        try:
+            obj_input = web.input()
+            objCondition = obj_input.get('objCondition')
+            objPageInfo = obj_input.get('objPageInfo')
+            dictCondition = json.loads(objCondition)
+            dictPageInfo = json.loads(objPageInfo)
+            if dictCondition['nUserID']:
+                nUserID = dictCondition['nUserID']
+            else:
+                nUserID =''
+            if dictCondition['sWorkCode']:
+                sWorkCode = dictCondition['sWorkCode']
+            else:
+                sWorkCode = ''
+            if dictCondition['sUserCode']:
+                sUserCode = dictCondition['sUserCode']
+            else:
+                sUserCode =''
+            if dictCondition['sUserName']:
+                sUserName = dictCondition['sUserName']
+            else:
+                sUserName = ''
+            if dictCondition['nOperaType']:
+                nOperaType = dictCondition['nOperaType']
+            else:
+                nOperaType =''
+            if  dictCondition['sPost']:
+                sPost = dictCondition['sPost']
+            else:
+                sPost =''
+            if dictCondition['sDateStart']:
+                dtDateStart = to_datetime(dictCondition['sDateStart'])
+            else:
+                dtDateStart =''
+            if dictCondition['sDateEnd']:
+                dtDateEnd = to_datetime(dictCondition['sDateEnd'])
+            else:
+                dtDateEnd = ''
+            # objPageInfo = dictCondition['objPageInfo']
+            # objPageInfo = json.loads(objPageInfo)
+        except Exception, ce:
+            print Exception, ce
+            return FuncResult(fail='参数有误!')
+        return self.search_log_list(dictPageInfo, nUserID, sWorkCode, sUserCode, sUserName,
+                                    nOperaType, sPost,
+                                    dtDateStart, dtDateEnd)
+
+    def search_log_list(self, dictPageInfo, nUserID, sWorkCode, sUserCode, sUserName, nOperaType,
+                        sPost, dtDateStart, dtDateEnd):
+        strSql = OperatingLog().query2(OperatingLog, User.UserCode).join(User, OperatingLog.UserID == User.UserID)
+        if  nUserID !="":
+            strSql = strSql.filter(OperatingLog.UserID == nUserID)
+        if sWorkCode != "":
+            strSql = strSql.filter(OperatingLog.WorkCode == sWorkCode)
+        if sUserName != "":
+            strSql = strSql.filter(OperatingLog.UserName == sUserName)
+        if nOperaType != "":
+            strSql = strSql.filter(OperatingLog.OperaType == nOperaType)
+        if dtDateStart != "":
+            strSql = strSql.filter(OperatingLog.CreateTime >= dtDateStart)
+        if dtDateEnd != "":
+            strSql = strSql.filter(OperatingLog.CreateTime <= dtDateEnd)
+        lsQueryData = strSql.limit(
+            dictPageInfo['nPageSize']).offset((dictPageInfo['nPageNo'] - 1) * dictPageInfo['nPageSize']).all()
+        lsDataSet = []
+        for objQueryData in lsQueryData:
+            distData = web.storage(**obj_to_dict(objQueryData[0].copy(bind=False)))
+            distData['UserCode'] = objQueryData[1]
+            # distData['KeyWord'] = json.loads(objQueryData[0].KeyWord)
+            distData['KeyWord'] = objQueryData[0].KeyWord
+            lsDataSet.append(distData)
+        PageCount = len(lsQueryData)
+        Data = result_data(dictPageInfo['nPageNo'], dictPageInfo['nPageSize'], PageCount, lsDataSet)
+        return FuncResult(success=True, msg='操作成功！', data=Data)
+
+    def order_by(self, nSort):
+        sOrderBy = ""
+        if nSort == "UserID":
+            sOrderBy = "order by l_operating_log.UserID desc"
+        elif nSort == "":
+            sOrderBy = ""
+        return sOrderBy
+

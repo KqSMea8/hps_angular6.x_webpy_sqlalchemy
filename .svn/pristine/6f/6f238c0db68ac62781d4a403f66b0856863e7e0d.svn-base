@@ -1,0 +1,31 @@
+import { Component, OnInit } from '@angular/core';
+import { RouterState, Router } from '@angular/router';
+
+@Component({
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.less']
+})
+export class HeaderComponent implements OnInit {
+
+    public m_aTabList = [
+        {tabName: '旅客入住查询', tabIcon: 'guest-checkin.png', routerName: '/main/GuestSearch'},
+        {tabName: '旅店开房查询', tabIcon: 'hotel-checkin.png', routerName: '/main/CheckinList'},
+        {tabName: '旅客管理', tabIcon: 'hotel-manage.png', routerName: '/main/HotelSearch'},
+        {tabName: '系统管理', tabIcon: 'system-manage.png', routerName: ''}
+    ];
+
+    public m_sRoutePath: string;
+
+    constructor(
+        public m_objRouter: Router,
+    ) {
+        const objRouterState: RouterState = m_objRouter.routerState;
+        const aPathList: Array<string> = objRouterState.snapshot.url.split('/').splice(0, 3);
+        this.m_sRoutePath = aPathList.join('/');
+        console.log(this.m_sRoutePath);
+    }
+
+    ngOnInit() {
+    }
+}

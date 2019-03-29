@@ -1,0 +1,33 @@
+import { Injectable } from '@angular/core';
+import { HttpService } from './http.service';
+import { Observable } from 'rxjs';
+import { Pagination } from '../class/pagination';
+import { CheckinList } from '../class/checkinList';
+import { Result } from '../class/result';
+import { SearchCondition } from '../class/searchCondition'; // 筛选类
+import { CheckinListCondition } from '../class/checkinListCondition';
+import { GuestCheckinCondition } from '../class/guestCheckinListCondition';
+@Injectable({
+    providedIn: 'root'
+})
+export class ApiService {
+
+    constructor(
+        private m_objHttpService: HttpService
+    ) { }
+
+    // 测试接口
+    login(objParams: object): Observable<any> {
+        return this.m_objHttpService.request<any>('GET', '/User/Login', objParams);
+    }
+
+    // 旅店开房查询
+    fnSearchHotelCheckinList(objParams: SearchCondition<CheckinListCondition>): Observable<Result<Pagination<CheckinList>>> {
+        return this.m_objHttpService.request<Result<Pagination<CheckinList>>>('POST', '/Hotel/SearchHotelCheckinList', objParams);
+    }
+
+    // 旅客入住查詢
+    fnSearchGuestCheckinList(objParams: SearchCondition<GuestCheckinCondition>): Observable<any> {
+        return this.m_objHttpService.request<Result<any>>('POST', '/Guest/SearchGuestCheckInList', objParams);
+    }
+}

@@ -1,0 +1,4 @@
+<button nz-button routerLink="/GuestCheckinList">GuestCheckinList</button>
+<button nz-button routerLink="/HotelSearch">HotelSearch</button>
+<button nz-button routerLink="/SearchCondition">SearchCondition</button>
+<button nz-button routerLink="/CheckinLogListComponent">CheckinLogListComponent</button>

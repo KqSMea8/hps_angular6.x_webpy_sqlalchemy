@@ -1,0 +1,262 @@
+import { Injectable } from '@angular/core';
+import { differenceInCalendarDays } from 'date-fns';
+import { User } from '../class/user';
+import { ApiService } from './api.service';
+import { Router } from '@angular/router';
+import { Province } from '../class/province';
+import { City } from '../class/city';
+import { District } from '../class/district';
+import { AllDictResult, DictResult } from '../class/dictionary';
+import { UpdateDict } from '../class/updateDict';
+import { NzMessageService } from 'ng-zorro-antd';
+import { AreaProvince, AreaCity, AreaDistrict } from '../class/area-select';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ContextService {
+    m_objUserInfo: User = new User();
+    m_sUserInfoName = 'm_objUserInfo';
+    m_nTabActivedIndex = 0;
+    m_nSubTabActivedIndex = 0;
+    m_nUserID = 0;
+    /**日期组件-日期的格式 */
+    m_sDateFormat = 'yyyy-MM-dd';
+    /**当前时间日期 */
+    m_dToday = new Date();
+    /**省市区列表 */
+    public m_lsProvince: Province[] = [];
+    m_lsCity: City[] = [];
+    m_lsDistrict: District[] = [];
+    m_nMustUserID: number;
+    m_sMustUserName: string;
+    m_objAllDict: AllDictResult = new AllDictResult();
+    m_objUpdateDict: UpdateDict = new UpdateDict();
+    m_objSideTabList = {
+        guestCheckin: [
+            { subtabName: '所有住客查询', subtabIcon: 'icon-search', routerName: '/main/GuestCheckinList/allGuest', tree: false },
+            { subtabName: '境外住客查询', subtabIcon: 'icon-search', routerName: '/main/GuestCheckinList/foreignGuest', tree: false }
+        ],
+        hotelCheckin: [
+            { subtabName: '开房信息查询', subtabIcon: 'icon-search', routerName: '/main/SearchCheckinList/CheckinList', tree: false }
+        ],
+        hotelManagement: [
+            { subtabName: '旅店查询', subtabIcon: 'icon-search', routerName: '/main/Hotel/HotelSearch', tree: false },
+            { subtabName: '待审核', subtabIcon: 'icon-audit-pending', routerName: '/main/Hotel/Verify', tree: false },
+            { subtabName: '未通过', subtabIcon: 'icon-audit-fail', routerName: '/main/Hotel/Offline', tree: false },
+            // {subtabName: '添加酒店', subtabIcon: 'icon-add', routerName: '/main/Hotel/HotelAdd',  tree: false}
+        ],
+        hotelManagementBtn: [
+            { subbtnName: '添加酒店', subbtnIcon: 'icon-add', routerName: '/main/Hotel/HotelAdd' }
+        ],
+        systemManagement: [
+            { subtabName: '用户管理', subtabIcon: 'icon-user-manage', routerName: '/main/SystemManagement/UserManage', tree: false },
+            { subtabName: '操作日志', subtabIcon: 'icon-log', routerName: '/main/SystemManagement/Log', tree: false },
+            {
+                subtabName: '参数配置', subtabIcon: 'icon-param-config', routerName: '/main/SystemManagement/ParameterConfig', tree: false,
+                children: [
+                    {
+                        TypeName: '境内证件类型',
+                        TypeID: 0
+                    },
+                    {
+                        TypeName: '外籍旅客证件类型',
+                        TypeID: 1
+                    },
+                    {
+                        TypeName: '旅店类型',
+                        TypeID: 2
+                    },
+                    {
+                        TypeName: '省份',
+                        TypeID: 3
+                    },
+                    {
+                        TypeName: '州市县',
+                        TypeID: 4
+                    },
+                    {
+                        TypeName: '行政区',
+                        TypeID: 5
+                    }
+                ]
+            }
+        ]
+    };
+
+    m_lsAreaSelect: Array<AreaProvince> = [];
+
+    constructor(
+        private m_objApiService: ApiService,
+        private m_objRouter: Router,
+        private m_objMessageService: NzMessageService
+    ) {
+        this.m_objUserInfo.UserName = '';
+        this.fnRestoreState();
+        this.fnGetUserInfo();
+        this.fnGetProvince();
+        this.fnGetDict();
+        // this.fnGetProvincePromise()
+        //     .then(this.fnGetCityPromise.call(this, this.m_lsAreaSelect))
+        //     .then(this.fnGetDistrictPromise.call(this, this.m_lsAreaSelect));
+    }
+
+    /**修改字典 */
+    fnUpdateDict(): void {
+        this.m_objApiService.fnUpdateDict(this.m_objUpdateDict).subscribe(data => {
+            if (data.Code === 200) {
+                this.m_objMessageService.success('修改成功！');
+            } else {
+                this.m_objMessageService.error(data.Msg);
+            }
+        });
+    }
+
+    /**获取字典 */
+    fnGetDict(fnCallback?: any): void {
+        this.m_objApiService.fnGetDict().subscribe(u => {
+            this.m_objAllDict = u.Data;
+            if (fnCallback) {
+                fnCallback();
+            }
+        });
+    }
+
+    /**禁止点击的时间 */
+    fnDisabledDate = (dCurrent: Date): boolean => {
+        return differenceInCalendarDays(dCurrent, this.m_dToday) > 0;
+    }
+
+    /**存储登录状态信息至Session */
+    fnSaveLoginState(objUserInfo: User): void {
+        this.m_objUserInfo = objUserInfo;
+        sessionStorage[this.m_sUserInfoName] = JSON.stringify(objUserInfo);
+    }
+
+    /**恢复上下文登录状态 */
+    fnRestoreState(): void {
+        if (sessionStorage[this.m_sUserInfoName]) {
+            this.m_objUserInfo = JSON.parse(sessionStorage[this.m_sUserInfoName]);
+        } else {
+            // this.fnLogout();
+        }
+    }
+
+    /**退出登录 */
+    fnLogout(): void {
+        // debugger;
+        this.m_objApiService.fnLogout().subscribe(data => {
+            if (data.Code === 200) {
+                sessionStorage.removeItem(this.m_sUserInfoName);
+                this.m_objUserInfo = null;
+                this.m_objRouter.navigate(['/']);
+            }
+        });
+    }
+    /**获取省份 */
+    fnGetProvince(fn?: any): void {
+        this.m_objApiService.fnGetProvince().subscribe(data => {
+            if (data.Code === 200) {
+                this.m_lsProvince = data.Data;
+                this.fnGetCity(fn);
+            }
+        });
+    }
+
+    /**获取城市 */
+    fnGetCity(fn?: any): void {
+        this.m_objApiService.fnGetCity().subscribe(data => {
+            if (data.Code === 200) {
+                this.m_lsCity = data.Data;
+                this.fnGetDistrict(fn);
+                // for (let i = 0; i < this.m_lsProvince.length; i++) {
+                //     for (let y = 0; y < data.Data.length; y++) {
+                //         if (this.m_lsProvince[i].ProvinceID === data.Data[y].ProvinceID) {
+                //             this.m_lsProvince[i].CitySet.push(data.Data[y]);
+                //         }
+                //     }
+                // }
+            }
+        });
+    }
+
+    /**获取区域 */
+    fnGetDistrict(fn?: any): void {
+        this.m_objApiService.fnGetDistrict().subscribe(data => {
+            if (data.Code === 200) {
+                this.m_lsDistrict = data.Data;
+                if (fn) {
+                    fn();
+                }
+            }
+        });
+    }
+    /**获取登录用户的信息 */
+    fnGetUserInfo(): void {
+        if (sessionStorage['m_objUserInfo']) {
+            this.m_nUserID = JSON.parse(sessionStorage['m_objUserInfo']).UserID;
+        }
+    }
+
+    // fnGetProvincePromise(): Promise<any> {
+    //     return new Promise((resolve, reject) => {
+    //         this.m_objApiService.fnGetProvince().subscribe(u => {
+    //             u.Data.forEach(provinceItem => {
+    //                 const item = new AreaProvince();
+    //                 item.IsFlag = provinceItem.IsFlag;
+    //                 item.Province = provinceItem.Province;
+    //                 item.ProvinceID = provinceItem.ProvinceID;
+    //                 item.TableID = provinceItem.TableID;
+    //                 this.m_lsAreaSelect.push(item);
+    //             });
+    //             resolve(this.m_lsAreaSelect);
+    //         });
+    //     });
+    // }
+
+    // fnGetCityPromise(data: Array<AreaProvince>): Promise<any> {
+    //     return new Promise((resolve, reject) => {
+    //         this.m_objApiService.fnGetCity().subscribe(u => {
+    //             u.Data.forEach(cityItem => {
+    //                 const item = new AreaCity();
+    //                 data.forEach(provinceItem => {
+    //                     if (cityItem.ProvinceID === provinceItem.ProvinceID) {
+    //                         item.CityID = cityItem.CityID;
+    //                         item.CityName = cityItem.CityName;
+    //                         item.IsCapitalCity = cityItem.IsCapitalCity;
+    //                         item.IsFlag = cityItem.IsFlag;
+    //                         item.ProvinceID = cityItem.ProvinceID;
+    //                         item.TableID = cityItem.TableID;
+    //                         provinceItem.Children.push(item);
+    //                     }
+    //                 });
+    //             });
+    //             resolve(this.m_lsAreaSelect);
+    //         });
+    //     });
+    // }
+
+    // fnGetDistrictPromise(data: Array<AreaProvince>): Promise<any> {
+    //     return new Promise((resolve, reject) => {
+    //         this.m_objApiService.fnGetDistrict().subscribe(u => {
+    //             u.Data.forEach(districtItem => {
+    //                 const item = new AreaDistrict();
+    //                 data.forEach(provinceItem => {
+    //                     provinceItem.Children.forEach(cityItem => {
+    //                         if (districtItem.CityID === cityItem.CityID) {
+    //                             item.CityID = districtItem.CityID;
+    //                             item.District = districtItem.District;
+    //                             item.DistrictID = districtItem.DistrictID;
+    //                             item.IsFlag = districtItem.IsFlag;
+    //                             item.ProvinceID = districtItem.ProvinceID;
+    //                             item.TableID = districtItem.TableID;
+    //                             cityItem.Children.push(item);
+    //                         }
+    //                     });
+    //                 });
+    //             });
+    //             resolve(this.m_lsAreaSelect);
+    //         });
+    //     });
+    // }
+}

@@ -1,0 +1,24 @@
+<div nz-row class="header">
+    <div nz-col nzSpan="6" class="header-logo flex">
+        <img src="assets/img/logo.png" alt="广州穗通金融服务有限公司" title="广州穗通金融服务有限公司">
+        <p>旅馆业治安管理系统</p>
+    </div>
+    <div flex nz-col nzSpan="12" class="header-tab flex">
+        <div class="flex" *ngFor="let item of m_aTabList; let i = index" 
+            [ngClass]="{'selected':i===m_objContextService.m_nTabActivedIndex}"
+            (click)="fnSelected(i)" routerLink="{{item.routeName}}">
+            <img src="assets/img/{{item.tabIcon}}" alt="" title="{{item.tabName}}">
+            <p>{{item.tabName}}</p>
+        </div>
+    </div>
+    <div flex nz-col nzSpan="6" class="header-info flex">
+        <div class="flex">
+            <p>公安用户A</p>
+            <img src="assets/img/" alt="">
+        </div>
+        <div class="flex">
+            <p>注销</p>
+            <img src="assets/img/" alt="">
+        </div>
+    </div>
+</div>

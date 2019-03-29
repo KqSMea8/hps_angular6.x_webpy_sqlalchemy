@@ -1,0 +1,22 @@
+import { Injectable } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { differenceInCalendarDays } from 'date-fns';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ContextService {
+    m_nTabActivedIndex = 0;
+    m_nSubTabActivedIndex = 0;
+    // 日期组件-日期的格式
+    m_sDateFormat = 'yyyy-MM-dd';
+    // 当前时间日期
+    m_dToday = new Date();
+    constructor(
+    ) { }
+
+    // 禁止点击的时间
+    fnDisabledDate = (dCurrent: Date): boolean => {
+        return differenceInCalendarDays(dCurrent, this.m_dToday) > 0;
+    }
+}

@@ -1,0 +1,303 @@
+import {Component, OnInit} from '@angular/core';
+import {AddHotelCondition} from '../../../../class/addHotelCondition';
+import {ApiService} from '../../../../services/api.service';
+import {Subtab} from '../../../../class/sidebar';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {SearchCondition} from '../../../../class/searchCondition';
+import {SearchHotelListCondition} from '../../../../class/searchHotelListCondition';
+import {SearchHotelList} from '../../../../class/searchHotelList';
+import {UpdateHotelCondition} from '../../../../class/updateHotelCondition';
+import {UploadImg} from '../../../../class/uploadImg';
+import {ToolsService} from '../../../../services/tools.service';
+import {OfflineHotelCondition} from '../../../../class/offlineHotelCondition';
+import {VerifyHotelCondition} from '../../../../class/verifyHotelCondition';
+import {ContextService} from '../../../../services/context.service';
+import {User} from '../../../../class/user';
+import {AreaChooseOutput} from 'src/app/class/areaChooseOutput';
+import {UploadFile} from "ng-zorro-antd";
+import { HttpClient } from '@angular/common/http';
+
+
+// import {UploadComponent} from 'src/app/components/upload/upload.component';
+
+@Component({
+    selector: 'app-hotel-add',
+    templateUrl: './hotel-add.component.html',
+    styleUrls: ['./hotel-add.component.less']
+})
+export class HotelAddComponent implements OnInit {
+    objUploadImg: UploadImg;
+    objAddHotelCondition: AddHotelCondition; // 添加酒店条件
+    objUpdataHotelCondition: UpdateHotelCondition; // 修改酒店条件
+    objSearchCondition: SearchCondition<SearchHotelListCondition> =
+        new SearchCondition<SearchHotelListCondition>(SearchHotelListCondition);
+    objSearchHotelList: SearchHotelList;
+    objOfflineHotelCondition: OfflineHotelCondition;
+    objVerifyHotelCondition: VerifyHotelCondition;
+    m_objUserInfo: User = new User();
+    m_objAreaChooseOutput: AreaChooseOutput = new AreaChooseOutput();
+    m_strCreateUserName: string;
+    stateName: string;
+    url: string;
+    lsBusinesslicenseList: UploadFile[] = [];    // 营业执照
+    lsSpecialIndustriesList: any;    // 特种行业经营许可证
+    lsHygienePermitList: any;    // 公共场所卫生许可证
+    lsFirePermitList: any;    // 消防许可证
+    lsBusinesslicenseName: any;    // 营业执照
+    lsSpecialIndustriesName: any;    // 特种行业经营许可证
+    lsHygienePermitName: any;    // 公共场所卫生许可证
+    lsFirePermitName: any;    // 消防许可证
+    public m_objSubtab = this.m_objContextService.m_objSideTabList.hotelManagement;
+    public m_objSubbtn = this.m_objContextService.m_objSideTabList.hotelManagementBtn;
+    /**面包屑导航信息 */
+    m_lsBreadCrumbList: Array<{ name: string, routelink: string }> = [
+        {name: '首页', routelink: '/main'},
+        {name: '旅店查询', routelink: '/main/Hotel/HotelSearch'},
+        {name: '添加或修改酒店', routelink: ''},
+    ];
+
+    boonIsEdit: String;
+    nHotelID: number;
+    nHotelState: number;
+
+    lsBusinessPreviewImage = '';
+    lsBusinessPreviewVisible = false;
+
+    constructor(
+        private m_objApiService: ApiService,
+        private m_objRouter: Router,
+        public m_objActivatedRoute: ActivatedRoute,
+        private m_objToolsService: ToolsService,
+        public m_objContextService: ContextService,
+        private m_objHttpClient :HttpClient
+    ) {
+        this.objAddHotelCondition = new AddHotelCondition();
+        this.objUpdataHotelCondition = new UpdateHotelCondition();
+        this.objOfflineHotelCondition = new OfflineHotelCondition();
+        this.objVerifyHotelCondition = new VerifyHotelCondition();
+        this.objUploadImg = new UploadImg();
+    }
+
+    ngOnInit() {
+        this.m_objActivatedRoute.queryParams.subscribe((params: Params) => {
+            this.boonIsEdit = params['boonIsEdit'];
+            this.nHotelID = params['nHotelID'];
+        });
+        /**判断是否为编辑 */
+        if (this.boonIsEdit) {
+            this.fnGetHotelDetail(this.nHotelID);
+        }
+        this.lsBusinesslicenseName = '营业执照';
+        this.lsSpecialIndustriesName = '特种行业经营许可证';
+        this.lsHygienePermitName = '公共场所卫生许可证';
+        this.lsFirePermitName = '消防许可证';
+    }
+
+    /**判断当前酒店状态 */
+    fnJudgeHotelState(state: number): string {
+        switch (state) {
+            case 1:
+                this.stateName = '审核通过';
+                break;
+            case 2:
+                this.stateName = '审核中';
+                break;
+            case 3:
+                this.stateName = '审核不通过';
+                break;
+            case 4:
+                this.stateName = '未审核';
+                break;
+            case 5:
+                this.stateName = '已审核';
+                break;
+            case 6:
+                this.stateName = '待审核';
+                break;
+        }
+        return this.stateName;
+    }
+
+    fnAddOrUpdata() {
+        this.boonIsEdit === 'true' ? this.fnUpdateHotel() : this.fnAdd();
+    }
+
+    /**当前选择的省市区 */
+    fnGetCurrentArea(objAreaChooseOutput: AreaChooseOutput): void {
+        this.objAddHotelCondition.nProvinceID = objAreaChooseOutput.CurrentProvinceID;
+        this.objAddHotelCondition.nCityID = objAreaChooseOutput.CurrentCityID;
+        this.objAddHotelCondition.nDistrictID = objAreaChooseOutput.CurrentDistrictID;
+    }
+
+    /**添加酒店 */
+    fnAdd(): void {
+        this.objAddHotelCondition.nAddUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+        this.objAddHotelCondition.sAddUserNameMust = this.m_objContextService.m_objUserInfo.UserName;
+        this.objAddHotelCondition.nCreatUserID = this.m_objContextService.m_objUserInfo.UserID;
+        this.objAddHotelCondition.sCreatUserCode = this.m_objContextService.m_objUserInfo.UserName;
+        this.objAddHotelCondition.nAuditState = 4;  // 默认未审核
+        this.objAddHotelCondition.sRegStartTime = this.m_objToolsService.fnFormatDate(this.objAddHotelCondition.sRegStartTime);
+        this.m_objApiService.fnAddHotel(this.objAddHotelCondition).subscribe(data => {
+            if (data.Code === 200) {
+                this.m_objToolsService.fnErrorReturnTips('添加成功');
+            } else {
+                this.m_objToolsService.fnErrorReturnTips(data.Msg);
+            }
+        });
+    }
+
+    /**审核酒店 */
+    fnVerifyHotel(): void {
+        this.objVerifyHotelCondition.nHotelID = this.nHotelID;
+        this.objVerifyHotelCondition.nVerifyUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+        this.objVerifyHotelCondition.sVerifyUserNameMust = this.m_objContextService.m_objUserInfo.UserName;
+        this.objVerifyHotelCondition.sVerifyDateTimeMust = this.m_objToolsService.fnFormatDate(new Date());
+        this.objVerifyHotelCondition.nState = 1;
+        this.objVerifyHotelCondition.sRemark = this.objAddHotelCondition.sRemark;
+        this.objVerifyHotelCondition.nAuditState = 1;
+        console.log(this.objVerifyHotelCondition);
+        this.m_objApiService.fnVerifyHotel(this.objVerifyHotelCondition).subscribe(data => {
+            if (data.Code === 200) {
+                this.fnGetHotelDetail(this.nHotelID);
+                this.m_objToolsService.fnDoSuccessReturnTips('审核成功');
+            } else {
+                this.m_objToolsService.fnErrorReturnTips(data.Msg);
+            }
+        });
+    }
+
+    /**注销酒店 */
+    fnOfflineHotel(): void {
+        this.objOfflineHotelCondition.nHotelIDMust = this.nHotelID;
+        this.objOfflineHotelCondition.nOffLineUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+        this.objOfflineHotelCondition.sOffLineUserNameMust = this.m_objContextService.m_objUserInfo.UserName;
+        this.objOfflineHotelCondition.sOffLineDateTimeMust = this.m_objToolsService.fnFormatDate(new Date());
+        this.objOfflineHotelCondition.sRemark = this.objAddHotelCondition.sRemark;
+        console.log(this.objOfflineHotelCondition);
+        this.m_objApiService.fnOfflineHotel(this.objOfflineHotelCondition).subscribe(data => {
+            if (data.Code === 200) {
+                this.fnGetHotelDetail(this.nHotelID);
+                this.m_objToolsService.fnDoSuccessReturnTips('注销成功');
+            } else {
+                this.m_objToolsService.fnErrorReturnTips(data.Msg);
+            }
+        });
+    }
+
+    /**修改酒店 */
+    fnUpdateHotel(): void {
+        this.objUpdataHotelCondition.nHotelIDMust = this.nHotelID;
+        this.objUpdataHotelCondition.sUpdateUserNameMust = this.m_objContextService.m_objUserInfo.UserName;
+        this.objUpdataHotelCondition.nUpdateUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+        this.objUpdataHotelCondition.sHotelCode = this.objAddHotelCondition.sHotelCode;
+        this.objUpdataHotelCondition.sHotelName = this.objAddHotelCondition.sHotelName;
+        this.objUpdataHotelCondition.sHotelAddr = this.objAddHotelCondition.sHotelAddr;
+        this.objUpdataHotelCondition.sHotelTel = this.objAddHotelCondition.sHotelTel;
+        this.objUpdataHotelCondition.sLegalTel = this.objAddHotelCondition.sLegalTel;
+        this.objUpdataHotelCondition.sLegalPerson = this.objAddHotelCondition.sLegalPerson;
+        this.objUpdataHotelCondition.sLegalDocNo = this.objAddHotelCondition.sLegalDocNo;
+        this.objUpdataHotelCondition.nProvinceID = this.objAddHotelCondition.nProvinceID;
+        this.objUpdataHotelCondition.nCityID = this.objAddHotelCondition.nCityID;
+        this.objUpdataHotelCondition.nDistrictID = this.objAddHotelCondition.nDistrictID;
+        this.objUpdataHotelCondition.nHotelType = this.objAddHotelCondition.nHotelType;
+        this.objUpdataHotelCondition.sResponPersonTel = this.objAddHotelCondition.sResponPersonTel;
+        this.objUpdataHotelCondition.sResponPerson = this.objAddHotelCondition.sResponPerson;
+        this.objUpdataHotelCondition.nRoomCount = this.objAddHotelCondition.nRoomCount;
+        this.objUpdataHotelCondition.nBedCount = this.objAddHotelCondition.nBedCount;
+        this.objUpdataHotelCondition.sBusLicenseCode = this.objAddHotelCondition.sBusLicenseCode;
+        this.objUpdataHotelCondition.sBusLicenseName = this.objAddHotelCondition.sBusLicenseName;
+        this.objUpdataHotelCondition.sRemark = this.objAddHotelCondition.sRemark;
+        this.objUpdataHotelCondition.nCreatUserID = this.objAddHotelCondition.nCreatUserID;
+        this.objUpdataHotelCondition.sRegStartTime = this.m_objToolsService.fnFormatDate(this.objAddHotelCondition.sRegStartTime);
+        this.m_objApiService.fnUpdateHotel(this.objUpdataHotelCondition).subscribe(data => {
+            if (data.Code === 200) {
+                this.m_objToolsService.fnDoSuccessReturnTips('修改成功');
+            } else {
+                this.m_objToolsService.fnErrorReturnTips(data.Msg);
+            }
+        });
+    }
+
+
+    /**h获取酒店信息 */
+    fnGetHotelDetail(nHotelID): void {
+        this.objSearchCondition.objCondition.nSearchUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+        this.objSearchCondition.objCondition.sSearchUserNameMust = this.m_objContextService.m_objUserInfo.UserName;
+        this.objSearchCondition.objCondition.nHotelID = this.nHotelID;
+        this.objSearchCondition.objPageInfo.nPageNo = 1;
+        this.objSearchCondition.objPageInfo.nPageSize = 10;
+        this.m_objApiService.fnSearchHotelList(this.objSearchCondition).subscribe(data => {
+            if (data.Code === 200) {
+                this.objSearchHotelList = data.Data.DataSet[0];
+                this.objAddHotelCondition.nHotelID = this.objSearchHotelList.HotelID;
+                this.objAddHotelCondition.sHotelCode = this.objSearchHotelList.HotelCode;
+                this.objAddHotelCondition.sHotelName = this.objSearchHotelList.HotelName;
+                this.objAddHotelCondition.sHotelAddr = this.objSearchHotelList.HotelAddr;
+                this.objAddHotelCondition.sHotelTel = this.objSearchHotelList.HotelTel;
+                this.objAddHotelCondition.sLegalTel = this.objSearchHotelList.LegalTel;
+                this.objAddHotelCondition.sLegalPerson = this.objSearchHotelList.LegalPerson;
+                this.objAddHotelCondition.sLegalDocNo = this.objSearchHotelList.LegalDocNo;
+                this.objAddHotelCondition.nProvinceID = this.objSearchHotelList.ProvinceID;
+                this.objAddHotelCondition.nCityID = this.objSearchHotelList.CityID;
+                this.objAddHotelCondition.nDistrictID = this.objSearchHotelList.DistrictID;
+                this.objAddHotelCondition.nHotelType = this.objSearchHotelList.HotelType;
+                this.objAddHotelCondition.nCreatUserID = this.objSearchHotelList.CreatUserID;
+                this.m_objAreaChooseOutput.CurrentProvinceID = this.objAddHotelCondition.nProvinceID;   // 绑定省ID
+                this.m_objAreaChooseOutput.CurrentCityID = this.objAddHotelCondition.nCityID;
+                this.m_objAreaChooseOutput.CurrentDistrictID = this.objAddHotelCondition.nDistrictID;
+                this.objAddHotelCondition.sCreatUserCode = this.objSearchHotelList.CreatuserCode;
+                this.objAddHotelCondition.sResponPersonTel = this.objSearchHotelList.ResponPersonTel;
+                this.objAddHotelCondition.sResponPerson = this.objSearchHotelList.ResponPerson;
+                this.objAddHotelCondition.nRoomCount = this.objSearchHotelList.RoomCount;
+                this.objAddHotelCondition.nBedCount = this.objSearchHotelList.BedCount;
+                this.objAddHotelCondition.sBusLicenseCode = this.objSearchHotelList.BusLicenseCode;
+                this.objAddHotelCondition.sBusLicenseName = this.objSearchHotelList.BusLicenseName;
+                this.objAddHotelCondition.sRegStartTime = this.objSearchHotelList.RegStartTime;
+                this.objAddHotelCondition.sRemark = this.objSearchHotelList.Remark;
+                this.nHotelState = this.objSearchHotelList.State;
+                this.m_strCreateUserName = this.objSearchHotelList.CreateUserName;
+                this.stateName = this.fnJudgeHotelState(this.objSearchHotelList.AuditState);
+            } else {
+                this.m_objToolsService.fnErrorReturnTips(data.Msg);
+            }
+        });
+    }
+
+
+    lsBusinessBeforeUpload = (file: UploadFile): boolean => {
+        this.lsBusinesslicenseList.push(file);
+        let formData = new FormData();
+        console.log(formData);
+        this.lsBusinesslicenseList.forEach((file: any) => {
+            formData.append('files[]', file);
+            formData.append('basePath','1')
+        });
+        console.log(formData);
+        this.fnUploadImg(formData);
+        return false;
+    };
+    lsBusinessHandlePreview = (formData:any) => {
+        // this.objUploadImg.basePath = '';
+        // this.objUploadImg.image = file;
+        console.log('lsBusinessHandlePreview');
+        this.fnUploadImg(formData);
+        // this.lsBusinessPreviewImage = file.url || file.thumbUrl;
+        // this.lsBusinessPreviewVisible = true;
+    };
+
+    fnUploadImg(formData:any): void {
+        // console.log(formData);
+        // const data = new UploadImg();
+        // data.image = formData;
+        console.log('到这里了');
+        // this.m_objHttpClient.post('http://10.3.15.36:8090/api/Hotel/UploadImg', formData);
+        this.m_objApiService.fnUploadImg(formData).subscribe(data => {
+            if (data.Code === 200) {
+                this.fnGetHotelDetail(this.nHotelID);
+                this.m_objToolsService.fnDoSuccessReturnTips('上传成功');
+            } else {
+                this.m_objToolsService.fnErrorReturnTips(data.Msg);
+            }
+        });
+    }
+}

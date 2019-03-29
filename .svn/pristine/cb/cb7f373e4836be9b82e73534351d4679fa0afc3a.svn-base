@@ -1,0 +1,10 @@
+<div class="breadcrumb-bar">
+    <nz-breadcrumb>
+        <nz-breadcrumb-item *ngFor="let item of m_aDataList">
+            <a routerLink="{{item.routelink}}">{{item.name}}</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{m_objDataLastItem.name}}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+</div>

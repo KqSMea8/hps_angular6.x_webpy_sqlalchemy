@@ -1,0 +1,66 @@
+<app-header></app-header>
+<div nz-row class="content">
+    <div nz-col nzSpan="3">
+        <app-sidebar [title]="'旅店登记客人'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div nz-col nzSpan="21" class="main">
+        <div class="search-bar">
+            <div class="IDCard-info">
+                <p class="title">按证件信息查询</p>
+                <ul class="flex">
+                    <li class="flex">
+                        <span>姓名</span>
+                        <input nz-input placeholder="姓名" nzSize="default">
+                    </li>
+                    <li class="flex">
+                        <span>证件类型</span>
+                        <nz-select style="width: 200px;" nzShowSearch nzAllowClear nzPlaceHolder="证件类型" [(ngModel)]="m_objAllGuestCondition.objCondition.nHotelDocType">
+                            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                        </nz-select>
+                    </li>
+                    <li class="flex">
+                        <span>证件号码</span>
+                        <input nz-input placeholder="证件号码" nzSize="default">
+                    </li>
+                </ul>
+                <ul class="flex">
+                    <li class="flex">
+                        <span>国籍</span>
+                        <nz-select style="width: 200px;" nzShowSearch nzAllowClear nzPlaceHolder="国籍" [(ngModel)]="m_objAllGuestCondition.objCondition.sNationality">
+                            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                        </nz-select>
+                    </li>
+                    <li class="flex">
+                        <span>性别</span>
+                        <nz-select style="width: 200px;" nzShowSearch nzAllowClear nzPlaceHolder="性别" [(ngModel)]="m_objAllGuestCondition.objCondition.nSex">
+                            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                        </nz-select>
+                    </li>
+                    <li class="flex">
+                        <span>民族</span>
+                        <nz-select style="width: 200px;" nzShowSearch nzAllowClear nzPlaceHolder="民族" [(ngModel)]="m_objAllGuestCondition.objCondition.sNation">
+                            <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                        </nz-select>
+                    </li>
+                    <li class="flex">
+                        <span>出生日期</span>
+                        <nz-range-picker [nzRanges]="ranges1" ngModel (ngModelChange)="onChange($event)"></nz-range-picker>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="sort-bar">
+
+        </div>
+        <div class="result-bar">
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="loading-box flex" *ngIf="m_bIsShow">
+    <ng-template #indicatorTemplate>
+        <i nz-icon type="loading"></i>
+    </ng-template>
+    <nz-spin [nzIndicator]="indicatorTemplate"></nz-spin>
+</div>
+<div class="loading-mask" *ngIf="m_bIsShow"></div>
+<router-outlet></router-outlet>

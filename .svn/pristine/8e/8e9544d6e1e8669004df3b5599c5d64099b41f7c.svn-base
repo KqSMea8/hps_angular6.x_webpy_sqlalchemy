@@ -1,0 +1,60 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.u_user import User
+from utils.func_api import FuncResult
+from utils.tools import is_null
+from utils import obj_to_json
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        '''
+        获取请求参数
+        '''
+        objInput = web.input()
+        try:
+            nUpdateUserIDMust = objInput.get('nUpdateUserIDMust')
+            sUpdateUserNameMust = objInput.get('sUpdateUserNameMust')
+            nUserID = objInput.get('nUserID')
+            sRemark = objInput.get('sRemark')
+            nState = int(objInput.get('nState'))
+            if is_null(nUpdateUserIDMust):
+                return FuncResult(fail='参数\'nUpdateUserIDMust\'不能为空')
+            elif is_null(sUpdateUserNameMust):
+                return FuncResult(fail='参数\'sUpdateUserNameMust\'不能为空')
+            elif is_null(nUserID):
+                return FuncResult(fail='参数\'nUserID\'不能为空')
+            elif is_null(nState):
+                return FuncResult(fail='参数\'nState\'不能为空')
+
+        except Exception, ce:
+            # 异常处理
+            return FuncResult(fail='参数有误！')
+
+        return self.add_user(nUserID, sRemark, nState)
+
+    def add_user(self, nUserID, sRemark, nState):
+        objUser = User().query.filter(User.UserID == nUserID)\
+                                .first()
+        if objUser:
+            # 修改密码
+            objUser.State = nState
+            # if not is_null(sRemark):
+            #     obj_user.Remark = sRemark
+            # 保存更改到数据库
+            objUser.save()
+            if nState == 1:
+                return FuncResult(success=True, msg='恢复账户成功！')
+            else:
+                return FuncResult(success=True, msg='禁用账户成功！')
+        else:
+            return FuncResult(fail='该用户编号不存在！')

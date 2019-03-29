@@ -1,0 +1,73 @@
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Login } from 'src/app/class/login';
+import { ApiService } from 'src/app/services/api.service';
+import { NzMessageService } from 'ng-zorro-antd';
+// import { ContextService } from 'src/app/services/context.service';
+import { Router } from '@angular/router';
+import { utils } from '../../utils/utils';
+import { DateRangePickerComponent } from 'ng-zorro-antd/date-picker/date-range-picker.component';
+import { ContextService } from 'src/app/services/context.service';
+
+@Component({
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.less']
+})
+export class LoginComponent implements OnInit {
+    m_objValidateForm: FormGroup;
+    m_objLogin: Login = new Login();
+    submitForm(): void {
+        for (const i of Object.keys(this.m_objValidateForm.controls)) {
+            this.m_objValidateForm.controls[i].markAsDirty();
+            this.m_objValidateForm.controls[i].updateValueAndValidity();
+        }
+    }
+
+    constructor(
+        private m_objFormBuilder: FormBuilder,
+        private m_objApiService: ApiService,
+        private m_objMessageService: NzMessageService,
+        private m_objContextService: ContextService,
+        private m_objRouter: Router
+    ) {
+        this.fnIsShowLoginPage();
+    }
+
+    ngOnInit(): void {
+        this.m_objValidateForm = this.m_objFormBuilder.group({
+            userName: [null, [Validators.required]],
+            password: [null, [Validators.required]],
+            remember: [true]
+        });
+    }
+
+    fnLogin(): void {
+        if (this.m_objLogin.sUserCode === '') {
+            return;
+        } else if (this.m_objLogin.sPassword === '') {
+            return;
+        }
+        this.m_objApiService.fnLogin(this.m_objLogin).subscribe(data => {
+            if (data.Code === 200) {
+                // this.m_objLogin = null;
+                const userInfo = {
+                    UserID: data.Data.UserID,
+                    UserName: data.Data.UserName
+                };
+                utils.fnSetCookie('userInfo', JSON.stringify(userInfo), 1000);
+                this.m_objContextService.fnGetUserInfo();
+                this.m_objRouter.navigate(['home']);
+            } else {
+                this.m_objMessageService.create('error', data.Msg);
+            }
+        });
+    }
+
+    /**判断是否登录，如果已登录则不再进入登录页面 */
+    fnIsShowLoginPage(): void {
+        // if (this.m_objContextService.m_objUserInfo) {
+        //     this.m_objRouter.navigate(['home']);
+        // }
+    }
+}

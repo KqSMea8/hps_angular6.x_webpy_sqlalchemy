@@ -1,0 +1,104 @@
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AreaProvince, AreaCity, AreaDistrict } from '../../class/area-select';
+import { ApiService } from 'src/app/services/api.service';
+import { ContextService } from 'src/app/services/context.service';
+
+@Component({
+    selector: 'app-area-select',
+    templateUrl: './area-select.component.html',
+    styleUrls: ['./area-select.component.less']
+})
+export class AreaSelectComponent implements OnInit {
+
+    m_lsAreaSelect: Array<AreaProvince> = [];
+    m_nCurrentProvinceID: number;
+    m_nCurrentCityID: number;
+    m_nCurrentDistrictID: number;
+    m_lsCurrentCityList: Array<AreaCity> = [];
+    m_lsCurrentDistrictList: Array<AreaDistrict> = [];
+
+    /**省 */
+    @Input()
+    get province() {
+        return this.m_nCurrentProvinceID;
+    }
+    set province(value) {
+        this.m_nCurrentProvinceID = value;
+        this.fnCurrentProvinceChange();
+        this.provinceChange.emit(value);
+    }
+
+    @Output()
+    provinceChange: EventEmitter<any> = new EventEmitter();
+
+    /**市 */
+    @Input()
+    get city() {
+        return this.m_nCurrentCityID;
+    }
+    set city(value) {
+        this.m_nCurrentCityID = value;
+        this.fnCurrentcityChange();
+        this.cityChange.emit(value);
+    }
+
+    @Output()
+    cityChange: EventEmitter<any> = new EventEmitter();
+
+    /**区 */
+    @Input()
+    get district() {
+        return this.m_nCurrentDistrictID;
+    }
+    set district(value) {
+        this.m_nCurrentDistrictID = value;
+        this.districtChange.emit(value);
+    }
+
+    @Output()
+    districtChange: EventEmitter<any> = new EventEmitter();
+
+    constructor(
+        public m_objApiService: ApiService,
+        public m_objContextService: ContextService
+    ) { }
+
+    ngOnInit() {
+    }
+
+    fnCurrentProvinceChange(): void {
+        console.log('执行了fnCurrentProvinceChange');
+        const self = this;
+        if (this.m_lsAreaSelect.length === 0) {
+            const timeout = setTimeout(() => {
+                self.m_lsAreaSelect = self.m_objContextService.m_lsAreaSelect;
+                self.fnCurrentProvinceChange();
+            }, 200);
+        }
+        if (this.m_nCurrentProvinceID || this.m_nCurrentProvinceID === 0) {
+            for (let i = 0; i < this.m_lsAreaSelect.length; i++) {
+                if (this.m_lsAreaSelect[i].ProvinceID === this.m_nCurrentProvinceID) {
+                    this.m_lsCurrentCityList = this.m_lsAreaSelect[i].Children;
+                }
+            }
+        }
+    }
+
+    fnCurrentcityChange(): void {
+        console.log('执行了fnCurrentcityChange');
+        const self = this;
+        if (this.m_lsAreaSelect.length === 0) {
+            const timeout = setTimeout(() => {
+                self.fnCurrentProvinceChange();
+                self.fnCurrentcityChange();
+            }, 200);
+        }
+        if (this.m_nCurrentCityID || this.m_nCurrentCityID === 0) {
+            for (let i = 0; i < this.m_lsCurrentCityList.length; i++) {
+                if (this.m_lsCurrentCityList[i].CityID === this.m_nCurrentCityID) {
+                    this.m_lsCurrentDistrictList = this.m_lsCurrentCityList[i].Children;
+                }
+            }
+        }
+    }
+}

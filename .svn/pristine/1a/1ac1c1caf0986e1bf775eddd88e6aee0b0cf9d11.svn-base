@@ -1,0 +1,122 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.u_user import User
+from models.hps.h_hotel import Hotel
+from models.hps.h_checkin import CheckIn
+from models.hps.h_relation_checkin import RelationCheckIn
+from utils import obj_to_json
+from utils.tools import to_datetime, result_data,obj_to_dict
+from utils.func_api import FuncResult
+import json
+from sqlalchemy import and_, or_, text
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        obj_input = web.input()
+        try:
+            objCondition = obj_input.get('objCondition')
+            objPageInfo = obj_input.get('objPageInfo')
+            dictCondition = json.loads(objCondition)
+            dictPageInfo = json.loads(objPageInfo)
+            if not dictCondition['nSearchUserIDMust'] or not dictCondition['sSearchUserCodeMust']:
+                return FuncResult(success=False, msg="参数有误!")
+        except Exception, ce:
+            return FuncResult(fail='参数有误!')
+        return self.search_hotel_checkin_log(dictCondition, dictPageInfo)
+
+    def search_hotel_checkin_log(self, dictCondition, dictPageInfo):
+        try:
+            objParamsValue = {}
+            sCheckInSql = '''
+                Select
+                    h_hotel.RoomCount , h_hotel.BedCount ,Count(h_hotel.HotelID) As CheckInCount
+                From
+                    h_hotel INNER JOIN h_checkin ON h_hotel.HotelID = h_checkin.HotelID
+                WHERE 1=1
+                '''
+
+            sGuestSql = '''
+                Select
+                    Count(h_hotel.HotelID) As CheckInCount
+                From
+                    h_hotel INNER JOIN h_checkin ON h_hotel.HotelID = h_checkin.HotelID
+                    INNER JOIN h_relation_checkin ON h_checkin.CheckInID = h_relation_checkin.CheckInID
+                WHERE 1=1
+                '''
+
+            sLastModifyTimeSql = '''
+                Select
+                   h_checkin.HotelLastModifyTime
+                From
+                    h_hotel INNER JOIN h_checkin ON h_hotel.HotelID = h_checkin.HotelID
+                WHERE 1=1
+                '''
+
+            if dictCondition.has_key('nHotelID') and dictCondition['nHotelID']:
+                nHotelID = dictCondition['nHotelID']
+                sCheckInSql = sCheckInSql + 'AND h_hotel.HotelID = :nHotelID '
+                sGuestSql = sGuestSql + 'AND h_hotel.HotelID = :nHotelID '
+                sLastModifyTimeSql = sLastModifyTimeSql + 'AND h_hotel.HotelID = :nHotelID '
+                objParamsValue['nHotelID'] = nHotelID
+            if dictCondition.has_key('sCheckInStartDate') and dictCondition['sCheckInStartDate']:
+                dtCheckInStartDate = dictCondition['sCheckInStartDate']
+                dtCheckInStartDate = to_datetime(dtCheckInStartDate)
+                sCheckInSql = sCheckInSql + 'AND CheckIn.CheckInTime >= :dtCheckInStartDate '
+                sGuestSql = sGuestSql + 'AND CheckIn.CheckInTime >= :dtCheckInStartDate '
+                sLastModifyTimeSql = sLastModifyTimeSql + 'AND CheckIn.CheckInTime >= :dtCheckInStartDate '
+                objParamsValue['dtCheckInStartDate'] = dtCheckInStartDate
+            if dictCondition.has_key('sCheckInEndDate') and dictCondition['sCheckInEndDate']:
+                dtCheckOutTime = dictCondition['sCheckInEndDate']
+                dtCheckOutTime = to_datetime(dtCheckOutTime)
+                sCheckInSql = sCheckInSql + 'AND CheckIn.CheckOutTime <= :dtCheckOutTime '
+                sGuestSql = sGuestSql + 'AND CheckIn.CheckOutTime <= :dtCheckOutTime '
+                sLastModifyTimeSql = sLastModifyTimeSql + 'AND CheckIn.CheckOutTime <= :dtCheckOutTime '
+                objParamsValue['dtCheckOutTime'] = dtCheckOutTime
+
+            sCheckInSql = sCheckInSql + "GROUP BY h_hotel.HotelID"
+            sGuestSql = sGuestSql + "GROUP BY h_hotel.HotelID"
+            sLastModifyTimeSql = sLastModifyTimeSql +"Order by h_checkin.CheckInID"
+
+            lsQueryData = web.ctx.cur_dbconn.execute(text(sCheckInSql), **objParamsValue).fetchall()
+            lsQueryData2 = web.ctx.cur_dbconn.execute(text(sGuestSql), **objParamsValue).fetchall()
+            lsQueryData3 = web.ctx.cur_dbconn.execute(text(sLastModifyTimeSql), **objParamsValue).fetchall()
+            nRoomCount = 0
+            nBedCount = 0
+            nCheckInCount = 0
+            nGuestCount = 0
+            Date = None
+            for i in range(len(lsQueryData)):
+                RP = lsQueryData[i]
+                nRoomCount = RP._row[0]
+                nBedCount = RP._row[1]
+                if RP._row[2]:
+                    nCheckInCount = RP._row[2]
+            for i in range(len(lsQueryData2)):
+                if lsQueryData2[i]:
+                    RP = lsQueryData2[i]
+                    nGuestCount = RP._row[0]
+            for i in range(len(lsQueryData3)):
+                RP = lsQueryData3[i]
+                Date = RP._row[0]
+
+            DateSet = {}
+            DateSet['Date'] = Date
+            DateSet['nRoomCount'] = nRoomCount
+            DateSet['nBedCount'] = nBedCount
+            DateSet['nCheckInCount'] = nCheckInCount
+            DateSet['nGuestCount'] = nGuestCount
+            ojbData = result_data(dictPageInfo['nPageNo'], dictPageInfo['nPageSize'], 1, DateSet)
+        except Exception, ce:
+            print Exception, ce
+            return FuncResult(success=False, msg='查询出错!!')
+        return FuncResult(success=True, msg='操作成功！',data= ojbData)

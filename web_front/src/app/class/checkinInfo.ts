@@ -1,0 +1,19 @@
+export class CheckinInfo {
+    CheckInID: number; // (开房日志ID)
+    HotelID: number; // (酒店ID)
+    HotelName: string; // 旅店名称
+    RoomNo: string; // (入住房号)
+    RoomTypeCode: string; // (房型编码)
+    RoomTypeName: string; // (房型名称)
+    ArrivalTime: string; // (预约到店时间)
+    DepartTime: string; // (预约离店时间)
+    CheckInTime: string; // (入住时间)
+    CheckOutTime: string; // (离店时间)
+    CheckInType: number; // (入住类型)
+    FolioCode: string; // (房单号)
+    FolioState: number; // (房单状态)
+    FolioStateName: string; // (房单状态名称)
+    LastModifyTime: string; // (最后修改时间)
+    HotelLastModifyTime: string; // (PMS时间)
+    HotelAddr: string; // 旅店地址
+}

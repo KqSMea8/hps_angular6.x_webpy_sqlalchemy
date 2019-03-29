@@ -1,0 +1,92 @@
+<div col-21 class="checkin-log-list">
+    <div class="hotel-info">
+        <div class="hotel-name">
+            <h2>xxx连锁酒店</h2>
+            <span>最终数据上传时间：2018-12-08 18:00</span>
+        </div>
+        <ul class="data-list">
+            <li>
+                <img src="/assets/img/checkin-log-list.png">
+                <div>
+                    <h2>房间总数（间）</h2>
+                    <p>110</p>
+                </div>
+            </li>
+            <li>
+                <img src="/assets/img/checkin-log-list.png">
+                <div>
+                    <h2>床位总数（间）</h2>
+                    <p>110</p>
+                </div>
+            </li>
+            <li>
+                <img src="/assets/img/checkin-log-list.png">
+                <div>
+                    <h2>在住房（间）</h2>
+                    <p>110</p>
+                </div>
+            </li>
+            <li>
+                <img src="/assets/img/checkin-log-list.png">
+                <div>
+                    <h2>在住人数（间）</h2>
+                    <p>110</p>
+                </div>
+            </li>
+        </ul>
+        <div class="search-condition">
+            <h2>详细数据</h2>
+            <ul>
+                <li>
+                    <span>日期查询范围</span>
+                    <nz-range-picker [(ngModel)]="m_sa" (ngModelChange)="change()"></nz-range-picker>
+                </li>
+                <li>
+                    <span>选择</span>
+                    <nz-radio-group>
+                        <label nz-radio nzValue="0">今天</label>
+                        <label nz-radio nzValue="1">一周</label>
+                        <label nz-radio nzValue="2">一个月</label>
+                    </nz-radio-group>
+                    <button nz-button nzType="primary">查询</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="filter-button">
+        <nz-dropdown [nzTrigger]="'click'">
+            <button nz-button nz-dropdown>
+                <span>默认排序</span>
+                <i nz-icon type="down"></i>
+            </button>
+            <ul nz-menu>
+                <li nz-menu-item>1</li>
+                <li nz-menu-item>2</li>
+                <li nz-menu-item>3</li>
+            </ul>
+        </nz-dropdown>
+    </div>
+    <div class="search-data-list">
+        <ul>
+            <li class="data-list-item">
+                <ul>
+                    <li>时间</li>
+                    <li>房间总数</li>
+                    <li>总开房次数</li>
+                    <li>总入住登记人次</li>
+                </ul>
+            </li>
+            <li class="data-list-item" ngFor="let item of m_lsHotelCheckinList.DataSet">
+                <ul>
+                    <li>{{item.Date}}</li>
+                    <li>{{item.RoomCount}}</li>
+                    <li>{{item.SumCheckInRoom}}</li>
+                    <li>{{item.SumCheckInGuest}}</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="pagination">
+        <nz-pagination [nzPageIndex]="m_nPageIndex" [nzTotal]="m_nTotal" nzShowSizeChanger [nzPageSize]="m_nPageSize"></nz-pagination>
+    </div>
+</div>

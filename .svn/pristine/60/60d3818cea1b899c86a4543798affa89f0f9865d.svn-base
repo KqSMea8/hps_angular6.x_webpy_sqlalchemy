@@ -1,0 +1,66 @@
+import { Component, OnInit } from '@angular/core';
+import { Subtab } from '../../../../class/sidebar';
+import { ContextService } from 'src/app/services/context.service';
+import { SearchCondition } from '../../../../class/searchCondition';
+import { AllGuestCheckinCondition } from '../../../../class/allGuestCheckinCondition';
+import { GuestCheckinService } from 'src/app/services/guest-checkin.service';
+import { ApiService } from 'src/app/services/api.service';
+import { GuestCheckinResult } from '../../../../class/guestCheckinResult';
+import { Router } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd';
+
+@Component({
+    selector: 'app-all-guest',
+    templateUrl: './all-guest.component.html',
+    styleUrls: ['./all-guest.component.less']
+})
+export class AllGuestComponent implements OnInit {
+    // 侧边栏
+    m_objSubtab: Array<Subtab> = this.m_objGuestCheckinService.m_objSubtab;
+    // 全部旅客查询条件
+    m_objAllGuestCondition: SearchCondition<AllGuestCheckinCondition> =
+    new SearchCondition<AllGuestCheckinCondition>(AllGuestCheckinCondition);
+    // 全部旅客入住数据
+    m_aAllGuestCheckinList: Array<GuestCheckinResult> = [];
+    m_nPageNo = 1;
+    m_nPageSize = 1;
+    m_nRowCount: number;
+
+    constructor(
+        private m_objContextService: ContextService,
+        private m_objGuestCheckinService: GuestCheckinService,
+        private m_objApiService: ApiService,
+        private m_objRouter: Router,
+        private m_objMessage: NzMessageService
+    ) { }
+
+    ngOnInit() {
+    }
+
+    // 查询全部入住旅客
+    fnSearchGuestCheckinLinst(): void {
+        this.m_objAllGuestCondition.objCondition.nSearchUserIDMust = 1;
+        this.m_objAllGuestCondition.objCondition.sSearchUserNameMust = 'ning';
+        this.m_objAllGuestCondition.objPageInfo.nPageNo = 1;
+        this.m_objAllGuestCondition.objPageInfo.nPageSize = 1;
+        this.m_objApiService.fnAllGuestCheckinList(this.m_objAllGuestCondition).subscribe( data => {
+            if (data.Data.RowCount === 0) {
+                this.m_objMessage.info('数据为0');
+            }
+            this.m_aAllGuestCheckinList = data.Data.DataSet;
+            this.m_nRowCount = data.Data.RowCount;
+        });
+    }
+
+    // 导航至旅客入住详情
+    fnToGuestCheckinDetails(id: number): void {
+        this.m_objGuestCheckinService.m_nGuestType = 0;
+        this.m_objGuestCheckinService.m_nGuestID = id;
+        this.m_objRouter.navigate(['/main/GuestCheckinList/allGuest/GuestDetails'], {
+            queryParams: {
+                type: 0,
+                id: id
+            }
+        });
+    }
+}

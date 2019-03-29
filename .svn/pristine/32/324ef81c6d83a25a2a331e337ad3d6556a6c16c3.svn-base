@@ -1,0 +1,42 @@
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Subtab, Subbtn } from '../../class/sidebar';
+import { RouterState, Router } from '@angular/router';
+import { NzIconService } from 'ng-zorro-antd';
+
+@Component({
+    selector: 'app-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.less']
+})
+export class SidebarComponent implements OnInit {
+
+    @Input()title: string;
+    @Input()subtab: Array<Subtab>;
+    @Input()subbtn: Array<Subbtn>;
+    @Input()template: any;
+
+    @Output()ShowTypeID = new EventEmitter();
+
+    public m_sRoutePath: string;
+    public m_nShowTypeID: number;
+    constructor(
+        public m_objRouter: Router,
+        public m_objNzIconService: NzIconService
+    ) {
+        const objRouterState: RouterState = m_objRouter.routerState;
+        const arr = objRouterState.snapshot.url.split('/').splice(0, 4);
+        this.m_sRoutePath = arr.join('/');
+        this.m_objNzIconService.fetchFromIconfont({
+            scriptUrl: 'assets/iconfont.js',
+        });
+    }
+
+    ngOnInit() {
+    }
+
+    /**切换配置列表 */
+    fnSwitchConfigType(nTypeID: number): void {
+        this.m_nShowTypeID = nTypeID;
+        this.ShowTypeID.emit(nTypeID);
+    }
+}

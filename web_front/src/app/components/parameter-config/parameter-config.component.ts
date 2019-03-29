@@ -1,0 +1,505 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { SystemManagementService } from 'src/app/services/system-management.service';
+import { ContextService } from 'src/app/services/context.service';
+import { ApiService } from 'src/app/services/api.service';
+import { NzModalService, NzMessageService } from 'ng-zorro-antd';
+import { UpdateDict } from 'src/app/class/updateDict';
+import { AddDict } from 'src/app/class/addDict';
+import { Dict } from 'src/app/class/dictionary';
+import { UpdateState } from 'src/app/class/updateState';
+import { City } from '../../class/City';
+import { AreaChooseComponent } from 'src/app/components/area-choose/area-choose.component';
+import { District } from 'src/app/class/district';
+import { UpdateDistrict } from 'src/app/class/updateDistrict';
+import { AddDistrict } from 'src/app/class/addDistrict';
+import { AreaChooseOutput } from 'src/app/class/areaChooseOutput';
+import { Router, NavigationEnd, ActivatedRoute, Params } from '@angular/router';
+
+@Component({
+    selector: 'app-parameter-config',
+    templateUrl: './parameter-config.component.html',
+    styleUrls: ['./parameter-config.component.less']
+})
+export class ParameterConfigComponent implements OnInit {
+    @ViewChild(AreaChooseComponent) m_objAreaChooseComponent: AreaChooseComponent;
+    m_objHaveData: any = [0];
+    m_lsDomestic: any[] = [];
+    /**0、境内证件 1、境外证件 2、旅店类型 3、省份 4、市 5、区域 */
+    m_nIsShowTypeID: number;
+    m_lsIsShow = [false, false, false, false, false];
+    m_lsIsShowAdd = [false, false, false, false, false];
+    m_objUpdateDict: UpdateDict = new UpdateDict();
+    m_objAddDict: AddDict = new AddDict();
+    /**当前选择的省市区ID */
+    m_objAreaChooseOutput: AreaChooseOutput = new AreaChooseOutput();
+    /**省市的类 */
+    m_objUpdateArea: UpdateState = new UpdateState();
+    /**修改行政区的类 */
+    m_objUpdateDistrict: UpdateDistrict = new UpdateDistrict();
+    /**新增行政区的类 */
+    m_objAddDistrict: AddDistrict = new AddDistrict();
+    /**当前选中的城市列表 */
+    m_lsCurrentCityList: City[] = [];
+    /**当前选中的区域列表 */
+    m_lsCurrentDistrictList: District[] = [];
+    /**显示省市两联动 */
+    m_lsIsShowProvinceType: boolean[] = [true];
+    /**显示省市区三联动 */
+    m_lsIsShowAreaType: boolean[] = [true, true];
+    /**按钮上的加载动画 */
+    m_bIsOkLoading: boolean;
+    /**加载动画 */
+    m_bShowLoading: boolean;
+    /**配置表列表 */
+    m_lsConfigList;
+    m_bShowConfigList: boolean;
+    m_lsBreadCrumbList: Array<{ name: string, routelink: string }> = [];
+    constructor(
+        public m_objSystemManagementService: SystemManagementService,
+        public m_objContextService: ContextService,
+        private m_objApiService: ApiService,
+        private m_objModalService: NzModalService,
+        private m_objMessageService: NzMessageService,
+        private m_objRouter: Router,
+        private m_objActivatedRoute: ActivatedRoute
+    ) {
+        this.m_objRouter.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                // setInterval(() => {
+                //     // this.m_lsBreadCrumbList[2] = {
+                //     //     name: '111',
+                //     //     routelink: ''
+                //     // };
+                //     console.log(this.m_lsBreadCrumbList);
+                // }, 1000);
+                this.m_objActivatedRoute.queryParams.subscribe((params: Params) => {
+                    this.m_nIsShowTypeID = Number(params['id']);
+                    this.m_lsBreadCrumbList = [
+                        { name: '首页', routelink: '/home' },
+                        { name: '参数配置', routelink: '/home/systemManagement/parameterConfig' },
+                        { name: '', routelink: '' }
+                    ];
+                    switch (this.m_nIsShowTypeID) {
+                        case 0:
+                            this.m_lsBreadCrumbList[2].name = '境内证件类型配置';
+                            break;
+                        case 1:
+                            this.m_lsBreadCrumbList[2].name = '外籍旅客证件类型配置';
+                            break;
+                        case 2:
+                            this.m_lsBreadCrumbList[2].name = '旅店类型配置';
+                            break;
+                        case 3:
+                            this.m_lsBreadCrumbList[2].name = '省份配置';
+                            break;
+                        case 4:
+                            this.m_lsBreadCrumbList[2].name = '州市县配置';
+                            break;
+                        case 5:
+                            this.m_lsBreadCrumbList[2].name = '行政区配置';
+                            break;
+                        default:
+                            this.m_nIsShowTypeID = 0;
+                            this.m_lsBreadCrumbList[2].name = '境内证件类型配置';
+                    }
+                    // this.m_lsBreadCrumbList[2].name = this.m_lsBreadCrumbAttach[this.m_nIsShowTypeID].name;
+                    // this.m_lsBreadCrumbList[2].routelink = this.m_lsBreadCrumbAttach[this.m_nIsShowTypeID].routelink;
+                    // this.m_lsBreadCrumbList[2] = this.m_lsBreadCrumbAttach[this.m_nIsShowTypeID];
+                    // console.log('id=' + this.m_nIsShowTypeID);
+                });
+            }
+        });
+    }
+
+    ngOnInit() {
+        this.m_objUpdateDistrict.nUpdateUserIDMust = this.m_objAddDistrict.nAddUserIDMust = this.m_objUpdateArea.nUpdateUserIDMust
+            = this.m_objAddDict.nAddUserIDMust = this.m_objUpdateDict.nUpdateUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+
+        this.m_objUpdateDistrict.sUpdateUserNameMust = this.m_objAddDistrict.sAddUserNameMust = this.m_objUpdateArea.sUpdateUserNameMust
+            = this.m_objAddDict.sAddUserNameMust = this.m_objUpdateDict.sUpdateUserNameMust
+            = this.m_objContextService.m_objUserInfo.UserName;
+    }
+    /**当前选择的省市区 */
+    fnGetCurrentArea(objAreaChooseOutput: AreaChooseOutput): void {
+        this.m_objAreaChooseOutput = objAreaChooseOutput;
+    }
+    /**获取当前选中的城市列表 */
+    fnGetCurrentProvince(lsCurrentCityList: City[]): void {
+        this.m_lsCurrentCityList = lsCurrentCityList;
+    }
+    /**获取当前选中的区域列表 */
+    fnGetDistrictList(lsCurrentDistrictList: District[]): void {
+        this.m_lsCurrentDistrictList = lsCurrentDistrictList;
+    }
+    /**显示参数配置列表 */
+    fnShowSwitchList(): void {
+        this.m_bShowConfigList = !this.m_bShowConfigList;
+    }
+
+    /**初始化市区 */
+    fnResetCurrentArea(): void {
+        this.m_objAreaChooseComponent.fnResetCurrentArea();
+    }
+
+    /**新增字典类型API */
+    fnAddDict(nCodeType): void {
+        this.m_bIsOkLoading = true;
+        let sTypeName: string;
+        /**0、境内证件 1、境外证件 2、旅店类型 3、省份 4、市 5、区域 */
+        switch (nCodeType) {
+            case 0:
+                sTypeName = 'doc_type';
+                break;
+            case 1:
+                sTypeName = 'foreigner_doc';
+                break;
+            case 2:
+                sTypeName = 'hotel_type';
+                break;
+        }
+        this.m_objAddDict.nCodeType = Dict[sTypeName];
+        this.m_objAddDict.sTypeName = sTypeName;
+
+        this.m_objApiService.fnAddDict(this.m_objAddDict).subscribe(data => {
+            this.m_bIsOkLoading = false;
+            if (data.Code === 200) {
+                this.fnUpdateContextDict(sTypeName);
+                this.m_objMessageService.success('新增成功');
+                /**关闭所有新增弹窗 */
+                for (let i = 0; i < this.m_lsIsShowAdd.length; i++) {
+                    this.m_lsIsShowAdd[i] = false;
+                }
+                this.m_objAddDict.sCodeName = '';
+            } else {
+                this.m_objMessageService.error(data.Msg);
+            }
+        });
+    }
+
+    /**保存国内证件类型修改 */
+    fnUpdate(nOperaNo?: number): void {
+        this.m_bIsOkLoading = true;
+        let sMsg: string;
+        let bHidePop: boolean;
+        // 1代表类型状态修改
+        if (nOperaNo === 1) {
+            this.m_objUpdateDict.nFlag === 1 ? this.m_objUpdateDict.nFlag = 2 : this.m_objUpdateDict.nFlag = 1;
+            sMsg = this.m_objUpdateDict.nFlag === 1 ? '启用成功' : '禁用成功';
+        } else if (nOperaNo === 2) {
+            this.m_objUpdateDict.nFlag = 0;
+            sMsg = '删除成功';
+        } else {
+            sMsg = '操作成功！';
+            bHidePop = true;
+        }
+        this.m_objApiService.fnUpdateDict(this.m_objUpdateDict).subscribe(data => {
+            this.m_bIsOkLoading = false;
+            if (data.Code === 200) {
+                this.fnUpdateContextDict('doc_type');
+                this.m_objMessageService.success(sMsg);
+                if (bHidePop) {
+                    /**关闭所有修改弹窗 */
+                    for (let i = 0; i < this.m_lsIsShow.length; i++) {
+                        this.m_lsIsShow[i] = false;
+                    }
+                }
+            } else {
+                this.m_objMessageService.error(data.Msg);
+            }
+        });
+    }
+
+    /**保存省市区有效状态修改
+    * nOperaNo 判断类型，1、为启用/禁用 2、为删除
+    * nTypeID 传给后端用以判断省市区的变量 1、省 2、市 3、区
+    */
+    fnUpdateAreaState(nOperaNo: number, nTypeID: number): void {
+        this.m_bIsOkLoading = true;
+        let sMsg: string;
+        let bHidePop: boolean;
+        // 1代表类型状态修改
+        if (nOperaNo === 1) {
+            this.m_objUpdateArea.nFlag === 1 ? this.m_objUpdateArea.nFlag = 2 : this.m_objUpdateArea.nFlag = 1;
+            sMsg = this.m_objUpdateArea.nFlag === 1 ? '启用成功' : '禁用成功';
+        } else if (nOperaNo === 2) {
+            this.m_objUpdateArea.nFlag = 0;
+            sMsg = '删除成功';
+        } else {
+            sMsg = '操作成功！';
+            bHidePop = true;
+        }
+        this.m_objApiService.fnUpdateState(this.m_objUpdateArea).subscribe(data => {
+            this.m_bIsOkLoading = false;
+            if (data.Code === 200) {
+                this.m_bShowLoading = true;
+                if (nTypeID === 2) {
+                    this.m_objAreaChooseComponent.fnCurrentProvinceChange(() => {
+                        this.m_bShowLoading = false;
+                    });
+                } else if (nTypeID === 3) {
+                    this.m_objAreaChooseComponent.fnCurrentCityChange(() => {
+                        /**处理更改数据后页面不刷新数据的问题 */
+                        if (nOperaNo === 1) {
+                            for (const item of this.m_lsCurrentDistrictList) {
+                                if (item.DistrictID === this.m_objUpdateArea.nDistrictID) {
+                                    item.IsFlag = this.m_objUpdateArea.nFlag;
+                                    item.District = this.m_objUpdateArea.sDistrictName;
+                                }
+                            }
+                        } else {
+                            let i = 0;
+                            for (const item of this.m_lsCurrentDistrictList) {
+                                if (item.DistrictID === this.m_objUpdateArea.nDistrictID) {
+                                    this.m_lsCurrentDistrictList.splice(i, 1);
+                                }
+                                i++;
+                            }
+                        }
+                        this.m_bShowLoading = false;
+                    });
+                }
+                this.m_objMessageService.success(sMsg);
+                if (bHidePop) {
+                    /**关闭所有修改弹窗 */
+                    for (let i = 0; i < this.m_lsIsShow.length; i++) {
+                        this.m_lsIsShow[i] = false;
+                    }
+                }
+            } else {
+                this.m_objMessageService.error(data.Msg);
+            }
+        });
+    }
+
+    /**保存行政区域修改 名称修改以及新增
+     * nOperatingNo 1、新增 2、修改
+     */
+    fnDistrictUpdate(nOperatingNo: number): void {
+        if (nOperatingNo === 1) {
+            this.m_objAddDistrict.nCityID = this.m_objAreaChooseOutput.CurrentCityID;
+            this.m_objAddDistrict.nProvinceID = this.m_objAreaChooseOutput.CurrentProvinceID;
+            if (!this.m_objAddDistrict.nCityID) {
+                this.m_objMessageService.error('必须要先选择一个城市！');
+                return;
+            }
+            this.m_bIsOkLoading = true;
+            this.m_objApiService.fnAddDistrict(this.m_objAddDistrict).subscribe(data => {
+                this.m_bIsOkLoading = false;
+                if (data.Code === 200) {
+                    this.m_objMessageService.success('操作成功！');
+                    this.m_bShowLoading = true;
+                    this.m_objAreaChooseComponent.fnCurrentCityChange(() => {
+                        /**处理更改数据后页面不刷新数据的问题 */
+                        for (const item of this.m_lsCurrentDistrictList) {
+                            if (item.DistrictID === this.m_objUpdateArea.nDistrictID) {
+                                item.IsFlag = this.m_objUpdateArea.nFlag;
+                                item.District = this.m_objUpdateArea.sDistrictName;
+                            }
+                        }
+                        const objDistrict: District = {
+                            DistrictID: data.Data.DistrictID,
+                            CityID: this.m_objAddDistrict.nCityID,
+                            ProvinceID: this.m_objAddDistrict.nProvinceID,
+                            District: this.m_objAddDistrict.sDistrict,
+                            IsFlag: 1,
+                        };
+                        this.m_lsCurrentDistrictList.push(objDistrict);
+                        this.m_bShowLoading = false;
+                        this.m_objAddDistrict.sDistrict = null;
+                    });
+                    /**关闭所有新增弹窗 */
+                    for (let i = 0; i < this.m_lsIsShowAdd.length; i++) {
+                        this.m_lsIsShowAdd[i] = false;
+                    }
+                } else {
+                    this.m_objMessageService.error(data.Msg);
+                }
+            });
+        } else {
+            /** */
+            this.m_objApiService.fnUpdateDistrict(this.m_objUpdateDistrict).subscribe(data => {
+                this.m_bIsOkLoading = false;
+                if (data.Code === 200) {
+                    this.m_objMessageService.success('操作成功！');
+                    this.m_bShowLoading = true;
+                    this.m_objAreaChooseComponent.fnCurrentCityChange(() => {
+                        /**处理更改数据后页面不刷新数据的问题 */
+                        for (const item of this.m_lsCurrentDistrictList) {
+                            if (item.DistrictID === this.m_objUpdateDistrict.nDistrictID) {
+                                item.IsFlag = this.m_objUpdateDistrict.nIsFlag;
+                                item.District = this.m_objUpdateDistrict.sDistrict;
+                            }
+                        }
+                        this.m_bShowLoading = false;
+                    });
+                    /**关闭所有修改弹窗 */
+                    for (let i = 0; i < this.m_lsIsShow.length; i++) {
+                        this.m_lsIsShow[i] = false;
+                    }
+                } else {
+                    this.m_objMessageService.error(data.Msg);
+                }
+            });
+        }
+    }
+
+    /**修改APi弹窗 */
+    fnModifyPop(nCodeType: number, objItem: any): void {
+        // 3以下是字典表的接口，3、4是省市接口，5是行政区的接口
+        if (nCodeType < 3) {
+            this.fnUpdateValue(objItem);
+            this.fnShowHidePop(nCodeType);
+        } else if (nCodeType === 3 || nCodeType === 4) {
+            this.fnUpdateAreaValue(3, objItem);
+        } else {
+            this.fnUpdateDistrictValue(objItem);
+            this.fnShowHidePop(nCodeType);
+        }
+    }
+
+    /**更改状态Api弹窗 */
+    fnUpdateStatePop(objItem: any): void {
+        this.fnUpdateValue(objItem);
+        this.fnShowRemoveConfirm(`您确定要${this.m_objUpdateDict.nFlag === 1 ? '禁用' : '启用'} [${this.m_objUpdateDict.sCodeName}] 吗？`,
+            this.fnUpdate, 1);
+    }
+
+    /**更改省市区状态Api弹窗
+     * nTypeID 为省市区在后端逻辑代码对应的ID，1为省 2为市 3为区
+     */
+    fnUpdateAreaStatePop(nTypeID: number, objItem: any): void {
+        this.m_objUpdateArea.sProvince = objItem.Province;
+        this.m_objUpdateArea.sCityName = objItem.CityName;
+        this.m_objUpdateArea.sDistrictName = objItem.District;
+        this.m_objUpdateArea.nFlag = objItem.IsFlag;
+        this.fnUpdateAreaValue(nTypeID, objItem);
+        this.m_objUpdateArea.nUpdateType = nTypeID;
+        switch (nTypeID) {
+            case 1:
+                this.fnShowRemoveConfirm(`您确定要${this.m_objUpdateArea.nFlag === 1 ? '禁用' : '启用'} [${this.m_objUpdateArea.sProvince}] 吗？`,
+                    this.fnUpdateAreaState, 1, 1);
+                break;
+            case 2:
+                this.fnShowRemoveConfirm(`您确定要${this.m_objUpdateArea.nFlag === 1 ? '禁用' : '启用'} [${this.m_objUpdateArea.sCityName}] 吗？`,
+                    this.fnUpdateAreaState, 1, 2);
+                break;
+            case 3:
+                this.fnShowRemoveConfirm(`您确定要${this.m_objUpdateArea.nFlag === 1 ? '禁用' : '启用'} [${this.m_objUpdateArea.sDistrictName}] 吗？`,
+                    this.fnUpdateAreaState, 1, 3);
+                break;
+        }
+    }
+
+    /**删除类型API弹窗 */
+    fnRemovePop(objItem: any): void {
+        this.fnUpdateValue(objItem);
+        this.fnShowRemoveConfirm(`您确定要删除 [${this.m_objUpdateDict.sCodeName}] 吗？`,
+            this.fnUpdate, 2);
+    }
+
+    /**删除行政区API弹窗 */
+    fnRemoveDistrictPop(objItem: any): void {
+        this.fnUpdateAreaValue(3, objItem);
+        this.fnShowRemoveConfirm(`您确定要删除 [${this.m_objUpdateArea.sDistrictName}] 吗？`,
+            this.fnUpdateAreaState, 2, 3);
+    }
+
+    /**弹窗
+     * nTypeID 为判断省市区配置后端ID，主要控制执行完修改数据API接口后是否需要刷新AreaChoose组件当中的城市列表，省不需要刷新，市区都要刷新
+     */
+    fnShowRemoveConfirm(sContent: string, fnCallback: any, nOperaNo: number, nTypeID?: number): void {
+        const self = this;
+        this.m_objModalService.confirm({
+            nzTitle: '提示',
+            nzContent: sContent,
+            nzOnOk: () => {
+                if (nTypeID) {
+                    fnCallback.call(self, nOperaNo, nTypeID);
+                } else {
+                    fnCallback.call(self, nOperaNo);
+                }
+            }
+        });
+    }
+
+    /**更新当前选中的值 */
+    fnUpdateValue(objItem: any): void {
+        this.m_objUpdateDict.nCodeID = objItem.CodeID;
+        this.m_objUpdateDict.sCodeName = objItem.CodeName;
+        this.m_objUpdateDict.nFlag = objItem.Flag;
+    }
+
+    /**更新当前选中的省市的值 */
+    fnUpdateAreaValue(nTypeID: number, objItem: any): void {
+        switch (nTypeID) {
+            case 1:
+                this.m_objUpdateArea.nProvinceID = objItem.ProvinceID;
+                break;
+            case 2:
+                this.m_objUpdateArea.nCityID = objItem.CityID;
+                break;
+            case 3:
+                this.m_objUpdateArea.nDistrictID = objItem.DistrictID;
+                this.m_objUpdateArea.sDistrictName = objItem.District;
+                break;
+        }
+        this.m_objUpdateArea.nUpdateType = nTypeID;
+        this.m_objUpdateArea.nFlag = objItem.IsFlag;
+    }
+
+    /**更新当前选中的行政区的值 */
+    fnUpdateDistrictValue(objItem: any): void {
+        this.m_objUpdateDistrict.nDistrictID = objItem.DistrictID;
+        this.m_objUpdateDistrict.sDistrict = objItem.District;
+        this.m_objUpdateDistrict.nIsFlag = objItem.District;
+    }
+
+    /**显示与关闭编辑弹窗 */
+    fnShowHidePop(nIndex: number): void {
+        this.m_bIsOkLoading = false;
+        this.m_lsIsShow[nIndex] = !this.m_lsIsShow[nIndex];
+    }
+
+    /**显示与关闭新增弹窗 */
+    fnShowHideAddPop(nIndex: number): void {
+        this.m_bIsOkLoading = false;
+        this.m_lsIsShowAdd[nIndex] = !this.m_lsIsShowAdd[nIndex];
+        // for (let item of this.m_lsIsShowAdd) {
+        //     item = false;
+        // }
+        // for (let item of this.m_lsIsShow) {
+        //     item = false;
+        // }
+    }
+
+    /**同步更新上下文的字典表 */
+    fnUpdateContextDict(sName: string): void {
+        this.m_bShowLoading = true;
+        this.m_objContextService.fnGetDict(() => {
+            this.m_bShowLoading = false;
+        });
+
+        // 前端本地更新字典表
+        // if (bIsAdd) {
+        //     this.m_objContextService.m_objAllDict[sName].push({
+        //         CodeID: this.m_objAddDict.nCodeID
+        //     });
+        // }
+        // const nLenth = this.m_objContextService.m_objAllDict[sName].length;
+        // for (let i = 0; i < nLenth; i++) {
+        //     if (this.m_objContextService.m_objAllDict[sName][i].CodeID === this.m_objUpdateDict.nCodeID) {
+        //         /**如果已被删除则从上下文中删除 */
+        //         if (this.m_objUpdateDict.nFlag === 0) {
+        //             this.m_objContextService.m_objAllDict[sName].splice(i, 1);
+        //             return;
+        //         }
+        //         this.m_objContextService.m_objAllDict[sName][i].CodeID = this.m_objUpdateDict.nCodeID;
+        //         this.m_objContextService.m_objAllDict[sName][i].CodeName = this.m_objUpdateDict.sCodeName;
+        //         this.m_objContextService.m_objAllDict[sName][i].Flag = this.m_objUpdateDict.nFlag;
+        //         return;
+        //     }
+        // }
+    }
+
+    /**同步更新上下文的省市区 */
+}

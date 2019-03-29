@@ -1,0 +1,19 @@
+<ul class="condition-list">
+    <li>
+        <p *ngIf="m_bIsShowDefaultTitle">范围</p>
+        <nz-select *ngIf="m_lsIsShowAreaType[0]" nzAllowClear class="input-big" [(ngModel)]="m_objAreaChooseOutput.CurrentProvinceID" nzPlaceHolder="省份"
+            (ngModelChange)="fnCurrentProvinceChange()">
+            <nz-option *ngFor="let item of this.m_objContextService.m_lsProvince" [nzLabel]="item.Province" [nzValue]="item.ProvinceID"></nz-option>
+        </nz-select>
+        <nz-select *ngIf="m_lsIsShowAreaType[1]" nzAllowClear class="input-big" [(ngModel)]="m_objAreaChooseOutput.CurrentCityID" nzPlaceHolder="市/州"
+            (ngModelChange)="fnCurrentCityChange()">
+            <nz-option *ngFor="let item of m_lsCurrentCity" [nzLabel]="item.CityName"
+                [nzValue]="item.CityID"></nz-option>
+        </nz-select>
+        <nz-select *ngIf="m_lsIsShowAreaType[2]" nzAllowClear class="input-big" [(ngModel)]="m_objAreaChooseOutput.CurrentDistrictID" nzPlaceHolder="区域"
+            (ngModelChange)="fnSendMessage()">
+            <nz-option *ngFor="let item of m_lsCurrentDistrict" [nzLabel]="item.District"
+                [nzValue]="item.DistrictID"></nz-option>
+        </nz-select>
+    </li>
+</ul>

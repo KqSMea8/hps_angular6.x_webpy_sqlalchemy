@@ -1,0 +1,62 @@
+import { Injectable } from '@angular/core';
+import { differenceInCalendarDays } from 'date-fns';
+import { User } from '../class/user';
+import { ApiService } from './api.service';
+import { NzMessageService } from 'ng-zorro-antd';
+import { Router } from '@angular/router';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ContextService {
+    m_objUserInfo: User = new User();
+    m_sUserInfoName = 'm_objUserInfo';
+    m_nTabActivedIndex = 0;
+    m_nSubTabActivedIndex = 0;
+    /**日期组件-日期的格式 */
+    m_sDateFormat = 'yyyy-MM-dd';
+    /**当前时间日期 */
+    m_dToday = new Date();
+    constructor(
+        private m_objApiService: ApiService,
+        private m_objMessageService: NzMessageService,
+        private m_objRouter: Router
+    ) {
+        this.m_objUserInfo.UserName = '';
+        this.fnRestoreState();
+    }
+
+    /**禁止点击的时间 */
+    fnDisabledDate = (dCurrent: Date): boolean => {
+        return differenceInCalendarDays(dCurrent, this.m_dToday) > 0;
+    }
+
+    /**存储登录状态信息至Session */
+    fnSaveLoginState(objUserInfo: User): void {
+        this.m_objUserInfo = objUserInfo;
+        sessionStorage[this.m_sUserInfoName] = JSON.stringify(objUserInfo);
+    }
+
+    /**恢复上下文登录状态 */
+    fnRestoreState(): void {
+        if (sessionStorage[this.m_sUserInfoName]) {
+            this.m_objUserInfo = JSON.parse(sessionStorage[this.m_sUserInfoName]);
+        } else {
+            this.fnLogout();
+        }
+    }
+
+    /**退出登录 */
+    fnLogout(): void {
+        // debugger;
+        this.m_objApiService.fnLogout().subscribe( data => {
+            if (data.Code === 200) {
+                sessionStorage.removeItem(this.m_sUserInfoName);
+                this.m_objUserInfo = null;
+                this.m_objRouter.navigate(['/']);
+            } else {
+                this.m_objMessageService.create('error', '操作失败，请重试!');
+            }
+        });
+    }
+}

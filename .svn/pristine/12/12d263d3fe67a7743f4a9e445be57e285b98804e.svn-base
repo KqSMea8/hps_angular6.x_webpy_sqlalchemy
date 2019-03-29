@@ -1,0 +1,130 @@
+@import "styles.less";
+
+.content{
+    height: ~"calc(100% - 70px)";
+
+    >div{
+        height: 100%;
+    }
+
+    .main{
+        padding: @defaultPadding;
+        >div{
+            width: 100%;
+        }
+
+        .search-bar{
+            background-color: #fff;
+
+            >div{
+                width: 100%;
+
+                &:not(:first-child){
+                    border-top: 1px dashed #ccc;
+                    padding-top: 10px;
+                }
+
+                &:not(:last-child){
+                    padding-bottom: 10px;
+                }
+
+                .title{
+                    color: #555;
+                    font-size: 16px;
+                    font-weight: bold;
+                    line-height: 30px;
+                    text-align: left;
+                }
+
+                ul.flex{
+                    align-items: center;
+                    justify-content: flex-start;
+                    flex-wrap: wrap;
+
+                    li.flex{
+                        margin: 5px 20px 5px 0;
+
+                        flex-direction: column;
+                        align-items: flex-start;
+                        justify-content: flex-start;
+
+                        span{
+                            white-space: nowrap;
+
+                            color: #777;
+
+                            margin-bottom: 10px;
+                        }
+
+                        input{
+                            padding-left: 10px;
+                        }
+
+                        div {
+                            align-items: center;
+                            justify-content: flex-start;
+
+                            span{
+                                margin: 0 10px;
+                            }
+
+                            nz-select{
+                                margin-right: 20px;
+                            }
+                        }
+
+                        >div.radio-box{
+                            height: 32px;
+                        }
+
+                        div.birth-picker{
+                            min-width: 360px;
+                        }
+                    }
+
+                    &.search-btn{
+                        position: relative;
+                        justify-content: center;
+                        padding: 10px 0;
+
+                        .btn-reset{
+                            margin-right: 40px;
+                            color: @themeColor;
+                        }
+
+                        .sort-box{
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                            margin: 0;
+                            nz-select{
+                                width: 180px;
+                                height: 30px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .error-msg-bar{
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 30px;
+            color: #f00;
+        }
+
+        .result-bar{
+
+            th, td{
+                white-space: nowrap;
+            }
+
+            .checkDetails{
+                color: #337;
+                cursor: pointer;
+            }
+        }
+    }
+}

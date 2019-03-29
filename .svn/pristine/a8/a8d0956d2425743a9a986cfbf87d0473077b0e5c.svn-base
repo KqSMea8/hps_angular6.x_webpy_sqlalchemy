@@ -1,0 +1,201 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped, table_query
+from models.hps.u_user import User
+from models.hps.h_hotel import Hotel
+from utils import obj_to_json
+from utils.tools import to_datetime
+from utils.func_api import FuncResult
+import time
+import datetime
+import json
+from sqlalchemy import *
+from utils.tools import to_datetime, days_count, obj_to_dict, result_data, json_to_obj
+
+web.config.debug = False
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        objInput = web.input()
+        try:
+            objCondition = objInput.get('objCondition')
+            objPageInfo = objInput.get('objPageInfo')
+            dictCondition = json.loads(objCondition)
+            dictPageInfo = json.loads(objPageInfo)
+            if not dictCondition['nSearchUserIDMust'] or not dictCondition['sSearchUserCodeMust']:
+                return FuncResult(success=False, msg="参数有误!")
+        except Exception, ce:
+            return FuncResult(fail='参数有误!')
+        return self.search_hotel(dictCondition, dictPageInfo)
+
+    def search_hotel(self, dictCondition, dictPageInfo):
+        try:
+            listParams = []
+            if 'sHotelCode' in dictCondition and not dictCondition['sHotelCode']:
+                listParams.append(Hotel.HotelCode == dictCondition['sHotelCode'])
+            if 'sHotelName' in dictCondition:
+                listParams.append(Hotel.HotelName == dictCondition['sHotelName'])
+            if 'sResponPerson' in dictCondition:
+                listParams.append(Hotel.ResponPerson == dictCondition['sResponPerson'])
+            if 'nProvinceID' in dictCondition:
+                listParams.append(Hotel.ProvinceID == dictCondition['nProvinceID'])
+            if 'nDistrictID' in dictCondition:
+                listParams.append(Hotel.DistrictID == dictCondition['nDistrictID'])
+            if 'nCityID' in dictCondition:
+                listParams.append(Hotel.CityID == dictCondition['nCityID'])
+            if 'nRoomCountMax' in dictCondition:
+                listParams.append(Hotel.RoomCount <= dictCondition['RoomCountMax'])
+            if 'nRoomCountMin' in dictCondition:
+                listParams.append(Hotel.RoomCount >= dictCondition['nRoomCountMin'])
+            if 'nBedCountMax' in dictCondition:
+                listParams.append(Hotel.BedCount <= dictCondition['nBedCountMax'])
+            if 'nBedCountMin' in dictCondition:
+                listParams.append(Hotel.BedCountMin >= dictCondition['nBedCountMin'])
+            if 'sRegStartDate' in dictCondition:
+                global sRegStartDate
+                sRegStartDate = to_datetime(dictCondition['sRegStartDate'])
+                listParams.append(Hotel.RegStartTime >= sRegStartDate)
+            if 'sRegEndDate' in dictCondition:
+                global sRegEndDate
+                sRegEndDate = to_datetime(dictCondition['sRegEndDate'])
+                listParams.append(Hotel.RegStartTime <= sRegEndDate)
+            if 'sCreateUserNameLike' in dictCondition:
+                listParams.append(Hotel.CreateUserName.like("%" + dictCondition['sCreateUserNameLike']) + "%")
+
+            sSql = Hotel().query2(Hotel).filter(*listParams)
+            sSqlOrderBy = self.order_by(sSql, dictPageInfo['sSort'])
+            dataSet = sSqlOrderBy.limit(
+                dictPageInfo['nPageSize']).offset((dictPageInfo['nPageNo'] - 1) * dictPageInfo['nPageSize']).all()
+
+            dtDays = days_count(dictCondition['sRegStartDate'], dictCondition['sRegEndDate'])
+            for index in range(len(dataSet)):
+                hotelID = dataSet[index].HotelID
+                nCheckInCount = int(self.search_hotel_checkin_log(hotelID, dictCondition, dictPageInfo))
+                nAvgCheckInCount = nCheckInCount / float(dtDays)
+                dataSet[index].CheckInCount = nCheckInCount
+                dataSet[index].AvgCheckInCount = nAvgCheckInCount
+
+            for index in range(len(dataSet)):
+                hotelID = dataSet[index].HotelID
+                nGuestCount = self.checkin_log_guest_count(hotelID, dictCondition, dictPageInfo)
+                nAvgnGuestCount = nGuestCount / float(dtDays)
+                dataSet[index].GuestCount = nGuestCount
+                dataSet[index].AvgnGuestCount = nAvgnGuestCount
+
+            PageCount = len(dataSet)
+            lsData = []
+            for objData in dataSet:
+                lsData.append(web.storage(**obj_to_dict(objData.copy(bind=False))))
+            Data = result_data(dictPageInfo['nPageNo'], dictPageInfo['nPageSize'], PageCount, lsData)
+        except Exception, ce:
+            print Exception, ce
+            return FuncResult(success=False, msg='查询出错!!')
+        return FuncResult(success=True, msg='操作成功！', data=Data)
+
+    def search_hotel_checkin_log(self, hotelID, dictCondition, dictPageInfo):
+        try:
+            listParams = []
+            objParamsValue = {}
+            strSql = '''
+                Select
+                    Count(h_hotel.HotelID) As CheckInCount
+                From
+                    h_hotel INNER JOIN h_checkin ON h_hotel.HotelID = h_checkin.HotelID
+                WHERE 1=1
+                '''
+
+            strSql2 = '''
+                Select
+                    Count(h_hotel.HotelID) As CheckInCount
+                From
+                    h_hotel INNER JOIN h_checkin ON h_hotel.HotelID = h_checkin.HotelID
+                    INNER JOIN h_relation_checkin ON h_checkin.CheckInID = h_relation_checkin.CheckInID
+                WHERE 1=1
+                '''
+
+            if hotelID:
+                nHotelID = hotelID
+                strSql = strSql + 'AND h_hotel.HotelID = :nHotelID '
+                objParamsValue['nHotelID'] = nHotelID
+            if dictCondition.has_key('sCheckInStartDate') and dictCondition['sCheckInStartDate']:
+                dtCheckInStartDate = dictCondition['sCheckInStartDate']
+                dtCheckInStartDate = to_datetime(dtCheckInStartDate)
+                strSql = strSql + 'AND CheckIn.CheckInTime >= :dtCheckInStartDate '
+                objParamsValue['dtCheckInStartDate'] = dtCheckInStartDate
+            if dictCondition.has_key('sCheckInEndDate') and dictCondition['sCheckInEndDate']:
+                dtCheckOutTime = dictCondition['sCheckInEndDate']
+                dtCheckOutTime = to_datetime(dtCheckOutTime)
+                strSql = strSql + 'AND CheckIn.CheckOutTime <= :dtCheckOutTime '
+                objParamsValue['dtCheckOutTime'] = dtCheckOutTime
+            strSql = strSql + "GROUP BY h_hotel.HotelID"
+            lsQueryData = web.ctx.cur_dbconn.execute(text(strSql), **objParamsValue).fetchall()
+            if lsQueryData:
+                for index in range(len(lsQueryData)):
+                    nCount = lsQueryData[index].CheckInCount
+                return nCount
+            else:
+                return 0
+        except Exception, ce:
+            print Exception, ce
+            return FuncResult(success=False, msg='查询出错!!')
+        return FuncResult(success=True, msg='操作成功！')
+
+    def checkin_log_guest_count(self, hotelID, dictCondition, dictPageInfo):
+        try:
+            listParams = []
+            objParamsValue = {}
+            strSql = '''
+                Select
+                   Count(h_hotel.HotelID) As CheckInCount
+                From
+                    h_hotel INNER JOIN h_checkin ON h_hotel.HotelID = h_checkin.HotelID
+                    INNER JOIN h_relation_checkin ON h_checkin.CheckInID = h_relation_checkin.CheckInID
+                WHERE 1=1
+                '''
+
+            if hotelID:
+                nHotelID = hotelID
+                strSql = strSql + 'AND h_hotel.HotelID = :nHotelID '
+                objParamsValue['nHotelID'] = nHotelID
+
+            if dictCondition.has_key('sCheckInStartDate') and dictCondition['sCheckInStartDate']:
+                dtCheckInStartDate = dictCondition['sCheckInStartDate']
+                dtCheckInStartDate = to_datetime(dtCheckInStartDate)
+                strSql2 = strSql + 'AND CheckIn.CheckInTime >= :dtCheckInStartDate '
+                objParamsValue['dtCheckInStartDate'] = dtCheckInStartDate
+
+            if dictCondition.has_key('sCheckInEndDate') and dictCondition['sCheckInEndDate']:
+                dtCheckOutTime = dictCondition['sCheckInEndDate']
+                dtCheckOutTime = to_datetime(dtCheckOutTime)
+                strSql = strSql + 'AND CheckIn.CheckOutTime <= :dtCheckOutTime '
+                objParamsValue['dtCheckOutTime'] = dtCheckOutTime
+            strSql = strSql + "GROUP BY h_hotel.HotelID"
+            lsQueryData = web.ctx.cur_dbconn.execute(text(strSql), **objParamsValue).fetchall()
+            if lsQueryData:
+                for index in range(len(lsQueryData)):
+                    nCount = lsQueryData[index].CheckInCount
+                print lsQueryData
+                return nCount
+            else:
+                return 0
+        except Exception, ce:
+            print Exception, ce
+            return FuncResult(success=False, msg='查询出错!!')
+        return FuncResult(success=True, msg='操作成功！')
+
+    def order_by(self, sSql, nSort):
+        sSqlOrderBy = sSql
+        if nSort == "HotelID":
+            sSqlOrderBy = sSql.order_by(desc(Hotel.HotelID))
+        elif nSort == "":
+            sSqlOrderBy = sSqlOrderBy
+        return sSqlOrderBy

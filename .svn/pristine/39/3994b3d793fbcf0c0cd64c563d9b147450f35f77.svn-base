@@ -1,0 +1,5 @@
+export class GuestCheckinCondition {
+    nSearchUserIDMust: number; // 搜索人id
+    sSearchUserCodeMust: string; // 搜索人姓名
+    nCheckInID: number;       // 旅客ID *
+}

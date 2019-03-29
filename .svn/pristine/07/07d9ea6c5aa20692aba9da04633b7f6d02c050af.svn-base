@@ -1,0 +1,56 @@
+@import "styles.less";
+
+.page{
+    width: 100%;
+
+    .welcome-bar{
+        font-size: 18px;
+        padding: 0 @defaultPadding;
+        line-height: 30px;
+        color: #000;
+        font-weight: bold;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .info-bar{
+        padding: @defaultPadding;
+        justify-content: space-around;
+
+        >div{
+            width: 45%;
+            height: 400px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+
+            .title{
+                height: 50px;
+                border-bottom: 1px solid #ccc;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 @defaultPadding;
+            }
+
+            ul{
+                padding: @defaultPadding;
+
+                li{
+                    align-items: center;
+                    justify-content: space-between;
+
+                    span{
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                    }
+
+                    span:first-child{
+                        max-width: 70%;
+                    }
+                    span:last-child{
+                        max-width: 30%;
+                    }
+                }
+            }
+        }
+    }
+}

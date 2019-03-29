@@ -1,0 +1,8 @@
+@import "styles.less";
+
+.checkin-list {
+    position: relative;
+    overflow-y: auto;
+    height: 100%;
+    background: #fff;
+}

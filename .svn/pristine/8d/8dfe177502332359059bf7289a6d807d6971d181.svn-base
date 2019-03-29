@@ -1,0 +1,8 @@
+import { City } from './City';
+
+export class Province {
+    ProvinceID: number;
+    Province: string;
+    TableID: number;
+    CitySet: Array<City>;
+}

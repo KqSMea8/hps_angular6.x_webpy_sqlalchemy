@@ -1,0 +1,112 @@
+@import "styles.less";
+
+.content{
+    height: ~"calc(100% - 70px)";
+
+    >div{
+        height: 100%;
+        background-color: #eaf1f9;
+    }
+
+    .main{
+        padding: @defaultPadding;
+        overflow-y: auto;
+
+        >div{
+            width: 100%;
+        }
+
+        .search-bar{
+            background-color: #fff;
+            
+            padding: @defaultPadding;
+
+            >div{
+                width: 100%;
+
+                &:not(:first-child){
+                    border-top: 1px dashed #ccc;
+                    padding-top: 10px;
+                }
+
+                &:not(:last-child){
+                    padding-bottom: 10px;
+                }
+
+                .title{
+                    color: #555;
+                    font-size: 16px;
+                    font-weight: bold;
+                    line-height: 30px;
+                    text-align: left;
+                }
+
+                ul.flex{
+                    align-items: center;
+                    justify-content: flex-start;
+                    flex-wrap: wrap;
+
+                    li.flex{
+                        margin: 5px 20px 5px 0;
+
+                        flex-direction: column;
+                        align-items: flex-start;
+                        justify-content: flex-start;
+
+                        span{
+                            white-space: nowrap;
+
+                            color: #777;
+
+                            margin-bottom: 10px;
+                            margin-left: 5px;
+                        }
+
+                        input{
+                            padding-left: 10px;
+                        }
+
+                        div {
+                            align-items: center;
+                            justify-content: flex-start;
+
+                            span{
+                                margin: 0 10px;
+                            }
+
+                            nz-select{
+                                margin-right: 20px;
+                            }
+                        }
+
+                        div.birth-picker{
+                            min-width: 360px;
+                        }
+                    }
+
+                    &.search-btn{
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+
+        .sort-bar{
+            height: 60px;
+            align-items: center;
+            justify-content: flex-end;
+
+            nz-select{
+                width: 180px;
+                height: 30px;
+            }
+        }
+
+        .result-bar{
+            .checkDetails{
+                color: #337;
+                cursor: pointer;
+            }
+        }
+    }
+}

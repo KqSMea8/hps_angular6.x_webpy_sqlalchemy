@@ -1,0 +1,129 @@
+/* You can add global styles to this file, and also import other style files */
+
+/**变量放这里*/
+@defaultPadding: 20px;
+@DefaultborderRadius: 5px;
+
+/**class放这里*/
+.flex{
+    display: flex;
+    display: -webkit-flex;
+}
+/**侧边栏*/
+.content{
+    overflow:hidden;
+    
+    height: calc(100% - 70px);
+    width: 100%;
+
+    &>div[nzSpan="3"] {
+        height: 100%;
+    }
+}
+/**单数行样式*/
+.table-row:nth-child(even){
+    background-color: #fff;
+}
+/*双数数行样式*/
+.table-row:nth-child(odd){
+    background-color: #f4f7fc;
+}
+/**flex垂直居中*/
+.flex-vertical-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/**居中定位*/
+.vertical-center {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    margin: auto;
+    overflow: hidden;
+}
+.title {
+    color: #555;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 30px;
+}
+.mt10 {
+    margin-top: 10px;
+}
+.mb10 {
+    margin-bottom: 10px;
+}
+.mt20 {
+    margin-top: 20px;
+}
+.mb20 {
+    margin-bottom: 20px;
+}
+.pt20 {
+    padding-top: 20px;
+}
+.pb20 {
+    padding-bottom: 20px;
+}
+
+/*样式重置*/
+body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{margin:0;padding:0}
+body{font:12px "宋体","Arial Narrow",HELVETICA;background:#fff;-webkit-text-size-adjust:100%}
+a{text-decoration:none}
+a:hover{text-decoration:none}
+em{font-style:normal}
+li{list-style:none}
+img{border:0;vertical-align:middle}
+table{border-collapse:collapse;border-spacing:0}
+p{word-wrap:break-word}
+li{list-style: none;}
+/*滚动条整体样式*/
+*::-webkit-scrollbar {
+    /*高宽分别对应横竖滚动条的尺寸*/
+    width: 8px;     
+    height: 1px;
+}
+/*滚动条里面小方块*/
+*::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+     -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: #d5d5d5;
+}
+/*滚动条里面轨道*/
+*::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    background: #EDEDED;
+}
+
+/*antd样式覆盖*/
+table {
+    text-align: center !important;
+    th {
+        text-align: center !important;
+    }
+}
+nz-breadcrumb {
+    margin-bottom: @defaultPadding;
+}
+* {
+    outline: none;
+}
+input {
+    padding: 0 12px;
+}
+.input-small{
+    width: 80px;
+}
+
+.input-middle{
+    width: 120px;
+}
+
+.input-big{
+    width: 160px;
+}

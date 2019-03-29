@@ -1,0 +1,20 @@
+import { Component, OnInit, Input } from '@angular/core';
+import { Subtab, Subbtn } from '../../class/sidebar';
+
+@Component({
+    selector: 'app-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.less']
+})
+export class SidebarComponent implements OnInit {
+
+    @Input()title: string;
+    @Input()subtab: Array<Subtab>;
+    @Input()subbtn: Array<Subbtn>;
+
+    constructor() { }
+
+    ngOnInit() {
+    }
+
+}

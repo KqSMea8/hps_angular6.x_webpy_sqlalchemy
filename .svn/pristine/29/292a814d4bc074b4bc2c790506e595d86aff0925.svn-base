@@ -1,0 +1,43 @@
+<div col-21 class="checkin-log-list">
+    <div class="hotel-info">
+        <div class="hotel-name">
+            <h2>xxx连锁酒店</h2>
+            <span>最终数据上传时间：2018-12-08 18:00</span>
+        </div>
+        <ul class="data-list">
+            <li>
+                <img src="/assets/img/checkin-log-list.png">
+                <div>
+                    <span>房间总数（间）</span>
+                    <p>110</p>
+                </div>
+            </li>
+            <li>
+                <img src="/assets/img/checkin-log-list.png">
+                <div>
+                    <span>床位总数（间）</span>
+                    <p>110</p>
+                </div>
+            </li>
+            <li>
+                <img src="/assets/img/checkin-log-list.png">
+                <div>
+                    <span>在住房（间）</span>
+                    <p>110</p>
+                </div>
+            </li>
+            <li>
+                <img src="/assets/img/checkin-log-list.png">
+                <div>
+                    <span>在住人数（间）</span>
+                    <p>110</p>
+                </div>
+            </li>
+        </ul>
+        <div class="search-condition">
+            <h2>详细数据</h2>
+            <span>日期查询范围</span>
+            <nz-range-picker></nz-range-picker>
+        </div>
+    </div>
+</div>

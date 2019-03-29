@@ -1,0 +1,7 @@
+export class OfflineHotelCondition {
+    nHotelIDMust: number; // 酒店编号
+    nOffLineUserIDMust: number; // 注销人ID
+    sOffLineuserCodeMust: string; // 注销人姓名
+    sOffLineDateTimeMust: string; // 注销时间
+    sRemark: string; // 备注
+}

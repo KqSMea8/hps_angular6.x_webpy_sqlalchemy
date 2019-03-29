@@ -1,0 +1,125 @@
+@import "styles.less";
+.content{
+    height: ~"calc(100% - 70px)";
+
+    >div{
+        height: 100%;
+    }
+
+    .user-manage {
+        overflow: scroll;
+        // background: #eaf1f9;
+        font-size: 14px;
+
+        .manage {
+            
+            ul {
+                display: flex;
+                // justify-content: space-between;
+                flex-direction: row;
+                align-items: flex-end;
+                background: #fff;
+    
+                li {
+                    justify-content: center;
+                    margin-bottom: @defaultPadding;
+                    margin-right: @defaultPadding;
+                }
+            }
+
+            margin: @defaultPadding @defaultPadding 0;
+
+            .search{
+                // padding-top: @defaultPadding;
+
+                li {
+                    // margin-right: @defaultPadding * 2;
+
+                    p {
+                        margin-bottom: 10px;
+                    }
+
+                    button {
+                        // width: 100px;
+                        height: 32px;
+                        color: #fff;
+                        // font-weight: bold;
+                        border: none;
+                    }
+                }
+            }
+
+            .searchButton {
+                justify-content: center;
+
+                .sort {
+                    position: absolute;
+                    right: 20px;
+                    width: 140px;
+                    padding: 0 0 20px 0;
+
+                    nz-select {
+                        margin-top: 0px;
+                        margin-right: 0px;
+                        margin-bottom: 0px;
+                        margin-left: 25%;
+                        width: 75%
+                    }
+                }
+
+                .button {
+                    align-items: flex-end;
+                }
+            }
+
+            .table {
+                background: #fff;
+                width: 100%;
+                
+                // tbody {
+                //     tr:nth-child(odd) {
+                //         background: #eaf1f9;
+                //     }
+                // }
+            }
+
+            .pagination {
+                margin-top: @defaultPadding;
+                margin-bottom: @defaultPadding;
+            }
+        }
+    }
+}
+nz-modal {
+    li {
+        width: 80%;
+        margin: 0 auto @defaultPadding;
+        text-align: center;
+        font-size: 16px;
+
+        span {
+            display: inline-block;
+            width: 17%;
+            text-align: right;
+            margin-right: @defaultPadding;
+        }
+
+        input {
+            width: 60%;
+            height: 40px;
+        }
+
+        .ant-select-lg {
+            font-size: 14px;
+        }
+
+        nz-select {
+            width: 60%;
+            height: 42px;
+        }
+
+        .red {
+            color: red;
+        }
+    }
+}

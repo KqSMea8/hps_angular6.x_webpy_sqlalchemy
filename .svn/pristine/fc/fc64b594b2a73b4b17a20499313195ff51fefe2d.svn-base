@@ -1,0 +1,17 @@
+import {Component, OnInit} from '@angular/core';
+
+@Component({
+    selector: 'app-hotel-search,nz-demo-select-search,nz-demo-input-basic,nz-demo-date-picker-start-end,nz-demo-button-basic,' +
+        'nz-demo-breadcrumb-separator,nz-demo-table-basic',
+    templateUrl: './hotel-search.component.html',
+    styleUrls: ['./hotel-search.component.less']
+})
+export class HotelSearchComponent implements OnInit {
+
+    constructor() {
+    }
+
+    ngOnInit() {
+    }
+
+}

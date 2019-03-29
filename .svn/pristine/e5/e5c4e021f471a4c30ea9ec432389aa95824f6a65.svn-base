@@ -1,0 +1,167 @@
+.mg(@t:0px,@r:0px,@b:0px,@l:0px) {
+    margin-top: @t;
+    margin-right: @r;
+    margin-bottom: @b;
+    margin-left: @l;
+}
+
+.pd(@t:0px,@r:0px,@b:0px,@l:0px) {
+    padding-top: @t;
+    padding-right: @r;
+    padding-bottom: @b;
+    padding-left: @l;
+}
+
+.ha-breadcrumb {
+    .mg(@t:6px,@b:8px);
+}
+
+.ha-area-add {
+    .pd(@l:20px);
+    border: 10px solid #eaf1f9;
+    .add-title {
+        .pd(@t:10px);
+        display: flex;
+        div {
+            /*width: 30%;*/
+            span {
+                .pd(@l:6px,@r:6px,@t:6px)
+            }
+        }
+    }
+    .line {
+        position: relative;
+        .mg(@t:6px,@b:40px);
+        height: 1px;
+        width: 95%;
+        background-color: #ccc;
+    }
+    .add-body-f {
+        .mg(@t:1px,@b:14px);
+        label {
+            .mg(@l:8px,@r:8px)
+        }
+        input {
+            width: 60%;
+        }
+    }
+    .add-body-s {
+        .mg(@t:14px,@b:14px);
+        width: 94%;
+        display: flex;
+        > div {
+            /*width: 30%;*/
+            label {
+                .mg(@l:8px,@r:8px)
+            }
+            > input {
+                width: 50%;
+            }
+        }
+        .id-no {
+            /*width: 30%;*/
+            label {
+                .mg(@l:8px,@r:8px)
+            }
+            > input {
+                width: 60%;
+            }
+        }
+    }
+    .add-body-th {
+        display: flex;
+        .mg(@t:14px,@b:14px);
+        width: 94%;
+        > div {
+            width: 20%;
+            label {
+                .mg(@l:8px,@r:8px)
+            }
+            > input {
+                width: 50%;
+            }
+        }
+        .th-tel {
+            width: 30%;
+
+        }
+    }
+    .add-body-fif {
+        display: flex;
+        .mg(@t:14px,@b:14px);
+        div {
+            .mg(@l:8px,@r:8px)
+        }
+        textarea {
+            width: 60%;
+        }
+    }
+}
+
+.ha-area-btn {
+    display: flex;
+    width: 100%;
+    .pd(@r:10%);
+    background-color: #eaf1f9;
+    border-bottom: 40px solid #eaf1f9;
+    border-left: 40px solid #eaf1f9;
+    .btn-verify {
+        width: 8%;
+        .mg(@l:5%,@r:5%);
+        button {
+            background-color: #f9b552;
+            border-color: #f9b552;
+            border-radius: 60px;
+            width: 100%;
+            height: 28px;
+
+        }
+    }
+    .btn-logoff {
+        button {
+            background-color: #fe0000;
+            border-color: #fe0000;
+        }
+    }
+    .btn-change {
+        .mg(@l:20%,@r:5%);
+        button {
+            background-color: #22ad38;
+            border-color: #22ad38;
+        }
+    }
+    .btn-submit {
+        button {
+            background-color: #f9b552;
+            border-color: #f9b552;
+        }
+    }
+    .btn-cencel {
+        button {
+            background-color: #aaaaaa;
+            border-color: #aaaaaa;
+        }
+    }
+}
+
+nz-select {
+    width: 50%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

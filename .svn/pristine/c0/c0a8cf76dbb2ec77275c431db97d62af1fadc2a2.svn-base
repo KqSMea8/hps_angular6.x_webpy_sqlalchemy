@@ -1,0 +1,40 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from models.hps.u_user import User
+
+from utils import obj_to_json, obj_to_dict
+from utils.func_api import FuncResult
+
+
+class handler(object):
+    '''登录
+    '''
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    def data_handle(self):
+        obj_input = web.input()
+        try:
+            str_usercode = obj_input.get('sUserCode')
+            str_password = obj_input.get('sPassword')
+            str_code = obj_input.get('sCode')
+        except Exception, ce:
+            return FuncResult(fail='参数有误!')
+
+        return self.login(str_usercode, str_password)
+
+    def login(self, str_usercode, str_password):
+        '''查询数据'''
+        obj_user = User().query.filter(User.UserCode == str_usercode,
+                                       User.Password == str_password).first()
+        if not obj_user:
+            return FuncResult(fail='用户名或密码错误')
+        else:
+            dict_user = obj_to_dict(obj_user)
+            # 保存用户信息到session
+            web.ctx.session.user = dict_user
+            return FuncResult(success=True, data=dict_user)

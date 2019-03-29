@@ -1,0 +1,134 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.h_hotel import Hotel
+from utils import obj_to_json
+from utils.func_api import FuncResult
+from utils.tools import is_null
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        # 获取请求参数
+        obj_input = web.input()
+        print 'obj_input=', obj_input
+        try:
+            int_add_userID_must = obj_input.get('nAddUserIDMust')
+            if is_null(int_add_userID_must):
+                return FuncResult(fail='参数：nAdduserIDmust不能为空')
+
+            str_add_usercode_must = obj_input.get('sAddUserCodeMust')
+            if is_null(str_add_usercode_must):
+                return FuncResult(fail='参数：sAddUserCodeMust不能为空')
+
+            str_hotel_code = obj_input.get('sHotelCode')
+            if is_null(str_hotel_code):
+                return FuncResult(fail='参数：sHotelCode不能为空')
+
+            str_hotel_name = obj_input.get('sHotelName')
+            if is_null(str_hotel_name):
+                return FuncResult(fail='参数：sHotelName不能为空')
+
+            str_hotel_addr = obj_input.get('sHotelAddr')
+            str_hotel_tel = obj_input.get('sHotelTel')
+            str_legal_tel = obj_input.get('sLegalTel')
+            str_legal_person = obj_input.get('sLegalPerson')
+            str_legal_docNo = obj_input.get('sLegalDocNo')
+            str_coordinate = obj_input.get('sCoordinate')
+            int_provinceID = obj_input.get('nProvinceID')
+            if is_null(int_provinceID):
+                return FuncResult(fail='参数：nProvinceID不能为空')
+
+            int_cityID = obj_input.get('nCityID')
+            if is_null(int_cityID):
+                return FuncResult(fail='参数：nCityID不能为空')
+
+            int_districtID = obj_input.get('nDistrictID')
+            if is_null(int_districtID):
+                return FuncResult(fail='参数：nDistrictID不能为空')
+
+            int_hotel_type = obj_input.get('nHotelType')
+            int_creat_UserID = obj_input.get('nCreatUserID')
+            str_creat_userCode = obj_input.get('sCreatUserCode')
+            str_respon_person_tel = obj_input.get('sResponPersonTel')
+            str_respon_person = obj_input.get('sResponPerson')
+            int_room_count = obj_input.get('nRoomCount')
+            int_bed_count = obj_input.get('nBedCount')
+            str_bus_license_code = obj_input.get('sBusLicenseCode')
+            str_bus_license_name = obj_input.get('sBusLicenseName')
+            str_reg_start_time = obj_input.get('sRegStartTime')
+            str_remark = obj_input.get('sRemark')
+
+        except Exception, ce:
+            # 异常处理
+            return FuncResult(fail='参数有误!')
+
+        return self.add_hotel(int_add_userID_must, str_add_usercode_must, str_hotel_code, str_hotel_name,
+                              str_hotel_addr, str_hotel_tel, str_legal_tel,str_legal_person, str_legal_docNo,
+                              str_coordinate, int_provinceID, int_cityID, int_districtID, int_hotel_type,
+                              int_creat_UserID, str_creat_userCode, str_respon_person_tel, str_respon_person,
+                              int_room_count, int_bed_count, str_bus_license_code, str_bus_license_name,
+                              str_reg_start_time, str_remark)
+
+    def add_hotel(self, int_add_userID_must, str_add_usercode_must, str_hotel_code, str_hotel_name, str_hotel_addr,
+                  str_hotel_tel, str_legal_tel,str_legal_person, str_legal_docNo, str_coordinate, int_provinceID,
+                  int_cityID, int_districtID, int_hotel_type,int_creat_UserID, str_creat_userCode,
+                  str_respon_person_tel, str_respon_person, int_room_count, int_bed_count, str_bus_license_code,
+                  str_bus_license_name, str_reg_start_time, str_remark):
+        # 实例化一个Hotel类
+        obj_hotel = Hotel()
+        # 赋值
+        obj_hotel.HotelCode = str_hotel_code
+        obj_hotel.HotelName = str_hotel_name
+        if not is_null(str_hotel_addr):
+            obj_hotel.HotelAddr = str_hotel_addr
+        if not is_null(str_hotel_tel):
+            obj_hotel.HotelTel = str_hotel_tel
+        if not is_null(str_legal_tel):
+            obj_hotel.LegalTel = str_legal_tel
+        if not is_null(str_legal_person):
+            obj_hotel.LegalPerson = str_legal_person
+        if not is_null(str_legal_docNo):
+            obj_hotel.LegalDocNo = str_legal_docNo
+        if not is_null(str_coordinate):
+            obj_hotel.Coordinate = str_coordinate
+        obj_hotel.ProvinceID = int_provinceID
+        obj_hotel.CityID = int_cityID
+        obj_hotel.DistrictID = int_districtID
+        if not is_null(int_hotel_type):
+            obj_hotel.HotelType = int_hotel_type
+        if not is_null(int_creat_UserID):
+            obj_hotel.CreateUserID = int_creat_UserID
+        if not is_null(str_creat_userCode):
+            obj_hotel.CreateUserName = str_creat_userCode
+        if not is_null(str_respon_person_tel):
+            obj_hotel.ResponPersonTel = str_respon_person_tel
+        if not is_null(str_respon_person):
+            obj_hotel.ResponPerson = str_respon_person
+        if not is_null(int_room_count):
+            obj_hotel.RoomCount = int_room_count
+        if not is_null(int_bed_count):
+            obj_hotel.BedCount = int_bed_count
+        if not is_null(str_bus_license_code):
+            obj_hotel.BusLicenseCode = str_bus_license_code
+        if not is_null(str_bus_license_name):
+            obj_hotel.BusLicenseName = str_bus_license_name
+        if not is_null(str_reg_start_time):
+            obj_hotel.RegStartTime = str_reg_start_time
+        if not is_null(str_remark):
+            obj_hotel.Remark = str_remark
+        # 0：待审核，1：已审核，3：以下线
+        obj_hotel.State = 1
+        # 保存到数据库
+        obj_hotel.save()
+
+        return FuncResult(success=True, msg='酒店新增成功!')
+

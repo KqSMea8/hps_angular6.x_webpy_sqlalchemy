@@ -1,0 +1,18 @@
+import { Component, OnInit } from '@angular/core';
+import { ContextService } from 'src/app/services/context.service';
+
+@Component({
+  selector: 'app-area-choose',
+  templateUrl: './area-choose.component.html',
+  styleUrls: ['./area-choose.component.less']
+})
+export class AreaChooseComponent implements OnInit {
+
+  constructor(
+    private m_objContextService: ContextService
+  ) { }
+
+  ngOnInit() {
+  }
+
+}

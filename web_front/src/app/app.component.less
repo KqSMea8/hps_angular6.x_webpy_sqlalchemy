@@ -1,0 +1,24 @@
+.loading-box,
+.loading-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.loading-mask{
+    z-index: 999;
+    background-color: #000;
+    opacity: .3;
+}
+
+.loading-box {
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+
+    [nz-icon]{
+        font-size: 50px;
+    }
+}

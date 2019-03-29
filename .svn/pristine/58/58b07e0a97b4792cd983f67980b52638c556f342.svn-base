@@ -1,0 +1,31 @@
+import {Component, NgModule, OnInit} from '@angular/core';
+import {ApiService} from "../../../../services/api.service";
+import {SearchHotelListCondition} from "../../../../class/searchHotelListCondition";
+import {SearchCondition} from "../../../../class/searchCondition";
+
+@Component({
+    selector: 'app-hotel-search,nz-demo-select-search,nz-demo-input-basic,nz-demo-date-picker-start-end,nz-demo-button-basic,' +
+        'nz-demo-breadcrumb-separator,nz-demo-table-basic',
+    templateUrl: './hotel-search.component.html',
+    styleUrls: ['./hotel-search.component.less'],
+
+})
+
+export class HotelSearchComponent implements OnInit {
+    m_objHotelListCondition: SearchCondition<SearchHotelListCondition>;
+
+    constructor( private m_objApiService : ApiService) {
+        this.m_objHotelListCondition = new SearchCondition<SearchHotelListCondition>(SearchHotelListCondition)
+    }
+
+    ngOnInit() {
+    }
+    // fnSearch (): void {
+    //     this.m_objHotelListCondition.objCondition.nCityID = 1;
+    //     this.m_objApiService.fnSearchGuestCheckinList(this.m_objGuestCheckinCondition).subscribe(u => {
+    //         console.log(u);
+    //         console.log('u');
+    //     });
+    // }
+
+}

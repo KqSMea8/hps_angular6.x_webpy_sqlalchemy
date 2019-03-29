@@ -1,0 +1,28 @@
+import { Component, OnInit } from '@angular/core';
+import { Subtab } from '../../../../class/sidebar';
+import { ContextService } from 'src/app/services/context.service';
+import { SearchCondition } from '../../../../class/searchCondition';
+import { GuestCheckinCondition } from '../../../../class/guestCheckinListCondition';
+
+@Component({
+    selector: 'app-all-guest',
+    templateUrl: './all-guest.component.html',
+    styleUrls: ['./all-guest.component.less']
+})
+export class AllGuestComponent implements OnInit {
+
+    public m_objSubtab: Array<Subtab> = [
+        {subtabName: '所有住客查询', subtabIcon: 'guest-checkin.png', routerName: '/main/GuestSearch/allGuest'},
+        {subtabName: '境外住客查询', subtabIcon: 'guest-checkin.png', routerName: '/main/GuestSearch/foreignGuest'},
+    ];
+    public m_objAllGuestCondition: SearchCondition<GuestCheckinCondition> =
+    new SearchCondition<GuestCheckinCondition>(GuestCheckinCondition);
+
+    constructor(
+        public m_objContextService: ContextService
+    ) { }
+
+    ngOnInit() {
+    }
+
+}

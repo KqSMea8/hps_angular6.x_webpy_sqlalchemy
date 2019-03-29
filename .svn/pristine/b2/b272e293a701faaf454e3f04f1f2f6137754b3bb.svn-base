@@ -1,0 +1,40 @@
+import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/services/api.service';
+import { CheckinListCondition } from 'src/app/class/checkinListCondition';
+import { SearchCondition } from 'src/app/class/searchCondition';
+
+@Component({
+    selector: 'app-search-condition',
+    templateUrl: './search-condition.component.html',
+    styleUrls: ['./search-condition.component.less']
+})
+export class SearchConditionComponent implements OnInit {
+    private m_objCheckinListCondition: SearchCondition<CheckinListCondition> = new SearchCondition<CheckinListCondition>();
+    constructor(
+        private m_objApiService: ApiService
+    ) {
+        this.m_objCheckinListCondition.objCondition.nSearchUserIDMust = 1;
+        this.m_objCheckinListCondition.objCondition.sSearchUserNameMust = '';
+        this.m_objCheckinListCondition.objCondition.nCityID = 1;
+
+        this.m_objCheckinListCondition.objPageInfo.nPageNo = 1;
+        this.m_objCheckinListCondition.objPageInfo.nPageSize = 1;
+        this.m_objCheckinListCondition.objPageInfo.nSort = 1;
+
+        this.fnSearchHotelCheckinList();
+    }
+
+    ngOnInit() {
+    }
+    // 获取酒店入住列表
+    fnSearchHotelCheckinList(): void {
+        this.m_objApiService.fnSearchHotelCheckinList(this.m_objCheckinListCondition).subscribe(data => {
+            if (data.Code === 200) {
+            }
+        });
+        // this.m_objApiService.login({}).subscribe( data => {
+
+        // })
+    }
+
+}

@@ -1,0 +1,15 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-all-guest',
+  templateUrl: './all-guest.component.html',
+  styleUrls: ['./all-guest.component.less']
+})
+export class AllGuestComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}

@@ -1,0 +1,102 @@
+import { Component, OnInit } from '@angular/core';
+import { Subtab } from '../../../../class/sidebar';
+import { ContextService } from 'src/app/services/context.service';
+import { SearchCondition } from '../../../../class/searchCondition';
+import { Pagination } from 'src/app/class/pagination';
+import { GuestCheckinService } from 'src/app/services/guest-checkin.service';
+import { ApiService } from 'src/app/services/api.service';
+import { ForeignerCheckinCondition } from '../../../../class/foreignerCheckinCodition';
+import { GuestCheckinResult } from '../../../../class/guestCheckinResult';
+import { Router } from '@angular/router';
+import { ToolsService } from 'src/app/services/tools.service';
+
+@Component({
+    selector: 'app-foreign-guest',
+    templateUrl: './foreign-guest.component.html',
+    styleUrls: ['./foreign-guest.component.less']
+})
+export class ForeignGuestComponent implements OnInit {
+    /**侧边栏 */
+    m_objSubtab: Array<Subtab> = this.m_objContextService.m_objSideTabList.guestCheckin;
+    m_objForeignGuestCondition: SearchCondition<ForeignerCheckinCondition> =
+        new SearchCondition<ForeignerCheckinCondition>(ForeignerCheckinCondition);
+    m_objForeignGuestCheckinList: Pagination<GuestCheckinResult> = new Pagination<GuestCheckinResult>();
+    m_nRowCount: number;
+    /**面包屑导航信息 */
+    m_aBreadCrumbList: Array<{ name: string, routelink: string }> = [
+        { name: '首页', routelink: '/home' },
+        { name: '境外旅客入住查询', routelink: '' }
+    ];
+    /**加载框 */
+    m_bShowLoading: boolean;
+    /**错误信息 */
+    m_sErrorMsg: string;
+    constructor(
+        public m_objContextService: ContextService,
+        public m_objGuestCheckinService: GuestCheckinService,
+        public m_objApiService: ApiService,
+        public m_objRouter: Router,
+        public m_objToolsService: ToolsService
+    ) { }
+
+    ngOnInit() {
+        this.m_objForeignGuestCondition.objPageInfo.nPageNo = 1;
+        this.m_objForeignGuestCondition.objPageInfo.nPageSize = 10;
+        this.m_objForeignGuestCheckinList.RowCount = 0;
+    }
+
+    // 查询全部入住旅客
+    fnSearchGuestCheckinLinst(): void {
+        this.m_bShowLoading = true;
+        /**当前登陆用户ID */
+        this.m_objForeignGuestCondition.objCondition.nSearchUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+        /**当前登陆用户名 */
+        this.m_objForeignGuestCondition.objCondition.sSearchUserNameMust = this.m_objContextService.m_objUserInfo.UserName;
+        /**格式化日期 */
+        this.m_objForeignGuestCondition.objCondition.sBornDateStart =
+            this.m_objToolsService.fnFormatDate(this.m_objForeignGuestCondition.objCondition.sBornDateStart);
+        this.m_objForeignGuestCondition.objCondition.sBornDateEnd =
+            this.m_objToolsService.fnFormatDate(this.m_objForeignGuestCondition.objCondition.sBornDateEnd);
+        this.m_objForeignGuestCondition.objCondition.sEntryTimeStart =
+            this.m_objToolsService.fnFormatDate(this.m_objForeignGuestCondition.objCondition.sEntryTimeStart);
+        this.m_objForeignGuestCondition.objCondition.sEntryTimeEnd =
+            this.m_objToolsService.fnFormatDate(this.m_objForeignGuestCondition.objCondition.sEntryTimeEnd);
+        this.m_objForeignGuestCondition.objCondition.sDepartureTimeStart =
+            this.m_objToolsService.fnFormatDate(this.m_objForeignGuestCondition.objCondition.sDepartureTimeStart);
+        this.m_objForeignGuestCondition.objCondition.sDepartureTimeEnd =
+            this.m_objToolsService.fnFormatDate(this.m_objForeignGuestCondition.objCondition.sDepartureTimeEnd);
+        this.m_objForeignGuestCondition.objCondition.sCheckInDateTimeStart =
+            this.m_objToolsService.fnFormatDate(this.m_objForeignGuestCondition.objCondition.sCheckInDateTimeStart);
+        this.m_objForeignGuestCondition.objCondition.sCheckInDateTimeEnd =
+            this.m_objToolsService.fnFormatDate(this.m_objForeignGuestCondition.objCondition.sCheckInDateTimeEnd);
+        this.m_objForeignGuestCondition.objCondition.sVisaDeadline =
+            this.m_objToolsService.fnFormatDate(this.m_objForeignGuestCondition.objCondition.sVisaDeadline);
+        this.m_objApiService.fnSearchForeignerCheckin(this.m_objForeignGuestCondition).subscribe(data => {
+            this.m_bShowLoading = false;
+            if (data.Code !== 200) {
+                // this.m_objContextService.fnError(data.Msg);
+            } else {
+                if (data.Data.RowCount === 0) {
+                    // this.m_objContextService.fnError('没有查找到匹配的数据，请修改查询条件！');
+                }
+                this.m_objForeignGuestCheckinList = data.Data;
+            }
+        });
+    }
+
+    /**每页显示条数改变 */
+    fnPageSizeChange(): void {
+        this.m_objForeignGuestCondition.objPageInfo.nPageNo = 1;
+        this.fnSearchGuestCheckinLinst();
+    }
+
+    // 导航至旅客入住详情
+    fnToGuestCheckinDetails(id: number): void {
+        this.m_objRouter.navigate(['/main/GuestCheckinList/foreignGuest/GuestDetails'], {
+            queryParams: {
+                type: 2,
+                id: id
+            }
+        });
+    }
+}

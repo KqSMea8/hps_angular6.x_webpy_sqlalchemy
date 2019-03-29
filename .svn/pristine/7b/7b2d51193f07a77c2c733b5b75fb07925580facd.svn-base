@@ -1,0 +1,6 @@
+import { PageInfo } from './pageInfo';
+
+export class SearchCondition<T> {
+    objCondition: T;
+    objPageInfo: PageInfo;
+}

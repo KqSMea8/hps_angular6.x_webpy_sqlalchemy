@@ -1,0 +1,55 @@
+@import "styles.less";
+.checkin-list {
+    overflow-y: auto;
+    height: 100%;
+    background: #eaf1f9;
+    padding: @defaultPadding;
+
+    ul {
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+
+    .search-condition {
+        overflow: hidden;
+        background: #fff;
+        margin-bottom: 0;
+        padding: @defaultPadding;
+
+        .condition-list {
+            display: flex;
+            align-items: center;
+            
+            li {
+                margin: 0 10px;
+                
+                p {
+                    display: flex;
+                    align-items: center;
+                    height: 39px;
+                }
+
+                span {
+                    margin: 0 @defaultPadding;
+                }
+                nz-select {
+                    margin-right: 10px;
+                }
+            }
+        }
+
+        .filter-button {
+            display: flex;
+            justify-content: flex-end;
+
+            margin-top: 10px;
+        }
+    }
+    
+    .search-data-list {
+        overflow: hidden;
+        background: #fff;
+    }
+}
+
+

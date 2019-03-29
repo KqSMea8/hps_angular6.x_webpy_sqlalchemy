@@ -1,0 +1,39 @@
+import {Component, OnInit, Input} from '@angular/core';
+import {NzMessageService, UploadFile} from 'ng-zorro-antd';
+
+@Component({
+    selector: 'app-upload',
+    templateUrl: './upload.component.html',
+    styleUrls: ['./upload.component.less']
+})
+export class UploadComponent implements OnInit {
+    constructor(private msg: NzMessageService) {
+    }
+
+    // fileList = [
+    //     {
+    //         uid: -1,
+    //         name: 'xxx.png',
+    //         status: 'done',
+    //         url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
+    //     }
+    // ];
+    previewImage = '';
+    previewVisible = false;
+
+    beforeUpload = (file: UploadFile): boolean => {
+        this.fileList.push(file);
+        return false;
+    };
+    handlePreview = (file: UploadFile) => {
+        this.previewImage = file.url || file.thumbUrl;
+        this.previewVisible = true;
+        console.log(file)
+    };
+    @Input() fileList: any;
+    @Input() upLoadName: String;
+
+    ngOnInit() {
+    }
+
+}

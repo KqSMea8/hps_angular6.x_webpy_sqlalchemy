@@ -1,0 +1,157 @@
+import {Routes} from '@angular/router';
+import {HotelSearchComponent} from '../pages/main/hotel-management/hotel-search/hotel-search.component';
+import {HotelAddComponent} from '../pages/main/hotel-management/hotel-add/hotel-add.component';
+import {LoginComponent} from '../pages/login/login.component';
+import {CheckinLogListComponent} from '../pages/main/search-checkin-list/checkin-log-list/checkin-log-list.component';
+import {AllGuestComponent} from '../pages/main/guest-checkin-list/all-guest/all-guest.component';
+import {ForeignGuestComponent} from '../pages/main/guest-checkin-list/foreign-guest/foreign-guest.component';
+import {CheckinListComponent} from '../pages/main/search-checkin-list/checkin-list/checkin-list.component';
+import {UserInfoComponent} from './../pages/main/system-management/user-info/user-info.component';
+import {UserManageComponent} from '../pages/main/system-management/user-manage/user-manage.component';
+import {LogComponent} from '../pages/main/system-management/log/log.component';
+import {GuestDetailsComponent} from '../pages/main/guest-checkin-list/guest-details/guest-details.component';
+import {HotelVerifyComponent} from '../pages/main/hotel-management/hotel-verify/hotel-verify.component';
+import {HotelOfflineComponent} from '../pages/main/hotel-management/hotel-offline/hotel-offline.component';
+import {ParameterConfigComponent} from '../pages/main/system-management/parameter-config/parameter-config.component';
+import {HomeComponent} from '../components/home/home.component';
+import {UploadComponent} from '../components/upload/upload.component';
+
+export const appRoutes: Routes = [
+    {
+        path: '',
+        redirectTo: 'Login',
+        pathMatch: 'full'
+    },
+    {
+        path: 'Login',
+        component: LoginComponent,
+    },
+    {
+        path: 'home',
+        component: HomeComponent
+    },
+    {
+        path: 'main',
+        redirectTo: 'main/GuestCheckinList',
+        pathMatch: 'full',
+    },
+    {
+        path: 'main',
+        children: [
+            {
+                path: 'GuestCheckinList',
+                children: [
+                    {
+                        path: '',
+                        redirectTo: 'allGuest',
+                        pathMatch: 'full'
+                    },
+                    {
+                        path: 'allGuest',
+                        data: {keep: true},
+                        component: AllGuestComponent
+                    },
+                    {
+                        path: 'foreignGuest',
+                        data: {keep: true},
+                        component: ForeignGuestComponent
+                    },
+                    {
+                        path: 'allGuest/GuestDetails',
+                        component: GuestDetailsComponent
+                    }
+                ]
+            },
+            {
+                path: 'Hotel',
+                children: [
+                    {
+                        path: '',
+                        redirectTo: 'HotelSearch',
+                        pathMatch: 'full'
+                    },
+                    {
+                        path: 'HotelSearch',
+                        // data: {keep: true},
+                        component: HotelSearchComponent
+                    },
+                    {
+                        path: 'HotelSearch/HotelEdit',
+                        component: HotelAddComponent
+                    },
+                    {
+                        path: 'Verify',
+                        data: {keep: true},
+                        component: HotelVerifyComponent
+                    },
+                    {
+                        path: 'Offline',
+                        data: {keep: true},
+                        component: HotelOfflineComponent
+                    },
+                    {
+                        path: 'HotelAdd',
+                        // data: {keep: true},
+                        component: HotelAddComponent
+                    },
+                    {
+                        path: 'ul',
+                        // data: {keep: true},
+                        component: UploadComponent
+                    }
+                ]
+
+            },
+            {
+                path: 'SearchCheckinList',
+                children: [
+                    {
+                        path: '',
+                        redirectTo: 'CheckinList',
+                        pathMatch: 'full'
+                    },
+                    {
+                        path: 'CheckinLogList',
+                        // data: {keep: true},
+                        component: CheckinLogListComponent
+                    },
+                    {
+                        path: 'CheckinList',
+                        data: {keep: true},
+                        component: CheckinListComponent
+                    },
+                ]
+            },
+            {
+                path: 'SystemManagement',
+                children: [
+                    {
+                        path: '',
+                        redirectTo: 'UserManage',
+                        pathMatch: 'full'
+                    },
+                    {
+                        path: 'UserInfo',
+                        data: {keep: true},
+                        component: UserInfoComponent
+                    },
+                    {
+                        path: 'UserManage',
+                        data: {keep: true},
+                        component: UserManageComponent
+                    },
+                    {
+                        path: 'Log',
+                        data: {keep: true},
+                        component: LogComponent
+                    },
+                    {
+                        path: 'ParameterConfig',
+                        data: {keep: true},
+                        component: ParameterConfigComponent
+                    }
+                ]
+            }
+        ]
+    },
+];

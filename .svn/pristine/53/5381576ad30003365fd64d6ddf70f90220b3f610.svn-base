@@ -1,0 +1,71 @@
+import { Component, OnInit } from '@angular/core';
+import { CheckinListCondition } from 'src/app/class/checkinListCondition';
+import { SearchCondition } from 'src/app/class/searchCondition';
+import { ApiService } from 'src/app/services/api.service';
+import { Pagination } from 'src/app/class/pagination';
+import { CheckinList } from 'src/app/class/checkinList';
+import { NzMessageService } from 'ng-zorro-antd';
+import { Period } from 'src/app/class/period';
+import { ToolsService } from 'src/app/services/tools.service';
+import { CheckinService } from 'src/app/services/checkin.service';
+
+@Component({
+    selector: 'app-checkin-list',
+    templateUrl: './checkin-list.component.html',
+    styleUrls: ['./checkin-list.component.less']
+})
+export class CheckinListComponent implements OnInit {
+    m_objCheckinListCondition: SearchCondition<CheckinListCondition> =
+        new SearchCondition<CheckinListCondition>(CheckinListCondition);
+    m_lsCheckinList: Pagination<CheckinList> = new Pagination<CheckinList>();
+    m_sCheckinDatePeriod: string;
+    m_sRegDatePeriod: string;
+    m_nTotal: number;
+    constructor(
+        private m_objApiService: ApiService,
+        private m_objMessage: NzMessageService,
+        private m_objToolsService: ToolsService,
+        private m_objCheckinService: CheckinService,
+    ) {}
+
+    ngOnInit() {
+        this.m_objCheckinListCondition.objCondition.nSearchUserIDMust = 1;
+        this.m_objCheckinListCondition.objCondition.sSearchUserNameMust = '';
+        this.m_objCheckinListCondition.objCondition.nCityID = 1;
+        this.m_objCheckinListCondition.objCondition.nHotelID = 1;
+
+        this.m_objCheckinListCondition.objPageInfo.nPageNo = 1;
+        this.m_objCheckinListCondition.objPageInfo.nPageSize = 1;
+        this.m_objCheckinListCondition.objPageInfo.nSort = 1;
+
+        this.m_lsCheckinList.PageSize = 10;
+
+        this.fnSearchHotelCheckinList();
+    }
+    // 获取酒店开房列表
+    fnSearchHotelCheckinList(): void {
+        this.m_objApiService.fnSearchHotelCheckinList(this.m_objCheckinListCondition).subscribe(data => {
+            if (data.Code === 200) {
+                this.m_lsCheckinList = data.Data;
+            } else {
+                this.m_objMessage.create('error', data.Msg);
+            }
+        });
+        // this.m_objApiService.login({}).subscribe( data => {
+
+        // })
+    }
+    // 登记时间区间
+    fnChangeRegDate(): void {
+        const objDate: Period = this.m_objToolsService.fnChangePeriod(this.m_sRegDatePeriod);
+        this.m_objCheckinListCondition.objCondition.sRegStartDate = objDate.sDateStart;
+        this.m_objCheckinListCondition.objCondition.sRegEndDate = objDate.sDateEnd;
+    }
+
+    // 入住时间区间
+    fnChangePeriod(): void {
+        const objDate: Period = this.m_objToolsService.fnChangePeriod(this.m_sCheckinDatePeriod);
+        this.m_objCheckinListCondition.objCondition.sCheckInStartDate = objDate.sDateStart;
+        this.m_objCheckinListCondition.objCondition.sCheckInEndDate = objDate.sDateEnd;
+    }
+}

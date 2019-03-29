@@ -1,0 +1,173 @@
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { ContextService } from '../../services/context.service';
+import { City } from '../../class/city';
+import { District } from '../../class/district';
+import { AreaChooseOutput } from '../../class/areaChooseOutput';
+import { ApiService } from '../../services/api.service';
+
+@Component({
+    selector: 'app-area-choose',
+    templateUrl: './area-choose.component.html',
+    styleUrls: ['./area-choose.component.less']
+})
+export class AreaChooseComponent implements OnInit {
+    @Output()  private m_objCurrentInfo = new EventEmitter();
+    @Output()  m_lsCurrentCityList = new EventEmitter();
+    @Output()  m_lsCurrentDistrictList = new EventEmitter();
+
+    @Input()  m_lsIsShowAreaType: boolean[];
+    @Input()  m_bIsShowDefaultTitle: boolean;
+
+    /**选中的区列表 */
+    // @Input()
+    // get area() {
+    //     return this.m_objAreaChooseOutput;
+    // }
+    // set area(value) {
+    //     console.log(value);
+    //     this.m_objAreaChooseOutput = value;
+    //     this.fnCurrentProvinceChange();
+    //     this.areaChange.emit(value);
+    // }
+
+    // @Output()
+    // areaChange: EventEmitter<any> = new EventEmitter();
+
+    /**选中省市区的ID */
+    @Input()
+    get area() {
+        return this.m_objAreaChooseOutput;
+    }
+    set area(value) {
+        this.m_objAreaChooseOutput = value;
+        this.fnCurrentCityChange();
+        this.areaChange.emit(value);
+    }
+
+    @Output()
+    areaChange: EventEmitter<any> = new EventEmitter();
+
+    /**省 */
+    @Input()
+    get province() {
+        return this.m_objAreaChooseOutput.CurrentProvinceID;
+    }
+    set province(value) {
+        this.m_objAreaChooseOutput.CurrentProvinceID = value;
+        this.fnCurrentProvinceChange();
+        this.provinceChange.emit(value);
+    }
+
+    @Output()
+    provinceChange: EventEmitter<any> = new EventEmitter();
+
+    /**市 */
+    @Input()
+    get city() {
+        return this.m_objAreaChooseOutput.CurrentCityID;
+    }
+    set city(value) {
+        this.m_objAreaChooseOutput.CurrentCityID = value;
+        this.fnCurrentCityChange();
+        this.cityChange.emit(value);
+    }
+
+    @Output()
+    cityChange: EventEmitter<any> = new EventEmitter();
+
+    /**区 */
+    @Input()
+    get district() {
+        return this.m_objAreaChooseOutput.CurrentDistrictID;
+    }
+    set district(value) {
+        this.m_objAreaChooseOutput.CurrentDistrictID = value;
+        this.districtChange.emit(value);
+    }
+
+    @Output()
+    districtChange: EventEmitter<any> = new EventEmitter();
+
+
+    /**当前选中的省市区ID */
+    m_objAreaChooseOutput: AreaChooseOutput = new AreaChooseOutput();
+    /**当前选中的省市区列表 */
+    m_lsCurrentCity: City[] = [];
+    m_lsCurrentDistrict: District[] = [];
+    constructor(
+        public m_objContextService: ContextService,
+        public m_objApiService: ApiService
+    ) { }
+
+    ngOnInit() {
+        /**是否完整显示省市区 */
+        if (this.m_lsIsShowAreaType !== undefined && this.m_lsIsShowAreaType.length !== 0) {
+            return;
+        } else {
+            this.m_lsIsShowAreaType = [true, true, true];
+        }
+        /**是否显示省市区上默认的中文【范围】 */
+        if (this.m_bIsShowDefaultTitle === undefined) {
+            this.m_bIsShowDefaultTitle = true;
+        }
+    }
+
+    /**省市联动 */
+    fnCurrentProvinceChange(fn?: any): void {
+        this.m_lsCurrentCity = [];
+        this.m_objAreaChooseOutput.CurrentCityID = null;
+        this.m_lsCurrentDistrict = [];
+        this.m_objAreaChooseOutput.CurrentDistrictID = null;
+        this.m_objApiService.fnGetCity().subscribe(data => {
+            for (const cityItem of data.Data) {
+                if (this.m_objAreaChooseOutput.CurrentProvinceID === cityItem.ProvinceID) {
+                    this.m_lsCurrentCity.push(cityItem);
+                }
+            }
+            this.fnSendMessage();
+            if (fn) {
+                fn();
+            }
+        });
+    }
+    /**市区联动 */
+    fnCurrentCityChange(fn?: any): void {
+        this.m_lsCurrentDistrict = [];
+        // if (fn) {
+        //     this.m_objAreaChooseOutput = JSON.parse(sessionStorage['m_objAreaChooseOutput']);
+        // } else {
+        //     sessionStorage['m_objAreaChooseOutput'] = JSON.stringify(this.m_objAreaChooseOutput);
+        // }
+        // console.log(this.m_objAreaChooseOutput);
+        this.m_objAreaChooseOutput.CurrentDistrictID = null;
+        this.m_objApiService.fnGetDistrict().subscribe(data => {
+            for (const districtItem of data.Data) {
+                if (this.m_objAreaChooseOutput.CurrentCityID === districtItem.CityID) {
+                    this.m_lsCurrentDistrict.push(districtItem);
+                }
+            }
+            this.fnSendMessage();
+            if (fn) {
+                fn();
+            }
+        });
+    }
+    /**初始化市区 */
+    fnResetCurrentArea(): void {
+        this.m_lsCurrentCity = [];
+        this.m_lsCurrentDistrict = [];
+        this.m_objAreaChooseOutput = null;
+        this.fnSendMessage();
+    }
+
+    /**向父组件发送消息 */
+    fnSendMessage(): void {
+        this.m_objCurrentInfo.emit(this.m_objAreaChooseOutput);
+        this.m_lsCurrentCityList.emit(this.m_lsCurrentCity);
+        this.m_lsCurrentDistrictList.emit(this.m_lsCurrentDistrict);
+        this.provinceChange.emit(this.m_objAreaChooseOutput.CurrentProvinceID);
+        this.cityChange.emit(this.m_objAreaChooseOutput.CurrentCityID);
+        this.districtChange.emit(this.m_objAreaChooseOutput.CurrentDistrictID);
+        this.areaChange.emit(this.m_objAreaChooseOutput);
+    }
+}

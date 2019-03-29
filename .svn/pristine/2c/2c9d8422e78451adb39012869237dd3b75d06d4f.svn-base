@@ -1,0 +1,180 @@
+<app-header></app-header>
+<div class="content flex">
+    <div class="hs-sider g-side">
+        <app-sidebar [title]="'旅店管理'" [subtab]="m_objSubtab" [subbtn]="m_objSubbtn"></app-sidebar>
+    </div>
+    <div class="hs-body g-main">
+        <app-loading *ngIf=""></app-loading>
+        <app-breadcrumb [data]="m_lsBreadCrumbList"></app-breadcrumb>
+        <div class="area-search">
+            <div>
+                <p class="hs-title">按旅店信息查询</p>
+                <div class="hs-input-f">
+                    <div>
+                        <div>旅店编号</div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="m_objHotelListCondition.objCondition.sHotelCodeLikeL">
+                    </div>
+                    <div>
+                        <div>旅店名称</div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="m_objHotelListCondition.objCondition.sHotelNameLike"
+                               value="sHotelNameLike">
+                    </div>
+                    <div>
+                        <div>前台电话</div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="m_objHotelListCondition.objCondition.sHotelTel">
+                    </div>
+                    <div>
+                        <div>房间数</div>
+                        <input nz-input placeholder="" class="buttom-width-80"
+                               [(ngModel)]="m_objHotelListCondition.objCondition.nRoomCountStart">
+                    </div>
+                    <div>
+                        <div style="visibility: hidden">房间数</div>
+                        <span> 至 &nbsp;</span>
+                        <input nz-input placeholder="" class="buttom-width-80"
+                               [(ngModel)]="m_objHotelListCondition.objCondition.nRoomCountEnd">
+                    </div>
+
+                </div>
+                <div class="hs-input-f">
+                    <div>
+                        <div>责任人</div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="m_objHotelListCondition.objCondition.sResponPerson">
+                    </div>
+                    <div>
+                        <div>责任人电话</div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="m_objHotelListCondition.objCondition.sResponPersonTel">
+                    </div>
+                    <div>
+                        <div>法人姓名</div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="m_objHotelListCondition.objCondition.sLegalPerson">
+                    </div>
+                    <div>
+                        <div>法人证件号</div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="m_objHotelListCondition.objCondition.sLegalPersonNo">
+                    </div>
+                    <div>
+                        <div>法人联系电话</div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="m_objHotelListCondition.objCondition.sLegalPersonMobile">
+                    </div>
+                    <div style="visibility:hidden">
+                    </div>
+                </div>
+                <div class="hs-input-f">
+                    <div>
+                        <div>状态</div>
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="" class="buttom-width-160"
+                                   [(ngModel)]="m_objHotelListCondition.objCondition.nAuditState">
+                            <nz-option nzLabel={{item.CodeName}} nzValue={{item.CodeNo}}
+                                       *ngFor="let item of m_objContextService.m_objAllDict.audit_state;let i = index">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                    <div>
+                        <div>登记人</div>
+                        <input nz-input placeholder="" class="buttom-width-160"
+                               [(ngModel)]="m_objHotelListCondition.objCondition.sCreateuserCode">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p class="hs-title line">按区域或时间查询</p>
+                <div class="hs-date">
+                    <div>
+                        <div class="reg-data">登记时间</div>
+                        <nz-date-picker
+                            [nzDisabledDate]="m_objContextService.fnDisabledDate" nzFormat="yyyy-MM-dd "
+                            [(ngModel)]="m_objHotelListCondition.objCondition.dtRegStartTime"
+                            nzPlaceHolder="">
+                        </nz-date-picker>
+                    </div>
+                    <div>
+                        <div class="reg-data" style="visibility:hidden">区</div>
+                        <span>至</span>
+                        <nz-date-picker
+                            [nzDisabledDate]="m_objContextService.fnDisabledDate" nzFormat="yyyy-MM-dd "
+                            [(ngModel)]="m_objHotelListCondition.objCondition.dtRegEndTime"
+                            nzPlaceHolder="">
+                        </nz-date-picker>
+                    </div>
+                    <app-area-choose (m_objCurrentInfo)="fnGetCurrentArea($event)"></app-area-choose>
+                </div>
+            </div>
+            <div class="btn-search">
+                <div class="reg-data" style="visibility:hidden">区</div>
+                <button class="btn-middle" nz-button nzType="primary" (click)="fnSearch()">
+                    <i nz-icon type="search"></i>
+                    搜索
+                </button>
+                <div class="area-sort">
+                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="默认排序"
+                               [(ngModel)]="m_objHotelListCondition.objCondition.nSort">
+                        <nz-option nzLabel={{item.CodeName}} nzValue={{item.CodeNo}}
+                                   *ngFor="let item of m_objContextService.m_objAllDict.sort;let i = index">
+                        </nz-option>
+                    </nz-select>
+                </div>
+            </div>
+        </div>
+        <!--<div class="area-tips" *ngIf="m_boolIsTips === true">-->
+        <!--{{m_strTips}}-->
+        <!--</div>-->
+        <app-error-bar [(isShow)]="m_bErrorIsShow" [msg]="m_sErrorMsg"></app-error-bar>
+        <div class="area-table">
+            <nz-table #basicTable [nzData]="m_listHotelLists" [nzShowPagination]="false" nzSize="small"
+                      class="table-header-bg">
+                <thead>
+                <tr>
+                    <th>酒店编号</th>
+                    <th>酒店名称</th>
+                    <th>省</th>
+                    <th>市/县</th>
+                    <th>酒店地址</th>
+                    <th>房间数</th>
+                    <th>责任人</th>
+                    <th>联系电话</th>
+                    <th>前台电话</th>
+                    <th>登记人</th>
+                    <th>登记时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-row" *ngFor="let item of m_listHotelLists" id='' (dblclick)="fnToHotelEdit(item.HotelID)">
+                    <td>{{item.HotelCode}}</td>
+                    <td>{{item.HotelName}}</td>
+                    <td>{{item.Province}}</td>
+                    <td>{{item.CityName}}</td>
+                    <td>{{item.HotelAddr}}</td>
+                    <td>{{item.RoomCount}}</td>
+                    <td>{{item.ResponPerson}}</td>
+                    <td>{{item.ResponPersonTel}}</td>
+                    <td>{{item.HotelTel}}</td>
+                    <td>{{item.CreateUserName}}</td>
+                    <td>{{item.RegStartTime}}</td>
+                    <td>{{item.AuditStateName}}</td>
+                    <td class="hs-edit">
+                        <a class="hs-checkin" (click)="fnToHotelEdit(item.HotelID)"> 编辑</a>
+                    </td>
+                </tr>
+                </tbody>
+            </nz-table>
+        </div>
+        <div class="pagination">
+            <nz-pagination [(nzPageIndex)]="m_objHotelListCondition.objPageInfo.nPageNo" [(nzTotal)]="nRowCount"
+                           nzShowSizeChanger [(nzPageSize)]="m_objHotelListCondition.objPageInfo.nPageSize"
+                           (nzPageIndexChange)="fnSearch()" (nzPageSizeChange)="fnPageSizeChange()"
+            ></nz-pagination>
+        </div>
+    </div>
+</div>
+

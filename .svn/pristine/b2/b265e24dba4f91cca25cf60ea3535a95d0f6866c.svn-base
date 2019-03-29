@@ -1,0 +1,9 @@
+<div *ngIf="m_bShowLoading" class='background-mask'></div>
+<div *ngIf="m_bShowLoading" class="loading-box">
+    <div class="loading vertical-center flex-vertical-center">
+        <ng-template #loading>
+            <i nz-icon type="loading" style="font-size:36px;"></i>
+        </ng-template>
+        <nz-spin [nzIndicator]="loading"></nz-spin>
+    </div>
+</div>

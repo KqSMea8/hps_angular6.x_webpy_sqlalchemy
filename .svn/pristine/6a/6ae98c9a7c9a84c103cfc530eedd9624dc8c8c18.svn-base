@@ -1,0 +1,49 @@
+<div class="login-outer">
+    <div class="logo"></div>
+    <div class="login flex">
+        <div class="login-content flex">
+            <!--<div class="title">旅业治安管理信息系统登录</div>-->
+            <div class="form">
+                <div class="bg"></div>
+                <div class="user-sign-up">用户登录</div>
+                <form nz-form [formGroup]="m_objValidateForm" class="login-form" (ngSubmit)="fnLogin()">
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzPrefix]="prefixUser">
+                                <input type="text" nz-input formControlName="userName"
+                                       [(ngModel)]="m_objLogin.sUserCode"
+                                       placeholder="用户名">
+                            </nz-input-group>
+                            <nz-form-explain
+                                *ngIf="m_objValidateForm.get('userName').dirty && m_objValidateForm.get('userName').errors">
+                                请输入您的用户名!
+                            </nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control>
+                            <nz-input-group [nzPrefix]="prefixLock">
+                                <input type="password" nz-input formControlName="password"
+                                       [(ngModel)]="m_objLogin.sPassword"
+                                       placeholder="密码">
+                            </nz-input-group>
+                            <nz-form-explain
+                                *ngIf="m_objValidateForm.get('password').dirty && m_objValidateForm.get('password').errors">
+                                请输入您的密码!
+                            </nz-form-explain>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-control>
+                            <button nz-button class="login-form-button" [nzType]="'primary'">登录</button>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+                <ng-template #prefixUser><i nz-icon type="user"></i></ng-template>
+                <ng-template #prefixLock><i nz-icon type="lock"></i></ng-template>
+            </div>
+        </div>
+    </div>
+    <div class="login-footer">广州穗通金融服务有限公司, Copy right 2019</div>
+</div>
+

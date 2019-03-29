@@ -1,0 +1,16 @@
+@import "styles.less";
+
+// .layer-content{
+//     width: 100%;
+//     height: calc(100% - 70px);
+
+//     .layer-side{
+//         width: 180px;
+//         height: 100%;
+//     }
+
+//     .layer-main{
+//         width: calc(100% - 180px);
+//         height: 100%;
+//     }
+// }

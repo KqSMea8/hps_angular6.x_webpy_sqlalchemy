@@ -1,0 +1,25 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { GuestCheckinListPageComponent } from './guest-checkin-list-page.component';
+
+describe('GuestCheckinListPageComponent', () => {
+  let component: GuestCheckinListPageComponent;
+  let fixture: ComponentFixture<GuestCheckinListPageComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ GuestCheckinListPageComponent ]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(GuestCheckinListPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

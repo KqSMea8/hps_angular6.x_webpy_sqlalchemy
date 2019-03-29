@@ -1,0 +1,6 @@
+<app-header></app-header>
+<div nz-row class="content">
+    <div nz-col nzSpan="3">
+        <app-sidebar [title]="'系统管理'" [subtab]="m_objSystemManagementService.m_objSubtab"></app-sidebar>
+    </div>
+</div>

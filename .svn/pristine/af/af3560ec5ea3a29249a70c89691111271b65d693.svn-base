@@ -1,0 +1,63 @@
+@import "styles.less";
+.checkin-list {
+    overflow-y: auto;
+    height: 100%;
+    background: #eaf1f9;
+    
+    ul {
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+
+    .search-condition {
+        overflow: hidden;
+        background: #fff;
+        margin: @defaultPadding @defaultPadding 0 @defaultPadding;
+        padding: @defaultPadding;
+
+        .condition-list {
+            display: flex;
+            align-items: center;
+            
+            li {
+                margin: 0 10px;
+                
+                p {
+                    display: flex;
+                    align-items: center;
+                    height: 39px;
+                }
+
+                span {
+                    margin: 0 @defaultPadding;
+                }
+                nz-select {
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+
+    .margin {
+        margin: 10px @defaultPadding 0 @defaultPadding;
+    }
+
+    .filter-button {
+        display: flex;
+        justify-content: flex-end;
+
+        .margin;
+    }
+    
+    .search-data-list {
+        .margin;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .pagination {
+        margin: @defaultPadding;
+    }
+}
+
+

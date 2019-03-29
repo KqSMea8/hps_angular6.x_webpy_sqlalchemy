@@ -1,0 +1,5 @@
+<button nz-button routerLink="/main/GuestSearch">GuestSearch</button>
+<button nz-button routerLink="/main/HotelSearch">HotelSearch</button>
+<button nz-button routerLink="/main/CheckinLogList">CheckinLogList</button>
+<button nz-button routerLink="/main/CheckinList">CheckinList</button>
+<button nz-button routerLink="/main/SystemManagement/UserInfo">UserInfo</button>

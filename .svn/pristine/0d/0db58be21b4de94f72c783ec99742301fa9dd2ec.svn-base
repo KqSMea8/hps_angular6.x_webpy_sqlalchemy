@@ -1,0 +1,145 @@
+<app-header></app-header>
+<div class="content flex">
+    <div class="g-side">
+        <app-sidebar [title]="'开房信息查询'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div class="g-main checkin-list">
+        <app-loading [m_bShowLoading]="m_bShowLoading"></app-loading>
+        <app-breadcrumb [data]="m_lsBreadCrumbList"></app-breadcrumb>
+        <div class="cont">
+            <div class="search-condition">
+                <div class="item">
+                    <p class="title">按旅店信息查询</p>
+                    <ul class="condition-list">
+                        <li>
+                            <p>旅店编号</p>
+                            <input class="input-big" nz-input [(ngModel)]="m_objCheckinListCondition.objCondition.sHotelCode">
+                        </li>
+                        <li>
+                            <p>旅店名称</p>
+                            <input class="input-big" nz-input [(ngModel)]="m_objCheckinListCondition.objCondition.sHotelName">
+                        </li>
+                        <li>
+                            <p>责任人</p>
+                            <input class="input-big" nz-input [(ngModel)]="m_objCheckinListCondition.objCondition.sResponPerson">
+                        </li>
+                        <li>
+                            <p>登记人</p>
+                            <input class="input-big" nz-input [(ngModel)]="m_objCheckinListCondition.objCondition.sCreateUserNameLike">
+                        </li>
+                    </ul>
+                </div>
+                <div class="item">
+                    <p class="title">按旅店区域查询</p>
+                    <app-area-choose (m_objCurrentInfo)="fnGetCurrentArea($event)"></app-area-choose>
+                </div>
+                <div class="item">
+                    <p class="title">按时间查询</p>
+                    <ul class="condition-list">
+                        <li>
+                            <p>登记时间</p>
+                            <nz-date-picker class="input-big" [nzDisabledDate]="m_objContextService.fnDisabledDate"
+                                [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objCheckinListCondition.objCondition.sRegStartDate"
+                                nzPlaceHolder="请选择日期"></nz-date-picker>
+                            <span>至</span>
+                            <nz-date-picker class="input-big" [nzDisabledDate]="m_objContextService.fnDisabledDate"
+                                [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objCheckinListCondition.objCondition.sRegEndDate"
+                                nzPlaceHolder="请选择日期"></nz-date-picker>
+                        </li>
+                        <li>
+                            <p>&nbsp;</p>
+                            <span>选择</span>
+                            <nz-radio-group [(ngModel)]="m_sRegDatePeriod" (ngModelChange)="fnChangeRegDate()">
+                                <label nz-radio nzValue="0">今天</label>
+                                <label nz-radio nzValue="1">一周</label>
+                                <label nz-radio nzValue="2">一个月</label>
+                            </nz-radio-group>
+                        </li>
+                    </ul>
+                    <ul class="condition-list">
+                        <li>
+                            <p>入住时间</p>
+                            <nz-date-picker class="input-big" [nzDisabledDate]="m_objContextService.fnDisabledDate"
+                                [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objCheckinListCondition.objCondition.sCheckInStartDate"
+                                nzPlaceHolder="请选择日期"></nz-date-picker>
+                            <span>至</span>
+                            <nz-date-picker class="input-big" [nzDisabledDate]="m_objContextService.fnDisabledDate"
+                                [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objCheckinListCondition.objCondition.sCheckInEndDate"
+                                nzPlaceHolder="请选择日期"></nz-date-picker>
+                        </li>
+                        <li>
+                            <p>&nbsp;</p>
+                            <span>选择</span>
+                            <nz-radio-group [(ngModel)]="m_sCheckinDatePeriod" (ngModelChange)="fnChangePeriod()">
+                                <label nz-radio nzValue="0">今天</label>
+                                <label nz-radio nzValue="1">一周</label>
+                                <label nz-radio nzValue="2">一个月</label>
+                            </nz-radio-group>
+                        </li>
+                    </ul>
+                </div>
+                <div class="text-center relative">
+                    <button class="btn-middle" nz-button nzType="primary" (click)="fnSearchHotelCheckinList()">
+                        <i nz-icon type="search" class="fl mt3"></i>
+                        查询
+                    </button>
+                    <nz-dropdown [nzTrigger]="'click'" class="absolute-r">
+                        <button nz-button nz-dropdown>
+                            <span>默认排序</span>
+                            <i nz-icon type="down"></i>
+                        </button>
+                        <ul nz-menu>
+                            <li nz-menu-item *ngFor="let item of m_objContextService.m_objAllDict.sort" (click)="fnSort(item.CodeNo)">{{item.CodeName}}</li>
+                        </ul>
+                    </nz-dropdown>
+                </div>
+            </div>
+            <div class="search-data-list mt20">
+                <nz-table class="table-header-bg" #smallTable [nzShowPagination]="false" [nzData]="m_lsCheckinList.DataSet"
+                    nzSize="small">
+                    <thead>
+                        <tr>
+                            <th>旅店编号</th>
+                            <th>旅店名称</th>
+                            <th>省份</th>
+                            <th>州市</th>
+                            <th>区域</th>
+                            <th>责任人</th>
+                            <th>登记人</th>
+                            <th>客人登记时间</th>
+                            <th>总开房次数</th>
+                            <th>总登记人次</th>
+                            <th>平均开房次数</th>
+                            <th>平均登记人数</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of m_lsCheckinList.DataSet" (dblclick)="fnViewChecklogList(item.HotelID, item.HotelName)">
+                            <td>{{item.HotelCode}}</td>
+                            <td>{{item.HotelName}}</td>
+                            <td>{{item.Province}}</td>
+                            <td>{{item.City}}</td>
+                            <td>{{item.District}}</td>
+                            <td>{{item.ResponPerson}}</td>
+                            <td>{{item.CreateUserName}}</td>
+                            <td>{{item.RegStartTime}}</td>
+                            <td>{{item.SumCheckInRoom}}</td>
+                            <td>{{item.SumCheckInGuest}}</td>
+                            <td>{{item.AvgCheckInRoom}}</td>
+                            <td>{{item.AvgCheckInGuest}}</td>
+                            <td>
+                                <a href="javascript:;" (click)="fnViewChecklogList(item.HotelID, item.HotelName)">查看</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+            <div class="pagination mt10 mb10">
+                <nz-pagination [(nzPageIndex)]="m_objCheckinListCondition.objPageInfo.nPageNo" [(nzTotal)]="m_lsCheckinList.RowCount"
+                    nzShowSizeChanger [(nzPageSize)]="m_objCheckinListCondition.objPageInfo.nPageSize"
+                    (nzPageIndexChange)="fnSearchHotelCheckinList()" (nzPageSizeChange)="fnPageSizeChange()"></nz-pagination>
+            </div>
+        </div>
+    </div>
+</div>

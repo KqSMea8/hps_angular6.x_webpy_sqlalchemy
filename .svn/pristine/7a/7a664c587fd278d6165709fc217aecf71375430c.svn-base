@@ -1,0 +1,28 @@
+import {Component, OnInit} from '@angular/core';
+
+@Component({
+    selector: 'app-upload',
+    templateUrl: './upload.component.html',
+    styleUrls: ['./upload.component.less']
+})
+export class UploadComponent implements OnInit {
+
+    constructor() {
+    }
+
+    // fileList: any;
+
+    fileList = [
+        {
+            uid: 1,
+            name: '',
+            status: 'done',
+            response: 'Server Error 500', // custom error message to show
+            url: ''
+        }
+    ];
+
+    ngOnInit() {
+    }
+
+}

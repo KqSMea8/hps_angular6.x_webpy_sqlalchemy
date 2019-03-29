@@ -1,0 +1,129 @@
+.mg(@t:0px,@r:0px,@b:0px,@l:0px) {
+    margin-top: @t;
+    margin-right: @r;
+    margin-bottom: @b;
+    margin-left: @l;
+}
+
+.pd(@t:0px,@r:0px,@b:0px,@l:0px) {
+    padding-top: @t;
+    padding-right: @r;
+    padding-bottom: @b;
+    padding-left: @l;
+}
+
+.Breadcrumb {
+    .mg(@t:6px,@b:8px,@l:20px);
+}
+
+.content {
+    height: ~"calc(100% - 70px)";
+
+    > div {
+        height: 100%;
+    }
+}
+
+.area-search {
+    border-top: 20px solid #eaf1f9;
+    border-left: 20px solid #eaf1f9;
+    border-right: 20px solid #eaf1f9;
+    .btn-search {
+        display: flex;
+        justify-content: center;
+        .reg-data {
+            .mg(@t:8px,@b:8px);
+        }
+    }
+}
+
+.hs-input-f {
+    position: relative;
+    left: 20px;
+    width: 90%;
+    display: flex;
+    > div {
+        .mg(@t:5px,@b:5px,@r:20px);
+        div {
+            .mg(@t:6px,@b:6px)
+        }
+    }
+}
+
+.hs-date {
+    .mg(@t:8px,@b:8px);
+    position: relative;
+    left: 20px;
+    width: 90%;
+    .reg-data {
+        .mg(@t:8px,@b:8px);
+    }
+    display: flex;
+    nz-date-picker {
+        .pd(@l:0px,@r:8px)
+    }
+
+}
+
+.area-sort {
+    width: 100%;
+    border-bottom: 8px solid #eaf1f9;
+    border-left: 20px solid #eaf1f9;
+    border-right: 20px solid #eaf1f9;
+    .pd(@b:20px);
+    nz-select {
+        .mg(@l:76%);
+        width: 14%;
+    }
+}
+
+.area-table {
+    border-left: 20px solid #eaf1f9;
+    border-bottom: 20px solid #eaf1f9;
+    border-top: 20px solid #eaf1f9;
+    border-right: 20px solid #eaf1f9;
+}
+
+.hs-body {
+    overflow-y: scroll;
+    background-color: #eaf1f9;
+
+}
+
+.hs-checkin {
+    color: blue;
+    padding-right: 6px;
+}
+
+.buttom-width-80 {
+    width: 80px;
+}
+
+.buttom-width-120 {
+    width: 120px;
+}
+
+.buttom-width-160 {
+    width: 160px;
+}
+
+.hs-title {
+    color: #555;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 30px;
+    .mg(@l:20px,@r:20px,@t:15px)
+}
+.line{
+    border-top: 1px dashed #ccc;
+    .pd(@t:15px)
+}
+
+.pagination{
+    .pd(@r:20px,@b:20px,@l:20px);
+    background-color: #eaf1f9;
+}
+
+.back-color-fff{
+    background-color: #fff;
+}

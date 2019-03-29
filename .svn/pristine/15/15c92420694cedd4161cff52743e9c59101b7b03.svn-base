@@ -1,0 +1,83 @@
+@import "styles.less";
+.content{
+    height: ~"calc(100% - 70px)";
+
+    >div{
+        height: 100%;
+    }
+
+    .user-info {
+        ul {
+            padding-left: 0;
+            margin-bottom: 0;
+
+            li {
+                float: left;
+                margin-bottom: @defaultPadding;
+            }
+        }
+        
+        overflow: hidden;
+        background: #eaf1f9;
+        font-size: 16px;
+    
+        .user-content {
+            margin: @defaultPadding @defaultPadding 0 @defaultPadding;
+            padding: @defaultPadding @defaultPadding 0 @defaultPadding;
+            height: 100%;
+            background: #fff;
+
+            .item {
+                margin: @defaultPadding;
+                padding-bottom: 30px;
+                border-bottom: 1px solid #c3c3c3;
+
+                h3 {
+                    font-weight: bold;
+                    margin-left: @defaultPadding;
+                }
+
+                span {
+                    font-weight: bold;
+                    text-align: right;
+                }
+            }
+
+            .info {
+                float: left;
+                margin: 0 75px;
+                width: 85%;
+
+                .green {
+                    color: #18b63a;
+                }
+            }
+
+            .operation {
+                float: left;
+                margin: 0 60px;
+                width: 90%;
+
+                li {
+                    margin-top: @defaultPadding;
+
+                    button {
+                        width: 130px;
+                        height: 40px;
+                        background: #353473;
+                        border: none;
+
+                        span {
+                            color: #fff;
+                            font-weight: bold;
+                        }
+                    }
+
+                    .disabled {
+                        background: #c3c3c3;
+                    }
+                }
+            }
+        }
+    }
+}

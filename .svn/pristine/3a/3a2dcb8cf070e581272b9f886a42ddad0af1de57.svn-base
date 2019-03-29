@@ -1,0 +1,17 @@
+export class CheckinListCondition {
+    nSearchUserIDMust: number; // (操作用户ID)
+    sSearchUserNameMust: string; // (操作用户)
+    sHotelCode: string; // 酒店编号
+    sHotelName: string;
+    sResponPerson: string; // 责任人
+    nRoomCount: number;
+    nBedCount: number;
+    nProvinceID: number; // 省份ID
+    nCityID: number;
+    nDistrictID: number;
+    sCreatUserNameLike: string;
+    sRegStartDate: string; // 登记时间(查询开始时间)
+    sRegEndDate: string; // 登记时间(查询结束时间)
+    sCheckInStartDate: string; // 入住时间(查询开始时间)
+    sCheckInEndDate: string; // 入住时间(查询结束时间)
+}

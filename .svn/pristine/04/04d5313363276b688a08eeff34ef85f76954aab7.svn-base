@@ -1,0 +1,146 @@
+<app-header></app-header>
+<div nz-row class="content">
+    <div nz-col nzSpan="3">
+        <app-sidebar [title]="'旅店登记客人'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div nz-col nzSpan="21">
+        <div class="breadcrumb-bar">
+            <app-breadcrumb [data]="m_aBreadCrumbList"></app-breadcrumb>
+        </div>
+        <div nzType="flex" class="main">
+            <nz-tabset>
+                <nz-tab [nzTitle]="item.GuestCheckIn.HotelDocName" *ngFor="let item of m_objAllGuestCheckinDetailsResult.GuestInfo">
+                    <div nz-row nzType="flex" nzJustify="space-between">
+                        <div nz-col nzSpan="7" class="flex info-card">
+                            <p>证件信息</p>
+                            <nz-card style="width:100%;" [nzCover]="coverTemplate" [nzBordered]="false">
+                                <ul class="ic-content">
+                                    <li class="flex">
+                                        <span>姓名：</span><span>{{item.GuestDoc.DocName}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>性别：</span><span>{{item.GuestDoc.Sex}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>出生年月：</span><span>{{item.GuestDoc.BornDate}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>住址：</span><span>{{item.GuestDoc.Address}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>证件号码：</span><span>{{item.GuestDoc.DocNo}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>签发机关：</span><span>{{item.GuestDoc.CertiOffice}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>有效期：</span><span>{{item.GuestDoc.CertiEffStartTime}}-{{item.GuestDoc.CertiEffEndTime}}</span>
+                                    </li>
+                                    <li class="flex" *ngIf="m_nGuestType===2">
+                                        <span>护照编号：</span><span>{{m_objForeignerGuestCheckinDetailsResult.PassNo}}</span>
+                                    </li>
+                                    <li class="flex" *ngIf="m_nGuestType===2">
+                                        <span>签证失效时间：</span><span>{{m_objForeignerGuestCheckinDetailsResult.VisaDeadline}}</span>
+                                    </li>
+                                    <li class="flex" *ngIf="m_nGuestType===2">
+                                        <span>离境时间：</span><span>{{m_objForeignerGuestCheckinDetailsResult.DepartureTime}}</span>
+                                    </li>
+                                    <li class="flex" *ngIf="m_nGuestType===2">
+                                        <span>入境时间：</span><span>{{m_objForeignerGuestCheckinDetailsResult.EntryTime}}</span>
+                                    </li>
+                                    <li class="flex" *ngIf="m_nGuestType===2">
+                                        <span>入境地点：</span><span>{{m_objForeignerGuestCheckinDetailsResult.EntryPlace}}</span>
+                                    </li>
+                                    <li class="flex" *ngIf="m_nGuestType===2">
+                                        <span>离境地点：</span><span>{{m_objForeignerGuestCheckinDetailsResult.DeparturePlace}}</span>
+                                    </li>
+                                    <li class="flex" *ngIf="m_nGuestType===2">
+                                        <span>签证类型：</span><span>{{m_objForeignerGuestCheckinDetailsResult.VisaType}}</span>
+                                    </li>
+                                    <li class="flex" *ngIf="m_nGuestType===2">
+                                        <span>国籍：</span><span>{{m_objForeignerGuestCheckinDetailsResult.Nationality}}</span>
+                                    </li>
+                                </ul>
+                            </nz-card>
+                            <ng-template #coverTemplate>
+                                <div class="flex ic-avator">
+                                    <img src="/src/assets/img/avatar.jpg" alt="">
+                                </div>
+                            </ng-template>
+                        </div>
+                        <div nz-col nzSpan="7" class="flex info-card">
+                            <p>登记信息</p>
+                            <nz-card style="width:100%;" [nzCover]="coverTemplate" [nzBordered]="false">
+                                <ul class="ic-content">
+                                    <li class="flex">
+                                        <span>登记姓名：</span><span>{{item.GuestCheckIn.HotelDocName}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>证件类型：</span><span>{{item.GuestCheckIn.HotelDocType}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>性别：</span><span>{{item.GuestCheckIn.HotelSex}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>国籍：</span><span>{{item.GuestCheckIn.HotelNation}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>民族：</span><span>{{item.GuestCheckIn.HotelNation}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>出生年月：</span><span>{{item.GuestCheckIn.HotelBornDate}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>联系方式：</span><span>{{item.GuestCheckIn.HotelTel}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>登记住址：</span><span>{{item.GuestCheckIn.HotelAddress}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>入住旅店：</span><span>{{m_objAllGuestCheckinDetailsResult.CheckinInfo.HotelID}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>房号：</span><span>{{m_objAllGuestCheckinDetailsResult.CheckinInfo.RoomNo}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>关联人：</span><span>{{m_objAllGuestCheckinDetailsResult.CheckinInfo.HotelID}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>入住日期：</span><span>{{m_objAllGuestCheckinDetailsResult.CheckinInfo.CheckInTime}}</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>退房日期：</span><span>{{m_objAllGuestCheckinDetailsResult.CheckinInfo.CheckOutTime}}</span>
+                                    </li>
+                                </ul>
+                            </nz-card>
+                            <ng-template #coverTemplate>
+                                <div class="flex ic-avator">
+                                    <img src="/src/assets/img/avatar.jpg" alt="">
+                                </div>
+                            </ng-template>
+                        </div>
+                        <div nz-col nzSpan="9" class="flex info-card">
+                            <p>住店详情</p>
+                            <nz-table #basicTable [nzData]="dataSet" nzSize="small" [nzWidthConfig]="['33.33%', '33.33%', '33.34%']">
+                                <thead>
+                                    <tr>
+                                        <th>操作</th>
+                                        <th>操作时间</th>
+                                        <th>上传时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of basicTable.data">
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+                        </div>
+                    </div>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </div>
+</div>

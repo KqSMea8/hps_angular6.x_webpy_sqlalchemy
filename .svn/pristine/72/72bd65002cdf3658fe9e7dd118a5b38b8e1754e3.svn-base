@@ -1,0 +1,7 @@
+<app-header></app-header>
+<div nz-row class="content">
+    <div nz-col nzSpan="3">
+        <app-sidebar [title]="'旅店登记客人'" [subtab]="m_objSubtab" [subbtn]="m_objSubbtn"></app-sidebar>
+    </div>
+    <div nz-col nzSpan="21"></div>
+</div>

@@ -1,0 +1,10 @@
+export class Subtab {
+    subtabName: string;
+    subtabIcon: string;
+    count?: number;
+}
+
+export class Subbtn {
+    subbtnName: string;
+    subbtnIcon: string;
+}

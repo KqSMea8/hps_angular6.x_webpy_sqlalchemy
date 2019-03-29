@@ -1,0 +1,35 @@
+export const utils = {
+    transformRequest: function (params: object): string {
+        /**
+        *@methon transformRequest
+        *@desc 序列化对象
+        *@param params: object
+        *@return string
+        **/
+        const arr = [];
+        Object.keys(params).forEach(key => {
+            let value = params[key];
+            if (Object.prototype.toString.call(value) === '[object Object]') {
+                value = JSON.stringify(value);
+            }
+            arr.push(this.encodeUriQuery(key) + '=' + this.encodeUriQuery(value));
+        });
+        return arr.join('&');
+    },
+
+    encodeUriQuery: function (val: string, pctEncodeSpaces: string): any {
+        /**
+        *@methon encodeUriQuery
+        *@desc 编码数据
+        *@param val: string 需编码参数
+        *@param pctEncodeSpaces: string
+        *@return any
+        **/
+        return encodeURIComponent(val).
+            replace(/%40/gi, '@').
+            replace(/%3A/gi, ':').
+            replace(/%24/g, '$').
+            replace(/%2C/gi, ',').
+            replace(/%20/g, (pctEncodeSpaces ? '%20' : '+'));
+    }
+};

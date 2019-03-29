@@ -1,0 +1,112 @@
+import { Component, OnInit } from '@angular/core';
+import { Subtab } from '../../../../class/sidebar';
+import { ContextService } from 'src/app/services/context.service';
+import { SearchCondition } from '../../../../class/searchCondition';
+import { Pagination } from 'src/app/class/pagination';
+import { AllGuestCheckinCondition } from '../../../../class/allGuestCheckinCondition';
+import { GuestCheckinService } from 'src/app/services/guest-checkin.service';
+import { ApiService } from 'src/app/services/api.service';
+import { GuestCheckinResult } from '../../../../class/guestCheckinResult';
+import { Router } from '@angular/router';
+import { ToolsService } from 'src/app/services/tools.service';
+import { DictResult } from '../../../../class/dictionary';
+import { AreaChooseOutput } from 'src/app/class/areaChooseOutput';
+
+@Component({
+    selector: 'app-all-guest',
+    templateUrl: './all-guest.component.html',
+    styleUrls: ['./all-guest.component.less']
+})
+export class AllGuestComponent implements OnInit {
+    /**侧边栏 */
+    m_objSubtab: Array<Subtab> = this.m_objContextService.m_objSideTabList.guestCheckin;
+    /**全部旅客查询条件 */
+    m_objAllGuestCondition: SearchCondition<AllGuestCheckinCondition> =
+    new SearchCondition<AllGuestCheckinCondition>(AllGuestCheckinCondition);
+    // 全部旅客入住数据
+    m_lsAllGuestCheckinList: Pagination<GuestCheckinResult> = new Pagination<GuestCheckinResult>();
+    m_nRowCount: number;
+    /**面包屑导航信息 */
+    m_lsBreadCrumbList: Array<{name: string, routelink: string}> = [
+        {name: '首页', routelink: '/home'},
+        {name: '所有旅客入住查询', routelink: ''}
+    ];
+    /**民族信息 */
+    m_lsGresNation: Array<DictResult> = [];
+    /**加载框 */
+    m_bShowLoading: boolean;
+    /**错误信息 */
+    m_sErrorMsg: string;
+    /**是否显示错误信息组件 */
+    m_bShowError: boolean;
+
+    constructor(
+        public m_objContextService: ContextService,
+        public m_objGuestCheckinService: GuestCheckinService,
+        public m_objApiService: ApiService,
+        public m_objRouter: Router,
+        public m_objToolsService: ToolsService
+    ) { }
+
+    ngOnInit() {
+        this.m_objAllGuestCondition.objPageInfo.nPageNo = 1;
+        this.m_objAllGuestCondition.objPageInfo.nPageSize = 1;
+        this.m_nRowCount = 0;
+        this.m_lsAllGuestCheckinList.RowCount = 0;
+    }
+
+    /**查询全部入住旅客 */
+    fnSearchGuestCheckinLinst(): void {
+        /**加载框 */
+        this.m_bShowLoading = true;
+        /**当前登陆用户ID */
+        this.m_objAllGuestCondition.objCondition.nSearchUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+        /**当前登陆用户名 */
+        this.m_objAllGuestCondition.objCondition.sSearchUserNameMust = this.m_objContextService.m_objUserInfo.UserName;
+        /**格式化日期 */
+        this.m_objAllGuestCondition.objCondition.sBornDateStart =
+        this.m_objToolsService.fnFormatDate(this.m_objAllGuestCondition.objCondition.sBornDateStart);
+        this.m_objAllGuestCondition.objCondition.sBornDateEnd =
+        this.m_objToolsService.fnFormatDate(this.m_objAllGuestCondition.objCondition.sBornDateEnd);
+        this.m_objAllGuestCondition.objCondition.sHotelBornDateStart =
+        this.m_objToolsService.fnFormatDate(this.m_objAllGuestCondition.objCondition.sHotelBornDateStart);
+        this.m_objAllGuestCondition.objCondition.sHotelBornDateEnd =
+        this.m_objToolsService.fnFormatDate(this.m_objAllGuestCondition.objCondition.sHotelBornDateEnd);
+        this.m_objApiService.fnAllGuestCheckinList(this.m_objAllGuestCondition).subscribe( data => {
+            this.m_bShowLoading = false;
+            if (data.Code !== 200) {
+                this.m_bShowError = true;
+                this.m_sErrorMsg = data.Msg;
+            } else {
+                if (data.Data.RowCount === 0) {
+                    this.m_bShowError = true;
+                    this.m_sErrorMsg = '没有查找到匹配的数据，请修改查询条件！';
+                }
+                this.m_lsAllGuestCheckinList = data.Data;
+            }
+        });
+    }
+
+    /**每页显示条数改变 */
+    fnPageSizeChange(): void {
+        this.m_objAllGuestCondition.objPageInfo.nPageNo = 1;
+        this.fnSearchGuestCheckinLinst();
+    }
+
+    /**当前选择的省市区 */
+    fnGetCurrentArea(objAreaChooseOutput: AreaChooseOutput): void {
+        this.m_objAllGuestCondition.objCondition.nProvinceID = objAreaChooseOutput.CurrentProvinceID;
+        this.m_objAllGuestCondition.objCondition.nCityID = objAreaChooseOutput.CurrentCityID;
+        this.m_objAllGuestCondition.objCondition.nDistrictID = objAreaChooseOutput.CurrentDistrictID;
+    }
+
+    // 导航至旅客入住详情
+    fnToGuestCheckinDetails(id: number): void {
+        this.m_objRouter.navigate(['/main/GuestCheckinList/allGuest/GuestDetails'], {
+            queryParams: {
+                type: 1,
+                id: id
+            }
+        });
+    }
+}

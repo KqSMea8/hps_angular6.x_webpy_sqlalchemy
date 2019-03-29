@@ -1,0 +1,55 @@
+/**
+ * @license hps v1.0
+ * (c) 2018 穗通, Inc. http://www.grgsuitong.com/
+ * @author zhanghongjun
+ * @file http.service.ts
+ * @createDate 2018-12-24
+ * @desc http服务,在HttpClient上包装一层，统一处理请求路径、请求参数，也方便后面做一些全局处理
+ */
+
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import * as _ from 'lodash';
+import { utils } from '../utils/utils';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class HttpService {
+    private httpOptions = {
+        headers: new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        }),
+        withCredentials: true
+    };
+    constructor(
+        private m_objHttpClient: HttpClient,
+    ) { }
+
+    request<T>(sMethon: string, sPath: string, objParams?: object, isFormData: boolean = false): Observable<T> {
+        if (sMethon.length === 0) {
+            console.error('请求错误，sMethon不能为空');
+        } else if (sPath.length === 0) {
+            console.error(sPath + '请求错误，sPath不能为空');
+        } else {
+            if (sMethon.toLowerCase() === 'get') {
+                const reqParams = new HttpParams();
+                for (const key of Object.keys(objParams)) {
+                    reqParams.append(key, objParams[key]);
+                }
+                return this.m_objHttpClient.get<T>(environment.baseUrl + sPath, { params: reqParams, withCredentials: false });
+            } else if (sMethon.toLowerCase() === 'post') {
+                if (isFormData) {
+                    return this.m_objHttpClient.post<T>(environment.baseUrl + sPath, objParams, this.httpOptions);
+                } else {
+                    return this.m_objHttpClient.post<T>(environment.baseUrl + sPath,
+                        utils.transformRequest(objParams ? objParams : {}), this.httpOptions);
+                }
+            } else {
+                console.error('请求错误，sMethon参数错误，请检查！');
+            }
+        }
+    }
+}

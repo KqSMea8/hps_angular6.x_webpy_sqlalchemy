@@ -1,0 +1,215 @@
+# coding: utf-8
+
+import web
+
+from sqlalchemy import text, and_
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import get_data_from_sql
+from models.hps.g_guest_checkin import GuestCheckIn
+from models.hps.h_checkin import CheckIn
+from models.hps.h_hotel import Hotel
+from models.hps.h_relation_checkin import RelationCheckIn
+from utils import json_to_obj, obj_to_json, obj_to_dict, to_datetime
+from utils.func_api import FuncResult
+
+
+class handler(object):
+    '''所有旅客入住查询'''
+
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    def data_handle(self):
+        obj_input = web.input()
+
+        obj_condition = json_to_obj(obj_input.get('objCondition'))
+        obj_page = json_to_obj(obj_input.get('objPageInfo'))
+
+        if not obj_condition:
+            print obj_condition
+            return FuncResult(msg='未输入查询条件')
+        else:
+            if not obj_condition.has_key('nSearchUserIDMust') or not obj_condition['nSearchUserIDMust']:
+                return FuncResult(fail='操作用户ID为必传参数')
+            if not obj_condition.has_key('sSearchUserCodeMust') or not obj_condition['sSearchUserCodeMust']:
+                return FuncResult(fail='操作用户为必传参数')
+
+        return self.search_all_checkin(obj_condition, obj_page)
+
+    def search_all_checkin(self, obj_condition, obj_page):
+
+        str_sql = '''select
+                       SQL_CALC_FOUND_ROWS
+                       h_relation_checkin.*, g_guest_checkin.*, g_guest_doc.*, g_foreigner.*
+                    from
+                        h_relation_checkin
+                        inner join h_checkin on h_relation_checkin.CheckInID = h_checkin.CheckInID
+                        inner join g_guest_checkin on h_relation_checkin.HotelGuestID = g_guest_checkin.HotelGuestID
+                        inner join g_guest_doc on h_relation_checkin.GuestDocID = g_guest_doc.GuestDocID,
+                        h_checkin checkin
+                        inner join h_hotel on checkin.HotelID = h_hotel.HotelID,
+                        g_guest_doc g
+                        left join g_foreigner on g.GuestDocID
+              '''
+
+        if len(obj_condition) > 2:
+            str_sql += ' where '
+
+        lst_params = []
+        dict_params_value = {}
+        if obj_condition.has_key('sHotelNameLike') and obj_condition['sHotelNameLike']:
+            str_hotel_name = obj_condition['sHotelNameLike']
+            str_sql += ' h_hotel.HotelName Like :str_hotel_name '
+            lst_params.append('h_hotel.HotelName Like :str_hotel_name')
+            dict_params_value['str_hotel_name'] = str_hotel_name
+
+        if obj_condition.has_key('nProvinceID') and obj_condition['nProvinceID']:
+            int_provinceID = obj_condition['nProvinceID']
+            str_sql += ' And h_hotel.ProvinceID = :int_provinceID '
+            lst_params.append('h_hotel.ProvinceID = :int_provinceID')
+            dict_params_value['int_provinceID'] = int_provinceID
+
+        if obj_condition.has_key('nCityID') and obj_condition['nCityID']:
+            int_cityID = obj_condition['nCityID']
+            str_sql += ' And CityID = :int_cityID '
+            lst_params.append('h_hotel.CityID = :int_cityID')
+            dict_params_value['int_cityID'] = int_cityID
+
+        if obj_condition.has_key('nDistrictID') and obj_condition['nDistrictID']:
+            int_districtID = obj_condition['nDistrictID']
+            str_sql += ' And DistrictID = :int_districtID '
+            lst_params.append('h_hotel.DistrictID = :int_districtID')
+            dict_params_value['int_districtID'] = int_districtID
+
+        if obj_condition.has_key('sRoomNo') and obj_condition['sRoomNo']:
+            str_roomNo = obj_condition['sRoomNo']
+            str_sql += ' And RoomNo = :str_roomNo '
+            lst_params.append('h_hotel.RoomNo = :str_roomNo')
+            dict_params_value['str_roomNo'] = str_roomNo
+
+        if obj_condition.has_key('sCheckInDateTimeStart') and obj_condition['sCheckInDateTimeStart']:
+            date_checkin_datetime_start = to_datetime(obj_condition['sCheckInDateTimeStart'])
+            str_sql += ' And h_checkin.CheckInTime > :date_checkin_datetime_start '
+            lst_params.append('h_checkin.CheckInTime > :date_checkin_datetime_start')
+            dict_params_value['date_checkin_datetime_start'] = date_checkin_datetime_start
+
+        if obj_condition.has_key('sCheckInDateTimeEnd') and obj_condition['sCheckInDateTimeEnd']:
+            date_checkin_datetime_end = to_datetime(obj_condition['sCheckInDateTimeEnd'])
+            str_sql += ' And h_checkin.CheckInTime <= :date_checkin_datetime_end '
+            lst_params.append('h_checkin.CheckInTime <= :date_checkin_datetime_end')
+            dict_params_value['date_checkin_datetime_end'] = date_checkin_datetime_end
+
+        if obj_condition.has_key('sNationality') and obj_condition['sNationality']:
+            str_nationality = obj_condition['Nationality']
+            str_sql += ' And g.Nationality = :str_nationality '
+            lst_params.append('g.Nationality = :str_nationality')
+            dict_params_value['str_nationality'] = str_nationality
+
+        # 证件信息
+        if obj_condition.has_key('sHotelGuestNameLike') and obj_condition['sHotelGuestNameLike']:
+            str_hotel_guest_name = obj_condition['sHotelGuestNameLike']
+            str_sql += ' And g_guest_doc.HotelGuestName = :str_hotel_guest_name '
+            lst_params.append('g_guest_doc.HotelGuestName = :str_hotel_guest_name')
+            dict_params_value['str_hotel_guest_name'] = str_hotel_guest_name
+
+        if obj_condition.has_key('nHotelDocType') and obj_condition['nHotelDocType']:
+            int_hotel_doc_type = obj_condition['nHotelDocType']
+            str_sql += ' And g_guest_doc.HotelDocType = :int_hotel_doc_type '
+            lst_params.append('g_guest_doc.HotelDocType = :int_hotel_doc_type')
+            dict_params_value['int_hotel_doc_type'] = int_hotel_doc_type
+
+        if obj_condition.has_key('sHotelDocNoLikeL') and obj_condition['sHotelDocNoLikeL']:
+            int_hotel_docNo = obj_condition['sHotelDocNoLikeL']
+            str_sql += ' And g_guest_doc.HotelDocNo = :int_hotel_docNo '
+            lst_params.append('g_guest_doc.HotelDocNo = :int_hotel_docNo')
+            dict_params_value['int_hotel_docNo'] = int_hotel_docNo
+
+        # 入住出示证件信息
+        if obj_condition.has_key('sGuestDocNameLike') and obj_condition['sGuestDocNameLike']:
+            str_guest_doc_name = obj_condition['sGuestDocNameLike']
+            str_sql += ' And g_guest_checkin.GuestDocName = :str_guest_doc_name '
+            lst_params.append('g_guest_checkin.GuestDocName = :str_guest_doc_name')
+            dict_params_value['str_guest_doc_name'] = str_guest_doc_name
+
+        if obj_condition.has_key('nDocType') and obj_condition['nDocType']:
+            int_doc_type = obj_condition['nDocType']
+            str_sql += ' And g_guest_checkin.DocType = :int_doc_type '
+            lst_params.append('g_guest_checkin.DocType = :int_doc_type')
+            dict_params_value['int_doc_type'] = int_doc_type
+
+        if obj_condition.has_key('sDocNoLikeL') and obj_condition['sDocNoLikeL']:
+            str_docNo = obj_condition['sDocNoLikeL']
+            str_sql += ' And g_guest_checkin.DocNo = :str_docNo '
+            lst_params.append('g_guest_checkin.DocNo = :str_docNo')
+            dict_params_value['str_docNo'] = str_docNo
+
+        if obj_condition.has_key('nSex') and obj_condition['nSex']:
+            int_Sex = obj_condition['nSex']
+            str_sql += ' And g_guest_checkin.Sex = :int_Sex '
+            lst_params.append('g_guest_checkin.Sex = :int_Sex')
+            dict_params_value['int_Sex'] = int_Sex
+
+        if obj_condition.has_key('sNation') and obj_condition['sNation']:
+            str_nation = obj_condition['sNation']
+            str_sql += ' And g_guest_checkin.Nation = :str_nation '
+            lst_params.append('g_guest_checkin.Nation = :str_nation')
+            dict_params_value['str_nation'] = str_nation
+
+        if obj_condition.has_key('sBornDateStart') and obj_condition['sBornDateStart']:
+            str_born_date_start = to_datetime(obj_condition['sBornDateStart'])
+            str_sql += ' And g_guest_checkin.BornDate > :str_born_date_start '
+            lst_params.append('g_guest_checkin.BornDateStart = :str_born_date_start')
+            dict_params_value['str_born_date_start'] = str_born_date_start
+
+        if obj_condition.has_key('sBornDateEnd') and obj_condition['sBornDateEnd']:
+            str_born_date_end = to_datetime(obj_condition['BornDateEnd'])
+            str_sql += ' And g_guest_checkin.BornDate <= :str_born_date_end '
+            lst_params.append('g_guest_checkin.BornDateEnd = :str_born_date_end')
+            dict_params_value['str_born_date_end'] = str_born_date_end
+
+        if obj_page:
+            str_sql += ' Limit %s, %s ' % ((obj_page['nPageNo'] - 1) * obj_page['nPageSize'], obj_page['nPageSize'])
+            lst_rows_count = web.ctx.cur_dbconn.execute(text('SELECT FOUND_ROWS()')).fetchone()
+            if lst_rows_count and len(lst_rows_count) > 0:
+                int_total_count = lst_rows_count[0]
+
+        lst_query_data = web.ctx.cur_dbconn.execute(text(str_sql),
+                                                **dict_params_value).fetchall()
+
+        lst_data = []
+        for obj_data in lst_query_data:
+            lst_data.append(web.storage(**obj_to_dict(obj_data)))
+
+            # lst_hotel = Hotel().query.filter(Hotel.HotelName.like(obj_condition['sHotelNameLike']),
+            #                                    Hotel.ProvinceID == obj_condition['nProvinceID'] if obj_condition.has_key('nProvinceID') else '',
+            #                                    Hotel.CityID == obj_condition['nCityID'] if obj_condition.has_key('nCityID') else '',
+            #                                    Hotel.DistrictID == obj_condition['nDistrictID'] if obj_condition.has_key('nDistrictID') else '').all()
+            # # 格式化日期
+            # if obj_condition.has_key('sCheckInDateTimeStart') and obj_condition['sCheckInDateTimeStart']:
+            #     checkin_datetime_start = to_datetime(obj_condition['sCheckInDateTimeStart'])
+            # if obj_condition.has_key('sCheckInDateTimeEnd') and obj_condition['sCheckInDateTimeEnd']:
+            #     checkin_datetime_end = to_datetime(obj_condition['sCheckInDateTimeEnd'])
+            #
+            # lst_checkIn = CheckIn().query.filter(CheckIn.RoomNo == obj_condition['sRoomNo'] if obj_condition.has_key('sRoomNo') else '',
+            #                                      CheckIn.HotelID == [obj_hotel.HotelID for obj_hotel in lst_hotel] if lst_hotel else '',
+            #                                      and_(CheckIn.CheckInTime >= checkin_datetime_start if obj_condition.has_key('sCheckInDateTimeStart') else '',
+            #                                           CheckIn.CheckInTime < checkin_datetime_end if obj_condition.has_key('sCheckInDateTimeEnd') else '')).all()
+            #
+            # lst_relation_checkIn = RelationCheckIn().query.filter(RelationCheckIn.CheckInID == [obj_checkIn.HotelID for obj_checkIn in lst_checkIn] if lst_checkIn else '')\
+            #                                         .all()
+            #
+            # lst_guest_checkIn = GuestCheckIn().query.filter(GuestCheckIn.HotelGuestName.like(obj_condition['sHotelGuestNameLike']) if obj_condition.has_key('sCheckInDateTimeStart') else '',
+            #                                                 GuestCheckIn.HotelDocType == obj_condition['nHotelDocType'] if obj_condition.has_key('nHotelDocType') else '',
+            #                                                 GuestCheckIn.HotelDocNo == obj_condition['sHotelDocNoLikeL'] if obj_condition.has_key('sHotelDocNoLikeL') else '').all()
+            #
+            # for obj_hotel in lst_relation_checkIn:
+            #     print obj_hotel.CheckInID
+            # if not query_data:
+            #     return FuncResult(success=True, msg='无数据!')
+
+        return FuncResult(success=True, data={'PageNo': obj_page['nPageNo'], 'PageSize': obj_page['nPageSize'],
+                                              'PageCount': int_total_count, 'DataList': lst_data})
+
+

@@ -1,0 +1,22 @@
+import { Component, OnInit } from '@angular/core';
+import { SystemManagementService } from 'src/app/services/system-management.service';
+
+@Component({
+    selector: 'app-parameter-config',
+    templateUrl: './parameter-config.component.html',
+    styleUrls: ['./parameter-config.component.less']
+})
+export class ParameterConfigComponent implements OnInit {
+    /**面包屑导航信息 */
+    m_lsBreadCrumbList: Array<{ name: string, routelink: string }> = [
+        { name: '首页', routelink: '/main' },
+        { name: '参数配置', routelink: '' },
+    ];
+    constructor(
+        private m_objSystemManagementService: SystemManagementService,
+    ) { }
+
+    ngOnInit() {
+    }
+
+}

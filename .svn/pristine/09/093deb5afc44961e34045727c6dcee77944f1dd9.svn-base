@@ -1,0 +1,95 @@
+# coding: utf-8
+
+import web
+from sqlalchemy import text, and_
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped, table_query
+from models.hps.u_user import User
+from utils import json_to_obj, obj_to_json
+from utils.func_api import FuncResult
+from utils.tools import is_null
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        obj_input = web.input()
+        try:
+            int_search_user_id = obj_input.get('nSearchUserIDMust')
+            str_search_user_code = obj_input.get('sSearchUserCodeMust')
+            obj_page = json_to_obj(obj_input.get('objPageInfo'))
+            obj_condition = json_to_obj(obj_input.get('objCondition'))
+            # obj_condition = {'nState': "1", 'sUserCode': "322323"}
+            if is_null(int_search_user_id):
+                return FuncResult(fail='参数\'nSearchUserIDMust\'不能为空')
+            elif is_null(str_search_user_code):
+                return FuncResult(fail='参数\'nSearchUserCodeMust\'不能为空')
+            elif is_null(obj_condition):
+                return FuncResult(msg='参数\'objCondition\'不能为空')
+        except Exception, ce:
+            return FuncResult(fail='参数有误!')
+
+        return self.add_user(int_search_user_id, str_search_user_code, obj_page, obj_condition)
+
+    def add_user(self, int_search_user_id, str_search_user_code, obj_page, obj_condition):
+
+        lst_params = []
+        dict_params_value = {}
+        if obj_condition.has_key('nUserID') and obj_condition['nUserID']:
+            int_userID = obj_condition['nUserID']
+            lst_params.append('u_user.UserID = :int_userID')
+            dict_params_value['int_userID'] = int_userID
+
+        if obj_condition.has_key('sUserCode') and obj_condition['sUserCode']:
+            str_User_Code = obj_condition['sUserCode']
+            lst_params.append('u_user.UserCode = :str_User_Code')
+            dict_params_value['lst_params'] = str_User_Code
+
+        if obj_condition.has_key('sTel') and obj_condition['sTel']:
+            str_tel = obj_condition['sTel']
+            lst_params.append('u_user.Tel = :str_tel')
+            dict_params_value['str_tel'] = str_tel
+
+        if obj_condition.has_key('nState') and obj_condition['nState']:
+            int_state = obj_condition['nState']
+            lst_params.append('u_user.State = :int_state')
+            dict_params_value['int_state'] = int_state
+
+        if obj_condition.has_key('sWorkCode') and obj_condition['sWorkCode']:
+            str_Work_Code = obj_condition['sWorkCode']
+            lst_params.append('u_user.WorkCode = :str_Work_Code')
+            dict_params_value['str_Work_Code'] = str_Work_Code
+
+        if obj_condition.has_key('sUserName') and obj_condition['sUserName']:
+            str_username = obj_condition['sUserName']
+            lst_params.append('u_user.UserName = :str_username')
+            dict_params_value['str_username'] = str_username
+
+        if obj_condition.has_key('sPost') and obj_condition['sPost']:
+            str_post = obj_condition['sPost']
+            lst_params.append('u_user.Post = :str_post')
+            dict_params_value['str_post'] = str_post
+
+        if obj_condition.has_key('sCreateTimeStart') and obj_condition['sCreateTimeStart']:
+            str_create_time_start = obj_condition['sCreateTimeStart']
+            lst_params.append('u_user.CreateTimeStart = :str_create_time_start')
+            dict_params_value['str_create_time_start'] = str_create_time_start
+
+        if obj_condition.has_key('sCreateTimeEnd') and obj_condition['sCreateTimeEnd']:
+            str_create_time_end = obj_condition['sCreateTimeEnd']
+            lst_params.append('u_user.CreateTimeEnd = :str_create_time_end')
+            dict_params_value['str_create_time_end'] = str_create_time_end
+
+        # if obj_page:
+        #     lst_rows_count = web.ctx.cur_dbconn.execute(text('SELECT FOUND_ROWS()')).fetchone()
+        #     if lst_rows_count and len(lst_rows_count) > 0:
+        #         total_count = lst_rows_count[0]
+
+        lst_data = table_query(User, lst_params, dict_params_value, obj_page)
+        print lst_data
+        # str_data = obj_to_json(lst_data)
+        return FuncResult(success=True, msg='操作成功！')

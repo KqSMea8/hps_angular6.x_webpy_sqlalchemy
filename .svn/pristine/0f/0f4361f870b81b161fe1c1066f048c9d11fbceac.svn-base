@@ -1,0 +1,55 @@
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { ContextService } from 'src/app/services/context.service';
+import { City } from 'src/app/class/City';
+import { District } from 'src/app/class/district';
+import { AreaChooseOutput } from 'src/app/class/areaChooseOutput';
+
+@Component({
+    selector: 'app-area-choose',
+    templateUrl: './area-choose.component.html',
+    styleUrls: ['./area-choose.component.less']
+})
+export class AreaChooseComponent implements OnInit {
+    @Output()  private m_objCurrentInfo = new EventEmitter();
+    /**当前选中的省市区ID */
+    m_objAreaChooseOutput: AreaChooseOutput = new AreaChooseOutput();
+    /**当前选中的省市区列表 */
+    m_lsCurrentCity: City[] = [];
+    m_lsCurrentDistrict: District[] = [];
+    constructor(
+        public m_objContextService: ContextService
+    ) { }
+
+    ngOnInit() {
+
+    }
+
+    /**省市联动 */
+    fnCurrentProvinceChange(): void {
+        this.m_lsCurrentCity = [];
+        this.m_objAreaChooseOutput.CurrentCityID = null;
+        this.m_lsCurrentDistrict = [];
+        this.m_objAreaChooseOutput.CurrentDistrictID = null;
+        for (const cityItem of this.m_objContextService.m_lsCity) {
+            if (this.m_objAreaChooseOutput.CurrentProvinceID === cityItem.ProvinceID) {
+                this.m_lsCurrentCity.push(cityItem);
+            }
+        }
+        this.fnSendMessage();
+    }
+    /**市区联动 */
+    fnCurrentCityChange(): void {
+        this.m_lsCurrentDistrict = [];
+        this.m_objAreaChooseOutput.CurrentDistrictID = null;
+        for (const districtItem of this.m_objContextService.m_lsDistrict) {
+            if (this.m_objAreaChooseOutput.CurrentCityID === districtItem.CityID) {
+                this.m_lsCurrentDistrict.push(districtItem);
+            }
+        }
+        this.fnSendMessage();
+    }
+    /**向父组件发送消息 */
+    fnSendMessage(): void {
+        this.m_objCurrentInfo.emit(this.m_objAreaChooseOutput);
+    }
+}

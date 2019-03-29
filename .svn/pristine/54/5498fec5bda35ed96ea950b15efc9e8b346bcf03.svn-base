@@ -1,0 +1,138 @@
+import { Injectable } from '@angular/core';
+import { differenceInCalendarDays } from 'date-fns';
+import { User } from '../class/user';
+import { ApiService } from './api.service';
+import { Router } from '@angular/router';
+import { Province } from '../class/province';
+import { City } from '../class/City';
+import { District } from '../class/district';
+import { AllDictResult } from '../class/dictionary';
+import { UpdateDict } from '../class/updateDict';
+import { NzMessageService } from 'ng-zorro-antd';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ContextService {
+    m_objUserInfo: User = new User();
+    m_sUserInfoName = 'm_objUserInfo';
+    m_nTabActivedIndex = 0;
+    m_nSubTabActivedIndex = 0;
+    m_nUserID = 0;
+    /**日期组件-日期的格式 */
+    m_sDateFormat = 'yyyy-MM-dd';
+    /**当前时间日期 */
+    m_dToday = new Date();
+    /**省市区列表 */
+    m_lsProvince: Province<City>[] = [];
+    m_lsCity: City[] = [];
+    m_lsDistrict: District[] = [];
+    m_nMustUserID: number;
+    m_sMustUserName: string;
+    m_objAllDict: AllDictResult = new AllDictResult();
+    m_objUpdateDict: UpdateDict = new UpdateDict();
+
+    constructor(
+        private m_objApiService: ApiService,
+        private m_objRouter: Router,
+        private m_objMessageService: NzMessageService
+    ) {
+        this.m_objUserInfo.UserName = '';
+        this.fnRestoreState();
+        this.fnGetUserInfo();
+        this.fnGetProvince();
+        this.fnGetDict();
+    }
+
+    /**修改字典 */
+    fnUpdateDict(): void {
+        this.m_objApiService.fnUpdateDict(this.m_objUpdateDict).subscribe( data => {
+            if (data.Code === 200) {
+                this.m_objMessageService.success('修改成功！');
+            } else {
+                this.m_objMessageService.error(data.Msg);
+            }
+        });
+    }
+
+    /**获取字典 */
+    fnGetDict(): void {
+        this.m_objApiService.fnGetDict().subscribe(u => {
+            console.log(u);
+            this.m_objAllDict = u.Data;
+        });
+    }
+
+    /**禁止点击的时间 */
+    fnDisabledDate = (dCurrent: Date): boolean => {
+        return differenceInCalendarDays(dCurrent, this.m_dToday) > 0;
+    }
+
+    /**存储登录状态信息至Session */
+    fnSaveLoginState(objUserInfo: User): void {
+        this.m_objUserInfo = objUserInfo;
+        sessionStorage[this.m_sUserInfoName] = JSON.stringify(objUserInfo);
+    }
+
+    /**恢复上下文登录状态 */
+    fnRestoreState(): void {
+        if (sessionStorage[this.m_sUserInfoName]) {
+            this.m_objUserInfo = JSON.parse(sessionStorage[this.m_sUserInfoName]);
+        } else {
+            this.fnLogout();
+        }
+    }
+
+    /**退出登录 */
+    fnLogout(): void {
+        // debugger;
+        this.m_objApiService.fnLogout().subscribe(data => {
+            if (data.Code === 200) {
+                sessionStorage.removeItem(this.m_sUserInfoName);
+                this.m_objUserInfo = null;
+                this.m_objRouter.navigate(['/']);
+            }
+        });
+    }
+    /**获取省份 */
+    fnGetProvince(): void {
+        this.m_objApiService.fnGetProvince().subscribe(data => {
+            if (data.Code === 200) {
+                this.m_lsProvince = data.Data;
+                this.fnGetCity();
+                this.fnGetDistrict();
+            }
+        });
+    }
+
+    /**获取城市 */
+    fnGetCity(): void {
+        this.m_objApiService.fnGetCity().subscribe(data => {
+            if (data.Code === 200) {
+                this.m_lsCity = data.Data;
+                // for (let i = 0; i < this.m_lsProvince.length; i++) {
+                //     for (let y = 0; y < data.Data.length; y++) {
+                //         if (this.m_lsProvince[i].ProvinceID === data.Data[y].ProvinceID) {
+                //             this.m_lsProvince[i].CitySet.push(data.Data[y]);
+                //         }
+                //     }
+                // }
+            }
+        });
+    }
+
+    /**获取区域 */
+    fnGetDistrict(): void {
+        this.m_objApiService.fnGetDistrict().subscribe(data => {
+            if (data.Code === 200) {
+                this.m_lsDistrict = data.Data;
+            }
+        });
+    }
+    /**获取登录用户的信息 */
+    fnGetUserInfo(): void {
+        if (sessionStorage['m_objUserInfo']) {
+            this.m_nUserID = JSON.parse(sessionStorage['m_objUserInfo']).UserID;
+        }
+    }
+}

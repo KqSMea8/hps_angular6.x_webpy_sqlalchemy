@@ -1,0 +1,15 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-checkin-log-list',
+  templateUrl: './checkin-log-list.component.html',
+  styleUrls: ['./checkin-log-list.component.less']
+})
+export class CheckinLogListComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}

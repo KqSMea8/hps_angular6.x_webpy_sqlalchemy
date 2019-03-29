@@ -1,0 +1,71 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.h_hotel import Hotel
+from utils.func_api import FuncResult
+from utils.tools import is_null
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        # 获取请求参数
+        objInput = web.input()
+
+        try:
+            nHotelID = objInput.get('nHotelID')
+            if is_null(nHotelID):
+                return FuncResult(fail='参数：nHotelID不能为空')
+
+            nVerifyUserIDMust = objInput.get('nVerifyUserIDMust')
+            if is_null(nVerifyUserIDMust):
+                return FuncResult(fail='参数：nVerifyUserIDMust不能为空')
+
+            sVerifyUserCodeMust = objInput.get('sVerifyUserNameMust')
+            if is_null(sVerifyUserCodeMust):
+                return FuncResult(fail='参数：sVerifyUserCodeMust不能为空')
+
+            sVerifyDateTimeMust = objInput.get('sVerifyDateTimeMust')
+            if is_null(sVerifyDateTimeMust):
+                return FuncResult(fail='参数：sVerifyDateTimeMust不能为空')
+
+            nAuditState = objInput.get('nAuditState')
+            if is_null(nAuditState):
+                return FuncResult(fail='参数：nAuditState不能为空')
+            sRemark = objInput.get('sRemark')
+
+        except Exception, ce:
+            # 异常处理
+            return FuncResult(fail='参数有误!')
+
+        return self.add_hotel(nHotelID, nVerifyUserIDMust, sVerifyUserCodeMust, sVerifyDateTimeMust, nAuditState,
+                              sRemark)
+
+    def add_hotel(self, nHotelID, nVerifyUserIDMust, sVerifyUserCodeMust, sVerifyDateTimeMust, nAuditState, sRemark):
+
+        # 查找对应HotelID的酒店数据
+        objHotel = Hotel().query.filter(Hotel.HotelID == nHotelID).first()
+
+        # 赋值
+        if not is_null(nVerifyUserIDMust):
+            objHotel.AuditUserID = nVerifyUserIDMust
+        if not is_null(sVerifyUserCodeMust):
+            objHotel.AuditUserCode = sVerifyUserCodeMust
+        if not is_null(sVerifyDateTimeMust):
+            objHotel.AuditTime = sVerifyDateTimeMust
+        if not is_null(nAuditState):
+            objHotel.AuditState = nAuditState
+        if not is_null(sRemark):
+            objHotel.HotelTel = sRemark
+
+        # 保存到数据库
+        objHotel.save()
+
+        return FuncResult(success=True, msg='擦作成功!')

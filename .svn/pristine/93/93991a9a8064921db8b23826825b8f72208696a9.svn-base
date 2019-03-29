@@ -1,0 +1,28 @@
+<!-- <ul class="condition-list">
+    <li>
+        <p>范围</p>
+        <nz-select nzAllowClear [(ngModel)]="m_nCurrentProvinceID" nzPlaceHolder="省份" (ngModelChange)="fnCurrentProvinceChange()">
+            <nz-option *ngFor="let item of m_lsAreaSelect" [nzLabel]="item.Province" [nzValue]="item.ProvinceID">
+            </nz-option>
+        </nz-select>
+        <nz-select nzAllowClear [(ngModel)]="m_nCurrentCityID" nzPlaceHolder="市/州" (ngModelChange)="fnCurrentcityChange()">
+            <nz-option *ngFor="let item of m_lsCurrentCityList" [nzLabel]="item.CityName" [nzValue]="item.CityID"></nz-option>
+        </nz-select>
+        <nz-select nzAllowClear [(ngModel)]="m_nCurrentDistrictID" nzPlaceHolder="区域">
+            <nz-option *ngFor="let item of m_lsCurrentDistrictList" [nzLabel]="item.District" [nzValue]="item.DistrictID"></nz-option>
+        </nz-select>
+    </li>
+</ul> -->
+<nz-select class="input-middle" nzAllowClear [(ngModel)]="m_nCurrentProvinceID" nzPlaceHolder="省份" 
+    (ngModelChange)="fnCurrentProvinceChange()" (nzOnSearch)="fnCurrentProvinceChange()">
+    <nz-option *ngFor="let item of m_lsAreaSelect" [nzLabel]="item.Province" [nzValue]="item.ProvinceID">
+    </nz-option>
+</nz-select>
+<nz-select class="input-middle" nzAllowClear [(ngModel)]="m_nCurrentCityID" nzPlaceHolder="市/州"
+    (ngModelChange)="fnCurrentcityChange()" (nzOnSearch)="fnCurrentcityChange()">
+    <nz-option *ngFor="let item of m_lsCurrentCityList" [nzLabel]="item.CityName" [nzValue]="item.CityID"></nz-option>
+    <!-- <nz-option [nzLabel]="m_nCurrentProvinceID" [nzValue]="m_nCurrentProvinceID"></nz-option> -->
+</nz-select>
+<nz-select class="input-middle" nzAllowClear [(ngModel)]="m_nCurrentDistrictID" nzPlaceHolder="区域">
+    <nz-option *ngFor="let item of m_lsCurrentDistrictList" [nzLabel]="item.District" [nzValue]="item.DistrictID"></nz-option>
+</nz-select>

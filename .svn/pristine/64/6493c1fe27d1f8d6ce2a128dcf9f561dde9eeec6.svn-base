@@ -1,0 +1,13 @@
+import { Injectable } from '@angular/core';
+import { Subtab } from '../class/sidebar';
+import { ContextService } from './context.service';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class SystemManagementService {
+    m_nIsShowTypeID = 0;
+    constructor(
+        private m_objContextService: ContextService
+    ) { }
+}

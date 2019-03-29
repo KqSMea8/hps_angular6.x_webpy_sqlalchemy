@@ -1,0 +1,72 @@
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppRoutingModule } from './routes/app-routing.module';
+import { AppComponent } from './app.component';
+import { HttpService } from './services/http.service';
+import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
+import { registerLocaleData } from '@angular/common';
+import zh from '@angular/common/locales/zh';
+import { HotelSearchComponent } from './pages/main/hotel-management/hotel-search/hotel-search.component';
+import { HotelAddComponent } from './pages/main/hotel-management/hotel-add/hotel-add.component';
+import { CheckinLogListComponent } from './pages/main/search-checkin-list/checkin-log-list/checkin-log-list.component';
+import { LoginComponent } from './pages/login/login.component';
+import { HeaderComponent } from './components/header/header.component';
+import { AllGuestComponent } from './pages/main/guest-checkin-list/all-guest/all-guest.component';
+import { ForeignGuestComponent } from './pages/main/guest-checkin-list/foreign-guest/foreign-guest.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { CheckinListComponent } from './pages/main/search-checkin-list/checkin-list/checkin-list.component';
+import { UserInfoComponent } from './pages/main/system-management/user-info/user-info.component';
+import { UserManageComponent } from './pages/main/system-management/user-manage/user-manage.component';
+import { LogComponent } from './pages/main/system-management/log/log.component';
+import { GuestDetailsComponent } from './pages/main/guest-checkin-list/guest-details/guest-details.component';
+import { LoadingComponent } from './components/loading/loading.component';
+import { HotelVerifyComponent } from './pages/main/hotel-management/hotel-verify/hotel-verify.component';
+import { HotelOfflineComponent } from './pages/main/hotel-management/hotel-offline/hotel-offline.component';
+import { RouteReuseStrategy } from '@angular/router';
+import { MyRouteReuseStrategy } from './utils/MyRouteReuseStrategy';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+
+registerLocaleData(zh);
+
+@NgModule({
+    declarations: [
+        AppComponent,
+        HotelSearchComponent,
+        CheckinLogListComponent,
+        HotelAddComponent,
+        LoginComponent,
+        HeaderComponent,
+        AllGuestComponent,
+        ForeignGuestComponent,
+        SidebarComponent,
+        CheckinListComponent,
+        UserInfoComponent,
+        UserManageComponent,
+        LogComponent,
+        GuestDetailsComponent,
+        LoadingComponent,
+        HotelVerifyComponent,
+        HotelOfflineComponent,
+        BreadcrumbComponent,
+
+    ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        NgZorroAntdModule,
+        ReactiveFormsModule,
+    ],
+    providers: [
+        HttpService,
+        { provide: NZ_I18N, useValue: zh_CN },
+        { provide: RouteReuseStrategy, useClass: MyRouteReuseStrategy }
+    ],
+    bootstrap: [AppComponent]
+})
+export class AppModule { }

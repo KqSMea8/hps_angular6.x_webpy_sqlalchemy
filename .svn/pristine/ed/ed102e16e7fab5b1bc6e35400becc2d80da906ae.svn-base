@@ -1,0 +1,8 @@
+<nz-upload
+    nzAction="https://jsonplaceholder.typicode.com/posts/"
+    [nzFileList]="fileList">
+    <button nz-button>
+        <i nz-icon type="upload"></i><span>附件上传</span>
+    </button>
+</nz-upload>
+

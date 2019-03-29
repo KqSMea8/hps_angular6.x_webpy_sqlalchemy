@@ -1,0 +1,50 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.u_user import User
+from utils.func_api import FuncResult
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        '''
+        获取请求参数
+        '''
+        obj_input = web.input()
+        try:
+            int_userID = input.get('nUserID')
+            str_update_userID_must = obj_input.get('sUpdateUserIDMust')
+            str_update_user_code_must = obj_input.get('sUpdateUserCodeMust')
+            str_role_list = input.get('sRoleList')
+            str_user_data_role_list = input.get('sUserDataRoleList')
+            if not str_update_userID_must:
+                return FuncResult(fail='参数\'sUpdateUserIDMust\'不能为空')
+            elif not str_update_user_code_must:
+                return FuncResult(fail='参数\'sUpdateUserCodeMust\'不能为空')
+
+        except Exception, ce:
+            # 异常处理
+            return FuncResult(fail='参数有误!')
+
+        return self.update_role(int_userID, str_role_list, str_user_data_role_list)
+
+    def update_role(self, int_userID, str_role_list, str_user_data_role_list):
+        # 新增数据
+        obj_user = User().query.filter(User.UserID == int_userID) \
+            .first()
+        if obj_user:
+            obj_user.UserID = int_userID
+            obj_user.RoleList = str_role_list
+            obj_user.UserDataRoleList = str_user_data_role_list
+            # 保存更改到数据库
+            obj_user.save()
+
+        return FuncResult(success=True, msg='操作成功！', data=int_UserID)

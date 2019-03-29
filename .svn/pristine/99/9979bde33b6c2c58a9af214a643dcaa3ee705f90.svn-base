@@ -1,0 +1,73 @@
+import { Component, OnInit } from '@angular/core';
+import { SystemManagementService } from 'src/app/services/system-management.service';
+import { ContextService } from 'src/app/services/context.service';
+import { ApiService } from 'src/app/services/api.service';
+
+@Component({
+    selector: 'app-parameter-config',
+    templateUrl: './parameter-config.component.html',
+    styleUrls: ['./parameter-config.component.less']
+})
+export class ParameterConfigComponent implements OnInit {
+    m_objHaveData: any = [0];
+    m_lsDomestic: any[] = [];
+    /**面包屑导航信息 */
+    m_lsBreadCrumbList: Array<{ name: string, routelink: string }> = [
+        { name: '首页', routelink: '/main' },
+        { name: '参数配置', routelink: '' },
+    ];
+    /**0、境内证件 1、境外证件 2、旅店类型 3、省份 4、市 5、区域 */
+    m_lsIsShow = [false, false, false, false, false];
+    m_bIsOkLoading: boolean;
+    constructor(
+        public m_objSystemManagementService: SystemManagementService,
+        private m_objContextService: ContextService,
+        private m_objApiService: ApiService,
+    ) { }
+
+    ngOnInit() {
+
+    }
+
+    /**显示与关闭境内证件弹窗 */
+    fnShowHidePop(nIndex: number): any {
+        this.m_lsIsShow[nIndex] = !this.m_lsIsShow[nIndex];
+    }
+
+    fnChangeSelect(aEvent: any, nIndex: number): void {
+        console.log(aEvent);
+    }
+
+    /**保存国内证件类型修改 */
+    // fnSaveDomesticCard(aEvent: any): void {
+    fnSaveDomesticCard(): void {
+        // console.log(aEvent);
+    }
+
+    /**保存境外证件类型修改 */
+    fnSaveOverseasCard(): void {
+        // this.m_objApiService.fnUpdateDict().subscribe( data => {
+
+        // })
+    }
+
+    /**保存旅店类型修改 */
+    fnSaveHotelType(): void {
+
+    }
+
+    /**保存省份修改 */
+    fnSaveProvince(): void {
+
+    }
+
+    /**保存市级修改 */
+    fnSaveCity(): void {
+
+    }
+
+    /**保存区域修改 */
+    fnSaveDistrict(): void {
+
+    }
+}

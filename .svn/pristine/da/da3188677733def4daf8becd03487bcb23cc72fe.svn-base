@@ -1,0 +1,29 @@
+import { Component, OnInit } from '@angular/core';
+import { ContextService } from '../../services/context.service';
+
+@Component({
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.less']
+})
+export class HeaderComponent implements OnInit {
+
+    private m_aTabList = [
+        {tabName: '旅客入住查询', tabIcon: 'guest-checkin.png', routeName: '/main/GuestCheckinList'},
+        {tabName: '旅店开房查询', tabIcon: 'hotel-checkin.png', routeName: '/main/HotelSearch'},
+        {tabName: '旅客管理', tabIcon: 'hotel-manage.png', routeName: ''},
+        {tabName: '系统管理', tabIcon: 'system-manage.png', routeName: ''}
+    ];
+
+    constructor(
+        public m_objContextService: ContextService,
+    ) { }
+
+    ngOnInit() {
+    }
+
+    fnSelected(index: number): void {
+        console.log(index);
+        this.m_objContextService.m_nTabActivedIndex = index;
+    }
+}

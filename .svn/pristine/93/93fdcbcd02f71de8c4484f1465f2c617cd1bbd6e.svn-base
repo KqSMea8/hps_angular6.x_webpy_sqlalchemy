@@ -1,0 +1,63 @@
+@import "styles.less";
+.log {
+    overflow: auto;
+    background: #fff;
+    
+    ul {
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+
+    .search-condition {
+        overflow: hidden;
+        background: #fff;
+
+        margin-bottom: 10px;
+
+        .item {
+            padding-bottom: 15px;
+
+            // &:not(:first-child) {
+            //     padding-top: 15px;
+            //     border-top: 1px dashed #ccc;
+            // }
+
+            .condition-list {
+                display: flex;
+                align-items: center;
+                
+                li {
+                    margin: 5px 20px 5px 0;
+                    
+                    p {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 10px;
+                    }
+    
+                    span {
+                        margin: 0 10px;
+                    }
+                    nz-select {
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+
+        .filter-button {
+            display: flex;
+            justify-content: flex-end;
+
+            margin-top: 10px;
+        }
+
+    }
+    
+    .search-data-list {
+
+        th, td{
+            white-space: nowrap;
+        }
+    }
+}

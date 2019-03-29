@@ -1,0 +1,66 @@
+/* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
+/* stylelint-disable no-duplicate-selectors */
+/* stylelint-disable */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
+.ant-modal-confirm .ant-modal-header {
+  display: none;
+}
+.ant-modal-confirm .ant-modal-close {
+  display: none;
+}
+.ant-modal-confirm .ant-modal-body {
+  padding: 32px 32px 24px;
+}
+.ant-modal-confirm-body-wrapper {
+  zoom: 1;
+}
+.ant-modal-confirm-body-wrapper:before,
+.ant-modal-confirm-body-wrapper:after {
+  content: '';
+  display: table;
+}
+.ant-modal-confirm-body-wrapper:after {
+  clear: both;
+}
+.ant-modal-confirm-body .ant-modal-confirm-title {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.4;
+  display: block;
+  overflow: hidden;
+}
+.ant-modal-confirm-body .ant-modal-confirm-content {
+  margin-left: 38px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.65);
+  margin-top: 8px;
+}
+.ant-modal-confirm-body > .anticon {
+  font-size: 22px;
+  margin-right: 16px;
+  float: left;
+}
+.ant-modal-confirm .ant-modal-confirm-btns {
+  margin-top: 24px;
+  float: right;
+  display: flex;
+  flex-direction: row-reverse;
+}
+.ant-modal-confirm .ant-modal-confirm-btns button + button {
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+.ant-modal-confirm-error .ant-modal-confirm-body > .anticon {
+  color: #f5222d;
+}
+.ant-modal-confirm-warning .ant-modal-confirm-body > .anticon,
+.ant-modal-confirm-confirm .ant-modal-confirm-body > .anticon {
+  color: #faad14;
+}
+.ant-modal-confirm-info .ant-modal-confirm-body > .anticon {
+  color: #1890ff;
+}
+.ant-modal-confirm-success .ant-modal-confirm-body > .anticon {
+  color: #52c41a;
+}

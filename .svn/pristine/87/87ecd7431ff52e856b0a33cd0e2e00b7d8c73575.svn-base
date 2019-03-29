@@ -1,0 +1,96 @@
+import { ContextService } from 'src/app/services/context.service';
+import { Router } from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { Subtab } from "src/app/class/sidebar";
+import { ApiService } from "./../../../../services/api.service";
+import { SearchCondition } from "src/app/class/searchCondition";
+import { SearchUserCondition } from "src/app/class/searchUserCondition";
+import { User } from "./../../../../class/user";
+import { Pagination } from "./../../../../class/pagination";
+import { SystemManagementService } from "./../../../../services/system-management.service";
+import { NzMessageService } from "ng-zorro-antd";
+import { AddUserCondition } from "./../../../../class/addUserCondition";
+
+@Component({
+    selector: "app-user-manage",
+    templateUrl: "./user-manage.component.html",
+    styleUrls: ["./user-manage.component.less"]
+})
+export class UserManageComponent implements OnInit {
+    m_nRowcount: number = 0;
+    m_objSubtab: Array<Subtab> = [];
+    m_objAddUserCondition: AddUserCondition = new AddUserCondition();
+    m_objUserList: Pagination<User> = new Pagination<User>();
+    m_objSearchUserCondition: SearchCondition<SearchUserCondition> = new SearchCondition<SearchUserCondition>(SearchUserCondition);
+    m_isVisible: boolean = false;
+    constructor(
+        public m_objApiService: ApiService,
+        public m_objSysService: SystemManagementService,
+        private m_objMessage: NzMessageService,
+        private m_objRouter: Router,
+        private m_objContextService: ContextService
+    ) {}
+
+    ngOnInit() {
+        this.m_objSubtab = this.m_objSysService.m_objSubtab;
+        this.m_objSearchUserCondition.objPageInfo.nPageNo = 1;
+        this.m_objSearchUserCondition.objPageInfo.nPageSize = 10;
+        this.m_objSearchUserCondition.objPageInfo.nSort = 0;
+    }
+
+    /**查询用户列表 */
+    fnGetUserList(): void {
+        this.m_objSearchUserCondition.objCondition.nSearchUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+        this.m_objSearchUserCondition.objCondition.sSearchUserNameMust = this.m_objContextService.m_objUserInfo.UserName;
+        this.m_objApiService
+            .fnSearchUserList(this.m_objSearchUserCondition)
+            .subscribe(data => {
+                if (data.Code === 200) {
+                    this.m_objUserList = data.Data;
+                    this.m_nRowcount = data.Data.RowCount;
+                } else {
+                    this.m_objMessage.create("error", data.Msg);
+                }
+            });
+    }
+
+    fnToUserInfo(nUserID: number): void {
+        this.m_objRouter.navigate(["/main/SystemManagement/UserInfo"]);
+        this.m_objContextService.m_nUserID = nUserID;
+    }
+
+    /**增加用户 */
+    fnAddUser(): void {
+        this.m_objAddUserCondition.nAddUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+        this.m_objAddUserCondition.sAddUserNameMust = this.m_objContextService.m_objUserInfo.UserName;
+        this.m_objAddUserCondition.sWorkCode = this.m_objContextService.m_objUserInfo.UserCode;
+        this.m_objApiService
+            .fnAddUser(this.m_objAddUserCondition)
+            .subscribe(data => {
+                if (data.Code === 200) {
+                    this.m_objMessage.create("success", "新增成功!");
+                    this.m_isVisible = false;
+                } else {
+                    if(data.Msg != ''){
+                        this.m_objMessage.create("error", data.Msg);
+                    } else {
+                        this.m_objMessage.create("error", "操作失败!");
+                    }
+                }
+            });
+    }
+
+    fnShowModal(): void {
+        this.m_isVisible = true;
+    }
+
+    fnHandleCancel(): void {
+        this.m_isVisible = false;
+    }
+
+      /**每页条数的改变 */
+    fnPageSizeChange(): void {
+        this.m_objSearchUserCondition.objPageInfo.nPageNo = 1;
+        this.fnGetUserList();
+    }
+}

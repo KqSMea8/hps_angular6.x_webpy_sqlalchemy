@@ -1,0 +1,69 @@
+import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/services/api.service';
+import { SearchCondition } from 'src/app/class/searchCondition';
+import { Pagination } from 'src/app/class/pagination';
+import { NzMessageService } from 'ng-zorro-antd';
+import { SearchHotelCheckinLog } from 'src/app/class/hotelCheckinLogListCondition';
+import { HotelCheckinLogList } from 'src/app/class/hotelCheckinLogList';
+import { Period } from 'src/app/class/period';
+import { ToolsService } from 'src/app/services/tools.service';
+import { CheckinService } from 'src/app/services/checkin.service';
+import { ContextService } from 'src/app/services/context.service';
+
+@Component({
+    selector: 'app-checkin-log-list',
+    templateUrl: './checkin-log-list.component.html',
+    styleUrls: ['./checkin-log-list.component.less']
+})
+export class CheckinLogListComponent implements OnInit {
+    m_objHotelCheckinCondition: SearchCondition<SearchHotelCheckinLog> = new SearchCondition<SearchHotelCheckinLog>(SearchHotelCheckinLog);
+    m_lsHotelCheckinList: Pagination<HotelCheckinLogList> = new Pagination<HotelCheckinLogList>();
+    m_sPeriod = '0';
+    constructor(
+        public m_objContextService: ContextService,
+        public m_objCheckinService: CheckinService,
+        private m_objApiService: ApiService,
+        private m_objMessage: NzMessageService,
+        private m_objToolsService: ToolsService,
+    ) { }
+
+    ngOnInit() {
+
+        this.m_objHotelCheckinCondition.objPageInfo.nPageNo = 1;
+        this.m_objHotelCheckinCondition.objPageInfo.nPageSize = 10;
+        this.m_objHotelCheckinCondition.objPageInfo.nSort = 1;
+        this.m_objHotelCheckinCondition.objCondition.nHotelID = 1;
+
+        this.fnChangePeriod();
+    }
+    /**分页尺寸改变触发 */
+    fnPageSizeChange(): void {
+        this.m_objHotelCheckinCondition.objPageInfo.nPageNo = 1;
+        this.fnSearchHotelCheckinLog();
+    }
+
+    /**旅店开房记录历史查询 */
+    fnSearchHotelCheckinLog() {
+        this.m_objHotelCheckinCondition.objCondition.nSearchUserIDMust = 1;
+        this.m_objHotelCheckinCondition.objCondition.sSearchUserNameMust = '1';
+        this.m_objHotelCheckinCondition.objCondition.sCheckInStartDate =
+            this.m_objToolsService.fnFormatDate(this.m_objHotelCheckinCondition.objCondition.sCheckInStartDate);
+        this.m_objHotelCheckinCondition.objCondition.sCheckInEndDate =
+            this.m_objToolsService.fnFormatDate(this.m_objHotelCheckinCondition.objCondition.sCheckInEndDate);
+        this.m_objApiService.fnHotelCheckinLog(this.m_objHotelCheckinCondition).subscribe( data => {
+            if (data.Code === 200) {
+                this.m_lsHotelCheckinList = data.Data;
+                console.log(this.m_lsHotelCheckinList.DataSet);
+            } else {
+                this.m_objMessage.create('error', data.Msg);
+            }
+        });
+    }
+
+    // 日期筛选区间
+    fnChangePeriod() {
+        const objDate: Period = this.m_objToolsService.fnChangePeriod(this.m_sPeriod);
+        this.m_objHotelCheckinCondition.objCondition.sCheckInStartDate = objDate.sDateStart;
+        this.m_objHotelCheckinCondition.objCondition.sCheckInEndDate = objDate.sDateEnd;
+    }
+}

@@ -1,0 +1,186 @@
+<app-header></app-header>
+<div class="content flex">
+    <div class="g-side">
+        <app-sidebar [title]="'旅店登记客人'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div class="overflow-y g-main">
+        <app-breadcrumb [data]="m_aBreadCrumbList"></app-breadcrumb>
+        <div class="main">
+            <div class="search-bar">
+                <div class="basic-info">
+                    <p class="title">按证件信息查询</p>
+                    <ul class="flex">
+                        <li class="flex">
+                            <span>姓名</span>
+                            <input class="input-big" nz-input placeholder="" nzSize="default" [(ngModel)]="m_objForeignGuestCondition.objCondition.sGuestDocNameLike">
+                        </li>
+                        <li class="flex">
+                            <span>性别</span>
+                            <nz-select class="input-small" nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="m_objForeignGuestCondition.objCondition.nSex">
+                                <nz-option nzLabel="{{item.CodeName}}" nzValue="{{item.CodeNo}}" *ngFor="let item of m_objContextService.m_objAllDict.sex"></nz-option>
+                            </nz-select>
+                        </li>
+                        <li class="flex">
+                            <span>出生日期</span>
+                            <div class="flex">
+                                <nz-date-picker [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objForeignGuestCondition.objCondition.sBornDateStart"></nz-date-picker>
+                                <span>至</span>
+                                <nz-date-picker [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objForeignGuestCondition.objCondition.sBornDateEnd"></nz-date-picker>
+                            </div>
+                        </li>
+                        <li class="flex">
+                            <span>国籍</span>
+                            <nz-select class="input-big" nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="m_objForeignGuestCondition.objCondition.sNationality">
+                                <nz-option nzLabel="{{item.CodeName}}" nzValue="{{item.CodeNo}}" *ngFor="let item of m_objContextService.m_objAllDict.gres_country"></nz-option>
+                            </nz-select>
+                        </li>
+                        <li class="flex">
+                            <span>证件类型</span>
+                            <nz-select class="input-big" nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="m_objForeignGuestCondition.objCondition.nDocType">
+                                <nz-option nzLabel="{{item.CodeName}}" nzValue="{{item.CodeNo}}" *ngFor="let item of m_objContextService.m_objAllDict.foreigner_doc"></nz-option>
+                            </nz-select>
+                        </li>
+                        <li class="flex">
+                            <span>证件号码</span>
+                            <input class="input-big" nz-input placeholder="" nzSize="default" [(ngModel)]="m_objForeignGuestCondition.objCondition.sDocNoLikeL">
+                        </li>
+                        <li class="flex">
+                            <span>签证类型</span>
+                            <nz-select class="input-big" nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="m_objForeignGuestCondition.objCondition.sVisaType">
+                                <nz-option nzLabel="{{item.CodeName}}" nzValue="{{item.CodeNo}}" *ngFor="let item of m_objContextService.m_objAllDict.visa_type"></nz-option>
+                            </nz-select>
+                        </li>
+                        <li class="flex">
+                            <span>签证失效日期</span>
+                            <nz-date-picker class="input-big" [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objForeignGuestCondition.objCondition.sVisaDeadline"></nz-date-picker>
+                        </li>
+                    </ul>
+                </div>
+                <div class="exit-entry-info">
+                    <p class="title">按出入境信息查询</p>
+                    <ul class="flex">
+                        <li class="flex">
+                            <span>入境口岸</span>
+                            <input class="input-big" nz-input placeholder="" nzSize="default" [(ngModel)]="m_objForeignGuestCondition.objCondition.sEntryPlace">
+                        </li>
+                        <li class="flex">
+                            <span>入境日期</span>
+                            <div class="flex">
+                                <nz-date-picker class="input-big" [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objForeignGuestCondition.objCondition.sEntryTimeStart"></nz-date-picker>
+                                <span>至</span>
+                                <nz-date-picker class="input-big" [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objForeignGuestCondition.objCondition.sEntryTimeEnd"></nz-date-picker>
+                            </div>
+                        </li>
+                        <li class="flex">
+                            <span>离境口岸</span>
+                            <input class="input-big" nz-input placeholder="" nzSize="default" [(ngModel)]="m_objForeignGuestCondition.objCondition.sVisaDeadline">
+                        </li>
+                        <li class="flex">
+                            <span>离境日期</span>
+                            <div class="flex">
+                                <nz-date-picker class="input-big" [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objForeignGuestCondition.objCondition.sDepartureTimeStart"></nz-date-picker>
+                                <span>至</span>
+                                <nz-date-picker class="input-big" [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objForeignGuestCondition.objCondition.sDepartureTimeEnd"></nz-date-picker>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="hotel-info">
+                    <p class="title">按旅店信息查询</p>
+                    <ul class="flex">
+                        <li class="flex">
+                            <span>旅店名称</span>
+                            <input nz-input placeholder="" nzSize="default" [(ngModel)]="m_objForeignGuestCondition.objCondition.sHotelNameLike">
+                        </li>
+                        <li class="flex">
+                            <app-area-choose></app-area-choose>
+                        </li>
+                        <li class="flex">
+                            <span>入住时间范围</span>
+                            <div class="flex">
+                                <nz-date-picker class="input-big" [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objForeignGuestCondition.objCondition.sCheckInDateTimeStart"></nz-date-picker>
+                                <span>至</span>
+                                <nz-date-picker class="input-big" [nzFormat]="m_objContextService.m_sDateFormat" [(ngModel)]="m_objForeignGuestCondition.objCondition.sCheckInDateTimeEnd"></nz-date-picker>
+                            </div>
+                        </li>
+                        <li class="flex">
+                            <span>住宿状态</span>
+                            <nz-select class="input-middle" nzShowSearch nzAllowClear nzPlaceHolder="不限" [(ngModel)]="m_objForeignGuestCondition.objCondition.nGuestState">
+                                <nz-option nzLabel="{{item.CodeName}}" nzValue="{{item.CodeNo}}" *ngFor="let item of m_objContextService.m_objAllDict.checkin_state"></nz-option>
+                            </nz-select>
+                        </li>
+                    </ul>
+                    <ul class="flex">
+                        <li class="flex ">
+                            <span>认证信息</span>
+                            <div>
+                                <nz-radio-group [(ngModel)]="m_objForeignGuestCondition.objCondition.nMatchResult">
+                                    <label nz-radio nzValue="{{item.CodeNo}}" *ngFor="let item of m_objContextService.m_objAllDict.verify_state">
+                                        {{item.CodeName}}
+                                    </label>
+                                </nz-radio-group>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="flex search-btn">
+                        <li>
+                            <button class="btn-middle" nz-button nzType="primary" (click)="fnSearchGuestCheckinLinst()">
+                                <i nz-icon type="search"></i>
+                                搜索
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="sort-box flex">
+                    <nz-select class="input-big" [(ngModel)]="m_objForeignGuestCondition.objPageInfo.nSort" nzAllowClear nzPlaceHolder="排序">
+                        <nz-option nzValue="{{item.CodeName}}" nzLabel="{{item.CodeNo}}" *ngFor="let item of m_objContextService.m_objAllDict.sort"></nz-option>
+                    </nz-select>
+                </div>
+            </div>
+            <div class="result-bar mt10">
+                <nz-table #basicTable [nzData]="m_objForeignGuestCheckinList">
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>国籍</th>
+                            <th>签证类型</th>
+                            <th>证件号码</th>
+                            <th>性别</th>
+                            <th>出生日期</th>
+                            <th>旅店名称</th>
+                            <th>旅店地址</th>
+                            <th>房号</th>
+                            <th>入住时间</th>
+                            <th>退房时间</th>
+                            <th>状态</th>
+                            <th>认证信息</th>
+                            <th>详情</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-row" *ngFor="let item of basicTable.data">
+                            <td>{{data.GusetDoc.DocName}}</td>
+                            <td>{{data.Foreigner.Nationality}}</td>
+                            <td>{{data.Foreigner.VisaType}}</td>
+                            <td>{{data.Foreigner.PassNo}}</td>
+                            <td>{{data.GusetDoc.Sex}}</td>
+                            <td>{{data.GusetDoc.BornDate}}</td>
+                            <td>{{data.CheckinInfo.HotelID}}</td>
+                            <td></td>
+                            <td>{{data.CheckinInfo.RoomNo}}</td>
+                            <td>{{data.CheckinInfo.CheckInTime}}</td>
+                            <td>{{data.CheckinInfo.CheckOutTime}}</td>
+                            <td>{{data.GuestCheckIn.GusetState}}</td>
+                            <td>{{data.GuestCheckIn.MatchResult}}</td>
+                            <td routerLink="GuestDetails" class="checkDetails">查看</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+            <div class="pagination-bar mt10">
+                <nz-pagination [(nzPageIndex)]="m_objForeignGuestCondition.objPageInfo.nPageNo" [(nzTotal)]="m_nRowCount"
+                    [(nzPageSize)]="m_objForeignGuestCondition.objPageInfo.nPageSize"></nz-pagination>
+            </div>
+        </div>
+    </div>
+</div>

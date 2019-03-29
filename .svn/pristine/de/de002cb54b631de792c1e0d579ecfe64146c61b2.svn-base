@@ -1,0 +1,41 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+
+from models.hps.g_guest_checkin import GuestCheckIn
+from models.hps.h_checkin import CheckIn
+from models.hps.h_relation_checkin import RelationCheckIn
+
+from utils import obj_to_dict
+from utils.func_api import FuncResult
+
+
+class handler(object):
+    '''入住旅客详情查询'''
+
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    def data_handle(self):
+        obj_input = web.input()
+
+        if not obj_input.get('nSearchUserIDMust'):
+            return FuncResult(fail='操作用户ID为必传参数')
+        if not obj_input.get('sSearchUserCodeMust'):
+            return FuncResult(fail='操作用户为必传参数')
+
+        int_checkinID = obj_input.get('nCheckInID')
+
+        return self.get_checkin_detail(int_checkinID)
+
+    def get_checkin_detail(self, int_checkinID):
+        obj_checkin = CheckIn().query.filter(CheckIn.CheckInID == int_checkinID).first()
+        dict_data = obj_to_dict(obj_checkin)
+
+        # lst_guest_checkin = GuestCheckIn.query.\
+        #     join(RelationCheckIn,RelationCheckIn.HotelGuestID = GuestCheckIn.HotelGuestID).filter()
+
+        return FuncResult(success=True, data={'CheckinInfo':dict_data})

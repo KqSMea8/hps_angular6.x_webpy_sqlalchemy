@@ -1,0 +1,24 @@
+<div class="sidebar">
+    <div class="title">{{title}}</div>
+    <ul class="subtab-list">
+        <li class="flex" *ngFor="let item of subtab;let i = index" routerLink="{{item.routerName}}">
+            <div class="side-row flex" [ngClass]="{'actived':item.routerName===m_sRoutePath}" (click)="item.tree = !item.tree">
+                <div class="flex">
+                    <i nz-icon [iconfont]="item.subtabIcon"></i>
+                    <p>{{item.subtabName}}</p>
+                </div>
+                <i *ngIf="item.count">{{item.count}}</i>
+            </div>
+            <ul *ngIf="item.tree" class="configType-list">
+                <li *ngFor="let list of item.children" (click)="fnSwitchConfigType(list.TypeID)" [ngClass]="{'actived':list.TypeID===m_nShowTypeID}">{{list.TypeName}}</li>
+            </ul>
+        </li>
+    </ul>
+
+    <ul class="subbtn">
+        <li class="flex" *ngFor="let item of subbtn" routerLink="{{item.routerName}}">
+            <p>{{item.subbtnName}}</p>
+            <img src="assets/img/{{item.subbtnIcon}}" alt="">
+        </li>
+    </ul>
+</div>

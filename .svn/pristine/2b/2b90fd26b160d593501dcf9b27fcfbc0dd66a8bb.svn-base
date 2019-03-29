@@ -1,0 +1,70 @@
+import { Component, OnInit } from '@angular/core';
+import { SystemManagementService } from 'src/app/services/system-management.service';
+
+@Component({
+    selector: 'app-parameter-config',
+    templateUrl: './parameter-config.component.html',
+    styleUrls: ['./parameter-config.component.less']
+})
+export class ParameterConfigComponent implements OnInit {
+    m_objHaveData: any = [0];
+    m_lsDomestic: any[] = [];
+    /**面包屑导航信息 */
+    m_lsBreadCrumbList: Array<{ name: string, routelink: string }> = [
+        { name: '首页', routelink: '/main' },
+        { name: '参数配置', routelink: '' },
+    ];
+    /**境内证件 */
+    m_bDomesticCard: boolean;
+    /**境外证件 */
+    m_bOverseasCard: boolean;
+    /**旅店类型 */
+    m_bHotelType: boolean;
+    /**省份 */
+    m_bProvince: boolean;
+    /**市 */
+    m_bCity: boolean;
+    /**区域 */
+    m_bDistrict: boolean;
+    m_bIsOkLoading: boolean;
+    constructor(
+        private m_objSystemManagementService: SystemManagementService,
+    ) { }
+
+    ngOnInit() {
+    }
+    /**显示与关闭境内证件弹窗 */
+    fnShowDomesticCard(): void {
+        this.m_bDomesticCard = !this.m_bDomesticCard;
+    }
+
+    /**保存国内证件类型修改 */
+    fnSaveDomesticCard(): void {
+
+    }
+
+    /**保存境外证件类型修改 */
+    fnSaveOverseasCard(): void {
+
+    }
+
+    /**保存旅店类型修改 */
+    fnSaveHotelType(): void {
+
+    }
+
+    /**保存省份修改 */
+    fnSaveProvince(): void {
+
+    }
+
+    /**保存市级修改 */
+    fnSaveCity(): void {
+
+    }
+
+    /**保存区域修改 */
+    fnSaveDistrict(): void {
+
+    }
+}

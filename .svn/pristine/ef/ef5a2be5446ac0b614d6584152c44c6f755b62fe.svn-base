@@ -1,0 +1,22 @@
+import { Component, OnInit } from '@angular/core';
+import { Subtab } from 'src/app/class/sidebar';
+
+@Component({
+    selector: 'app-user-info',
+    templateUrl: './user-info.component.html',
+    styleUrls: ['./user-info.component.less']
+})
+export class UserInfoComponent implements OnInit {
+
+    public m_objSubtab: Array<Subtab> = [
+        {subtabName: '我的信息', subtabIcon: 'guest-checkin.png', routerName: 'UserInfo'},
+        {subtabName: '用户管理', subtabIcon: 'guest-checkin.png', routerName: 'UserManage'},
+        {subtabName: '操作日志', subtabIcon: 'guest-checkin.png', routerName: 'UserInfo'},
+        {subtabName: '参数配置', subtabIcon: 'guest-checkin.png', routerName: 'UserInfo'}
+    ];
+    constructor() { }
+
+    ngOnInit() {
+    }
+
+}

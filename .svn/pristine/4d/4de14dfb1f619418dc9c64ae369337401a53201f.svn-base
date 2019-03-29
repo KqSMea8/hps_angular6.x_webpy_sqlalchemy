@@ -1,0 +1,183 @@
+import { FuncRole } from './../../../../class/funcRole';
+import { UpdataRoleCondition } from './../../../../class/updataRoleCondition';
+import { Component, OnInit } from "@angular/core";
+import { Subtab } from "src/app/class/sidebar";
+import { SystemManagementService } from "src/app/services/system-management.service";
+import { ApiService } from "src/app/services/api.service";
+import { RemoveUserCondition } from "src/app/class/removeUserCondition";
+import { NzMessageService, NzModalService } from "ng-zorro-antd";
+import { UpdateUserCondition } from "src/app/class/updateUserCondition";
+
+@Component({
+    selector: "app-user-info",
+    templateUrl: "./user-info.component.html",
+    styleUrls: ["./user-info.component.less"]
+})
+export class UserInfoComponent implements OnInit {
+
+    m_nBtnState: number = 0;
+    m_isVisible: boolean = false;
+    m_nVisible: number = 0;
+    m_sNewPassword: string;
+    m_isEditVisible: boolean = false;
+    m_isRoleVisible: boolean = false;
+    m_isUpdatePwdVisible: boolean = false;
+    m_objSubtab: Array<Subtab> = [];
+    m_lsFuncRoleList: Array<FuncRole> = [];
+    m_objRemoveUserCondition: RemoveUserCondition = new RemoveUserCondition();
+    m_objUpdateUserCondition: UpdateUserCondition = new UpdateUserCondition();
+    m_objUpdataRoleCondition: UpdataRoleCondition = new UpdataRoleCondition();
+    constructor(
+        public m_objSysService: SystemManagementService,
+        public m_objApiService: ApiService,
+        private m_objMessage: NzMessageService,
+        private modalService: NzModalService
+    ) {}
+
+    ngOnInit() {
+        this.m_objUpdateUserCondition.nUpdateUserIDMust = 1;
+        this.m_objUpdateUserCondition.sUpdateUserNameMust = "张三";
+        this.m_objRemoveUserCondition.nRemoveUserIDMust = 1;
+        this.m_objRemoveUserCondition.sRemoveUserCodeMust = "张三";
+        this.m_objUpdataRoleCondition.nUpdateUserIDMust = 1;
+        this.m_objUpdataRoleCondition.sUpdateUserNameMust = "张三";
+        this.m_objSubtab = this.m_objSysService.m_objSubtab;
+    }
+
+    /**更改用户资料 */
+    fnUpdateUser(): void {
+        this.m_objApiService
+            .fnUpdateUser(this.m_objUpdateUserCondition)
+            .subscribe(data => {
+                if (data.Code === 200) {
+                    this.m_objMessage.create("success", "修改资料成功！");
+                } else {
+                    this.m_objMessage.create("error", "修改资料失败！");
+                }
+            });
+    }
+
+    /**获取功能权限列表 */
+    fnGetFuncRoleList(): void {
+        this.m_objApiService.fnGetFuncRoleList(this.m_objUpdataRoleCondition).subscribe(data => {
+            if(data.Code === 200) {
+                this.m_lsFuncRoleList = data.Data
+                console.log(this.m_lsFuncRoleList)
+            }
+        })
+    }
+
+    /**权限编辑 */
+    fnUpdateRole(): void {
+        this.m_objUpdataRoleCondition.nUserID = 1
+        this.m_objUpdataRoleCondition.sRoleList = "1"
+        this.m_objUpdataRoleCondition.sUserDataRoleList = "1"
+        this.m_objApiService.fnUpdateRole(this.m_objUpdataRoleCondition).subscribe(data => {
+            if(data.Code === 200) {
+                this.m_objMessage.create("success", "权限编辑成功！");
+            }
+        })
+    }
+
+    /**修改用户密码 */
+    fnUpdatePassword(): void {
+        this.m_objUpdateUserCondition.nUserID = 1
+        if (this.m_sNewPassword == this.m_objUpdateUserCondition.sNewPassword) {
+            this.m_objApiService
+                .fnUpdatePassword(this.m_objUpdateUserCondition)
+                .subscribe(data => {
+                    if (data.Code === 200) {
+                        this.m_objMessage.create("success", "密码修改成功！");
+                    } else {
+                        this.m_objMessage.create("error", "密码修改失败！");
+                    }
+                });
+        } else {
+            this.m_objMessage.create("error", "新密码不一致！");
+        }
+    }
+
+    /**更改用户状态，禁用、恢复 */
+    fnUpdateUserState(nState: number): void {
+        this.m_objUpdateUserCondition.nUserID = 1;
+        this.m_objUpdateUserCondition.sRemark = "修改用户状态";
+        this.m_objUpdateUserCondition.nState = nState;
+        this.m_objApiService
+            .fnUpdateUserState(this.m_objUpdateUserCondition)
+            .subscribe(data => {
+                if (data.Code === 200) {
+                    this.m_nBtnState = 1;
+                    this.m_objMessage.create("info", "操作成功！");
+                } else {
+                    this.m_objMessage.create("error", "操作失败！");
+                }
+            });
+    }
+
+    /**关闭账户 */
+    fnRemoveUser(): void {
+        this.m_objRemoveUserCondition.nUserID = 26;
+        this.m_objRemoveUserCondition.sRemark = "关闭用户";
+        this.m_objApiService
+            .fnRemoveUser(this.m_objRemoveUserCondition)
+            .subscribe(data => {
+                if (data.Code === 200) {
+                    this.m_nBtnState = 2;
+                    this.m_objMessage.create("info", "账户关闭成功！");
+                } else {
+                    this.m_objMessage.create("error", "操作失败！");
+                }
+            });
+    }
+
+    /**关闭账户弹窗 */
+    fnShowForbidConfirm(): void {
+        this.modalService.confirm({
+            nzTitle: "提示",
+            nzContent: "确定禁用该账户？",
+            nzOnOk: () => this.fnUpdateUserState(2)
+        });
+    }
+
+    /**恢复账户弹窗 */
+    fnShowRecoveryConfirm(): void {
+        this.modalService.confirm({
+            nzTitle: "提示",
+            nzContent: "确定恢复账户使用？",
+            nzOnOk: () => this.fnUpdateUserState(1)
+        });
+    }
+
+    /**显示弹窗, 1：编辑弹窗、2：权限修改弹窗、3：修改密码弹窗 */
+    showModal(nVisiable: number): void {
+        this.m_isVisible = true;
+        this.m_nVisible = nVisiable;
+        switch (this.m_nVisible) {
+            case 1:
+                this.m_isEditVisible = true;
+                break;
+            case 2:
+                this.m_isRoleVisible = true;
+                break;
+            case 3:
+                this.m_isUpdatePwdVisible = true;
+                break;
+            default:
+                this.m_isEditVisible = false;
+                this.m_isRoleVisible = false;
+                this.m_isUpdatePwdVisible = false;
+                break;
+        }
+        console.log('edit',this.m_isEditVisible)
+        console.log('m_isUpdatePwdVisible',this.m_isUpdatePwdVisible)
+    }
+
+    /**关闭弹窗 */
+    handleCancel(): void {
+        this.m_isVisible = true;
+        this.m_nVisible = 0;
+        this.m_isEditVisible = false;
+        this.m_isRoleVisible = false;
+        this.m_isUpdatePwdVisible = false;
+    }
+}

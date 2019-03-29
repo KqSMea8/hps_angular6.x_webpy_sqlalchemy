@@ -1,0 +1,36 @@
+<app-header></app-header>
+<div nz-row class="content">
+    <div nz-col nzSpan="3">
+        <app-sidebar [title]="'旅店登记客人'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div nz-col nzSpan="21">
+        <div nz-row nzType="flex" nzJustify="space-between" class="main">
+            <div nz-col nzSpan="8" class="item">
+                <h1>证件信息</h1>
+                <div class="item-content">
+                    <img src="" alt="">
+                    <ul class="ic-list">
+                        <li>
+                            <span></span><span></span>
+                        </li>
+                    </li>
+                </div>
+            </div>
+            <div nz-col nzSpan="8" class="item">
+                <h1>登记信息</h1>
+                <div class="item-content">
+                    <img src="" alt="">
+                    <div class="ic-list">
+
+                    </div>
+                </div>
+            </div>
+            <div nz-col nzSpan="7" class="item">
+                <h1>住店详情</h1>
+                <div class="item-content">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

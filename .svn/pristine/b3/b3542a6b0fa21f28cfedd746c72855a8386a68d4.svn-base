@@ -1,0 +1,66 @@
+<div col-21 class="checkin-log-list">
+    <div class="hotel-info">
+        <div class="hotel-name">
+        </div>
+        <ul class="data-list">
+            
+        </ul>
+        <div class="search-condition">
+            <h2>详细数据</h2>
+            <ul>
+                <li>
+                    <span>日期查询范围</span>
+                    <nz-date-picker ></nz-date-picker>
+                    <span>至</span>
+                    <nz-date-picker></nz-date-picker>
+                </li>
+                <li>
+                    <span>选择</span>
+                    <nz-radio-group [(ngModel)]="m_sPeriod" (ngModelChange)="fnChangePeriod()">
+                        <label nz-radio nzValue="0">今天</label>
+                        <label nz-radio nzValue="1">一周</label>
+                        <label nz-radio nzValue="2">一个月</label>
+                    </nz-radio-group>
+                    <button nz-button nzType="primary">查询</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="filter-button">
+        <nz-dropdown [nzTrigger]="'click'">
+            <button nz-button nz-dropdown>
+                <span>默认排序</span>
+                <i nz-icon type="down"></i>
+            </button>
+            <ul nz-menu>
+                <li nz-menu-item>1</li>
+                <li nz-menu-item>2</li>
+                <li nz-menu-item>3</li>
+            </ul>
+        </nz-dropdown>
+    </div>
+    <div class="search-data-list">
+        <ul>
+            <li class="data-list-item">
+                <ul>
+                    <li>时间</li>
+                    <li>房间总数</li>
+                    <li>总开房次数</li>
+                    <li>总入住登记人次</li>
+                </ul>
+            </li>
+            <li class="data-list-item">
+                <ul>
+                    <li>2</li>
+                    <li>4</li>
+                    <li>1</li>
+                    <li>2</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="pagination">
+        <nz-pagination [nzPageIndex]="m_objHotelCheckinCondition.objPageInfo.nPageNo" [nzTotal]="m_nTotal"
+            nzShowSizeChanger [nzPageSize]="m_objHotelCheckinCondition.objPageInfo.nPageSize"></nz-pagination>
+    </div>
+</div>

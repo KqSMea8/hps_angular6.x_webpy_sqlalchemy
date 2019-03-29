@@ -1,0 +1,140 @@
+<app-header></app-header>
+<div class="content">
+    <div nz-col nzSpan="3" class="hs-sider">
+        <app-sidebar [title]="'系统管理'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div nz-col nzSpan="21" class="ha-body">
+        <div class="ha-area-add">
+            <div class="add-title">
+                <div>
+                    <span>酒店编号:</span>
+                    <span>xxxx</span>
+                </div>
+                <div>
+                    <span>登记:</span>
+                    <span>韩立</span>
+                </div>
+                <div>
+                    <span>状态:</span>
+                    <span>待审核</span>
+                </div>
+            </div>
+            <div class="line"></div>
+            <div class="add-body">
+                <div class="add-body-f">
+                    <label>酒店名称</label>
+                    <input nz-input placeholder="" [(ngModel)]="this.sHotelName">
+                </div>
+                <div class="add-body-s">
+                    <div>
+                        <label>法人姓名</label>
+                        <input nz-input placeholder="" [(ngModel)]="sLegalPerson">
+                    </div>
+                    <div class="id-no">
+                        <span style="visibility: hidden">人</span>
+                        <label>法人证件号</label>
+                        <input nz-input placeholder="" [(ngModel)]="sLegalDocNo">
+                    </div>
+                    <div>
+                        <label>法人联系电话</label>
+                        <input nz-input placeholder="" [(ngModel)]="sLegalTel">
+                    </div>
+                </div>
+                <div class="add-body-s">
+                    <div>
+                        <span style="visibility: hidden">人</span>
+                        <label>责任人</label>
+                        <input nz-input placeholder="" [(ngModel)]="sResponPerson">
+                    </div>
+                    <div class="id-no">
+                        <label>责任人证件号</label>
+                        <input nz-input placeholder="" [(ngModel)]="sLegalDocNo">
+                    </div>
+                    <div>
+                        <span style="visibility: hidden">人人</span>
+                        <label>联系电话</label>
+                        <input nz-input placeholder="" [(ngModel)]="sResponPersonTel">
+                    </div>
+                </div>
+                <div class="add-body-th">
+                    <div class="th-tel">
+                        <label>前台电话</label>
+                        <input nz-input placeholder="" [(ngModel)]="sHotelTel">
+                    </div>
+                    <div>
+                        <label>类型</label>
+                        <input nz-input placeholder="" [(ngModel)]="nHotelType">
+                    </div>
+                    <div>
+                        <label>客房数</label>
+                        <input nz-input placeholder="" [(ngModel)]="nRoomCount">
+                        <label>（间）</label>
+                    </div>
+                    <div>
+                        <label>床位数</label>
+                        <input nz-input placeholder="" [(ngModel)]="nBedCount">
+                        <label>（个）</label>
+                    </div>
+                </div>
+                <div class="add-body-th">
+                    <div class="th-tel">
+                        <label>详细地址</label>
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="this.nProvinceID">
+                            <nz-option nzLabel={{item.name}} nzValue={{i}}
+                                       *ngFor="let item of m_lsDataSet;let i = index">
+                            </nz-option>
+                        </nz-select>
+                        <label>（省）</label>
+                    </div>
+                    <div>
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="this.nCityID">
+                            <nz-option nzLabel={{item.name}} nzValue={{i}}
+                                       *ngFor="let item of m_lsDataSet;let i = index">
+                            </nz-option>
+                        </nz-select>
+                        <label>（市县）</label>
+                    </div>
+                    <div>
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="" [(ngModel)]="this.nDistrictID">
+                            <nz-option nzLabel={{item.name}} nzValue={{i}}
+                                       *ngFor="let item of m_lsDataSet;let i = index">
+                            </nz-option>
+                        </nz-select>
+                        <label>（区域）</label>
+                    </div>
+                    <div>
+                        <input nz-input placeholder="" [(ngModel)]="value">
+                        <label>（街道）</label>
+                    </div>
+                </div>
+                <div class="add-body-f">
+                    <label style="visibility: hidden">酒店地址</label>
+                    <input nz-input placeholder="" [(ngModel)]="sHotelAddr">
+                    <label>（具体到门牌号）</label>
+                </div>
+                <div class="add-body-fif">
+                    <span style="visibility: hidden">备注</span>
+                    <div>备注</div>
+                    <textarea rows="5" nz-input [(ngModel)]="sRemark"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="ha-area-btn">
+            <div class="btn-verify">
+                <button nz-button nzType="primary" (click)="fnVerifyHotel()">审核</button>
+            </div>
+            <div class="btn-verify btn-logoff">
+                <button nz-button nzType="primary" (click)="OfflineHotel()">注销</button>
+            </div>
+            <div class="btn-verify btn-change">
+                <button nz-button nzType="primary">修改</button>
+            </div>
+            <div class="btn-verify btn-submit">
+                <button nz-button nzType="primary" (click)="fnAdd()">提交</button>
+            </div>
+            <div class="btn-verify btn-cencel">
+                <button nz-button nzType="primary">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

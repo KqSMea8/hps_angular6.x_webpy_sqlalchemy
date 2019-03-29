@@ -1,0 +1,48 @@
+import { Injectable } from '@angular/core';
+import { HttpService } from './http.service';
+import { Observable } from 'rxjs';
+import { Pagination } from '../class/pagination';
+import { CheckinList } from '../class/checkinList';
+import { Result } from '../class/result';
+import { SearchCondition } from '../class/searchCondition'; // 筛选类
+import { CheckinListCondition } from '../class/checkinListCondition';
+import { GuestCheckinCondition } from '../class/guestCheckinListCondition';
+import { SearchLogCondition } from '../class/searchLogCondition';
+import { SearchLogList } from '../class/searchLogList';
+import { HotelCheckinLogList } from '../class/hotelCheckinLogList';
+import { SearchHotelCheckinLog } from '../class/hotelCheckinLogListCondition';
+@Injectable({
+    providedIn: 'root'
+})
+export class ApiService {
+
+    constructor(
+        private m_objHttpService: HttpService
+    ) { }
+
+    // 测试接口
+    login(objParams: object): Observable<any> {
+        return this.m_objHttpService.request<any>('GET', '/User/Login', objParams);
+    }
+
+    // 旅店开房查询
+    fnSearchHotelCheckinList(objParams: SearchCondition<CheckinListCondition>): Observable<Result<Pagination<CheckinList>>> {
+        return this.m_objHttpService.request<Result<Pagination<CheckinList>>>('POST', '/Hotel/SearchHotelCheckinList', objParams);
+    }
+
+    // 旅客入住查询
+    fnSearchGuestCheckinList(objParams: SearchCondition<GuestCheckinCondition>): Observable<Result<Pagination<GuestCheckinCondition>>> {
+        return this.m_objHttpService.request<Result<Pagination<GuestCheckinCondition>>>('POST', '/Guest/SearchGuestCheckInList', objParams);
+    }
+
+    // 酒店入住历史查詢
+    fnHotelCheckinLogList(objParams: SearchCondition<SearchHotelCheckinLog>): Observable<Result<Pagination<HotelCheckinLogList>>> {
+        return this.m_objHttpService.request<Result<Pagination<HotelCheckinLogList>>>('POST', '/Guest/HotelCheckinLogList', objParams);
+    }
+
+    // 日志查询
+    fnSearchLogList(objParams: SearchLogCondition): Observable<Result<Pagination<SearchLogList>>> {
+        return this.m_objHttpService.request<Result<Pagination<SearchLogList>>>('POST', '/Guest/SearchLogList', objParams);
+    }
+
+}

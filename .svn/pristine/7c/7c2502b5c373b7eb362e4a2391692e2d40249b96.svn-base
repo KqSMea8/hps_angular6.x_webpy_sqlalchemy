@@ -1,0 +1,73 @@
+import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/services/api.service';
+import { SearchCondition } from 'src/app/class/searchCondition';
+import { Pagination } from 'src/app/class/pagination';
+import { NzMessageService } from 'ng-zorro-antd';
+import { SearchHotelCheckinLog } from 'src/app/class/hotelCheckinLogListCondition';
+import { HotelCheckinLogList } from 'src/app/class/hotelCheckinLogList';
+import { DatePipe } from '@angular/common';
+
+@Component({
+    selector: 'app-checkin-log-list',
+    templateUrl: './checkin-log-list.component.html',
+    styleUrls: ['./checkin-log-list.component.less']
+})
+export class CheckinLogListComponent implements OnInit {
+    m_objHotelCheckinCondition: SearchCondition<SearchHotelCheckinLog> = new SearchCondition<SearchHotelCheckinLog>(SearchHotelCheckinLog);
+    m_objHotelCheckinLog: HotelCheckinLogList = new HotelCheckinLogList();
+    m_lsHotelCheckinList: Pagination<HotelCheckinLogList> = new Pagination<HotelCheckinLogList>();
+    m_nTotal = 0;
+    m_sPeriod: string;
+    constructor(
+        private m_objApiService: ApiService,
+        private m_objMessage: NzMessageService,
+        private m_objDatePipe: DatePipe
+    ) { }
+
+    ngOnInit() {
+    this.m_objHotelCheckinCondition.objPageInfo.nPageNo = 1;
+    this.m_objHotelCheckinCondition.objPageInfo.nPageSize = 10;
+    this.m_objHotelCheckinCondition.objPageInfo.nSort = 0;
+        this.fnSearchHotelCheckinLog();
+    }
+
+    // 旅店开房记录历史查询
+    fnSearchHotelCheckinLog() {
+        this.m_objHotelCheckinCondition.objCondition.nSearchUserIDMust = 1;
+        this.m_objHotelCheckinCondition.objCondition.sSearchUserCodeMust = '1';
+        this.m_objApiService.fnHotelCheckinLog(this.m_objHotelCheckinCondition).subscribe( data => {
+            if (data.Code === 200) {
+                this.m_objHotelCheckinLog = data.Data;
+            } else {
+                this.m_objMessage.create('error', data.Msg);
+            }
+        });
+    }
+    fnChangePeriod() {
+        const objToday = new Date();
+        const sToday = this.m_objDatePipe.transform(objToday, 'yyyy-MM-dd');
+        // 0为今天时间，1为一周内时间，2为一个月内时间
+        switch (this.m_sPeriod) {
+            case '0':
+                this.m_objHotelCheckinCondition.objCondition.sCheckInStartDate = sToday;
+                this.m_objHotelCheckinCondition.objCondition.sCheckInEndDate = sToday;
+                break;
+            case '1':
+                const objWeek = new Date(objToday.getTime() - (7 * 24 * 3600 * 1000));
+                this.m_objHotelCheckinCondition.objCondition.sCheckInStartDate = this.m_objDatePipe.transform(objWeek, 'yyyy-MM-dd');
+                this.m_objHotelCheckinCondition.objCondition.sCheckInEndDate = sToday;
+                break;
+            case '2':
+                // 是否一月份
+                const bIsJanuary = (objToday.getMonth() + 1) - 1 === 0;
+                // 上个月的年份
+                const nPrevYear = bIsJanuary ? objToday.getFullYear() - 1 : objToday.getFullYear();
+                // 上个月的月份
+                const nPrevMonth = bIsJanuary ? 12 : objToday.getMonth();
+                const objMonth = new Date(`${nPrevYear}-${nPrevMonth}-${objToday.getDate()}`);
+                this.m_objHotelCheckinCondition.objCondition.sCheckInStartDate = this.m_objDatePipe.transform(objMonth, 'yyyy-MM-dd');
+                this.m_objHotelCheckinCondition.objCondition.sCheckInEndDate = sToday;
+                break;
+        }
+    }
+}

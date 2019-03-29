@@ -1,0 +1,72 @@
+<app-header></app-header>
+<div nz-row class="content">
+    <div nz-col nzSpan="3">
+        <app-sidebar [title]="'系统管理'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div nz-col nzSpan="21" class="user-info">
+        <div class="user-content">
+            <div class="item">
+                <h3 nz-col nzSpan="11">用户信息</h3>
+                <span nz-col nzSpan="11">用户ID：g0000000001</span>
+            </div>
+            <ul class="info">
+                <li nz-col nzSpan="8">
+                    <span>账号：</span>
+                    <span>公安用户</span>
+                </li>
+                <li nz-col nzSpan="8">
+                    <span>岗位：</span>
+                    <span>普通职员</span>
+                </li>
+                <li nz-col nzSpan="8">
+                    <span>状态：</span>
+                    <span class="green">启用</span>
+                </li>
+                <li nz-col nzSpan="8">
+                    <span>姓名：</span>
+                    <span>张三</span>
+                </li>
+                <li nz-col nzSpan="8">
+                    <span>联系方式：</span>
+                    <span>1231231234</span>
+                </li>
+                <li nz-col nzSpan="8">
+                    <span>备注：</span>
+                    <span>旅店登记员</span>
+                </li>
+            </ul>
+            <ul class="operation">
+                <li nz-col nzSpan="4">
+                    <button nz-button [nzType]="primary" [nzShape]="circle" [nzSize]="large">
+                        <span>编辑</span>
+                    </button>
+                </li>
+                <li nz-col nzSpan="4">
+                    <button nz-button [nzType]="primary" [nzShape]="circle" [nzSize]="large">
+                        <span>权限编辑</span>
+                    </button>
+                </li>
+                <li nz-col nzSpan="4">
+                    <button nz-button [nzType]="primary" [nzShape]="circle" [nzSize]="large">
+                        <span>修改密码</span>
+                    </button>
+                </li>
+                <li nz-col nzSpan="4">
+                    <button nz-button [nzType]="primary" [nzShape]="circle" [nzSize]="large">
+                        <span>禁用账户</span>
+                    </button>
+                </li>
+                <li nz-col nzSpan="4">
+                    <button nz-button [nzType]="primary" [nzShape]="circle" [nzSize]="large">
+                        <span>恢复账户</span>
+                    </button>
+                </li>
+                <li nz-col nzSpan="4">
+                    <button nz-button [nzType]="primary" [nzShape]="circle" [nzSize]="large">
+                        <span>关闭账户</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

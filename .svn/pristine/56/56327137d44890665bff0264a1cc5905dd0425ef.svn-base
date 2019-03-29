@@ -1,0 +1,32 @@
+# coding: utf-8
+
+import web
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.u_user import User
+from utils import obj_to_json
+from utils.func_api import FuncResult
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        input = web.input()
+        try:
+            usercode = input.get('sUserCode')
+            password = input.get('sPassword')
+        except Exception, ce:
+            return FuncResult(fail='参数有误!')
+
+        return self.add_user(usercode, password)
+
+    def add_user(self, usercode, password):
+        obj_user = User()
+        obj_user.UserCode = usercode
+        obj_user.Password = password
+        obj_user.save()
+        return FuncResult(success=True)

@@ -1,0 +1,30 @@
+import { Component, OnInit } from '@angular/core';
+import { Subtab } from '../../../../class/sidebar';
+import { GuestCheckinService } from 'src/app/services/guest-checkin.service';
+import { ApiService } from 'src/app/services/api.service';
+import { GuestCheckinCondition } from '../../../../class/GuestCheckinDetailsCondition';
+
+@Component({
+    selector: 'app-guest-details',
+    templateUrl: './guest-details.component.html',
+    styleUrls: ['./guest-details.component.less']
+})
+export class GuestDetailsComponent implements OnInit {
+
+    public m_objSubtab: Array<Subtab> = this.m_objGuestCheckinService.m_objSubtab;
+    m_objAllGuestCheckinDetailsCondition: GuestCheckinCondition = new GuestCheckinCondition();
+
+    constructor(
+        public m_objGuestCheckinService: GuestCheckinService,
+        public m_objApiService: ApiService
+    ) { }
+
+    ngOnInit() {
+    }
+
+    fnGetCheckinDetail(id: number): void {
+        this.m_objApiService.fnGetCheckinDetail(this.m_objAllGuestCheckinDetailsCondition).subscribe(data => {
+            console.log(data);
+        });
+    }
+}

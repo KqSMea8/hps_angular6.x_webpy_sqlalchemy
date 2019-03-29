@@ -1,0 +1,120 @@
+<app-header></app-header>
+<div nz-row class="content">
+    <div nz-col nzSpan="3">
+        <app-sidebar [title]="'旅店登记客人'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div nz-col nzSpan="21">
+        <div nzType="flex" class="main">
+            <nz-tabset>
+                <nz-tab nzTitle="Tab 1">
+                    <div nz-row nzType="flex" nzJustify="space-between">
+                        <div nz-col nzSpan="7" class="flex info-card">
+                            <p>证件信息</p>
+                            <nz-card style="width:100%;" [nzCover]="coverTemplate" [nzBordered]="false">
+                                <ul class="ic-content">
+                                    <li class="flex">
+                                        <span>姓名：</span><span>杨雄华</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>性别：</span><span>男</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>出生年月：</span><span>2019-01-21</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>住址：</span><span>广州市天河区智慧城核心区</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>证件号码：</span><span>86464654654564654564564564</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>签发机关：</span><span>广州市天河区公安局</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>有效期：</span><span>2019-01-01 2019-</span>
+                                    </li>
+                                </ul>
+                            </nz-card>
+                            <ng-template #coverTemplate>
+                                <div class="flex ic-avator">
+                                    <img src="/src/assets/img/450881199401187715_ID.jpg" alt="">
+                                </div>
+                            </ng-template>
+                        </div>
+                        <div nz-col nzSpan="7" class="flex info-card">
+                            <p>登记信息</p>
+                            <nz-card style="width:100%;" [nzCover]="coverTemplate" [nzBordered]="false">
+                                <!-- <nz-card-meta nzTitle="Card title" nzDescription="This is the description" [nzAvatar]="avatarTemplate"></nz-card-meta> -->
+                                <ul class="ic-content">
+                                    <li class="flex">
+                                        <span>登记姓名：</span><span>XXX</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>证件类型：</span><span>身份证</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>性别：</span><span>男</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>国籍：</span><span>中国</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>民族：</span><span>汉族</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>出生年月：</span><span>2019-01-21</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>联系方式：</span><span>180-1234-5678</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>登记住址：</span><span>广州市天河区智慧城核心区</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>入住旅店：</span><span>XXX</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>房号：</span><span>101</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>关联人：</span><span>XXX</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>入住日期：</span><span>2019-01-01 2019-</span>
+                                    </li>
+                                    <li class="flex">
+                                        <span>退房日期：</span><span>2019-01-01 2019-</span>
+                                    </li>
+                                </ul>
+                            </nz-card>
+                            <ng-template #coverTemplate>
+                                <div class="flex ic-avator">
+                                    <img src="/src/assets/img/450881199401187715_ID.jpg" alt="">
+                                </div>
+                            </ng-template>
+                        </div>
+                        <div nz-col nzSpan="9" class="flex info-card">
+                            <p>住店详情</p>
+                            <nz-table #basicTable [nzData]="dataSet" nzSize="small">
+                                <thead>
+                                    <tr>
+                                        <th>操作</th>
+                                        <th>操作时间</th>
+                                        <th>上传时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of basicTable.data">
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+                        </div>
+                    </div>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </div>
+</div>

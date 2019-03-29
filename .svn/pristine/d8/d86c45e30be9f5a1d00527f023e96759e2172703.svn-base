@@ -1,0 +1,267 @@
+# coding: utf-8
+from libs import web
+
+from sqlalchemy import text, and_
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import get_data
+from models.hps.g_foreigner import Foreigner
+from models.hps.g_guest_checkin import GuestCheckIn
+from models.hps.g_guest_doc import GuestDoc
+from models.hps.h_checkin import CheckIn
+from models.hps.h_hotel import Hotel
+from models.hps.h_relation_checkin import RelationCheckIn
+from utils import json_to_obj, obj_to_dict, to_datetime, dict_to_name
+from utils.func_api import FuncResult
+
+
+class handler(object):
+    '''所有旅客入住查询'''
+
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    def data_handle(self):
+        objInput = web.input()
+
+        objCondition = json_to_obj(objInput.get('objCondition'))
+        objPage = json_to_obj(objInput.get('objPageInfo'))
+
+        if not objCondition:
+            return FuncResult(msg='未输入查询条件！')
+        else:
+            if not objCondition.has_key('nSearchUserIDMust') or not objCondition['nSearchUserIDMust']:
+                return FuncResult(fail='nSearchUserIDMust为必传参数！')
+            if not objCondition.has_key('sSearchUserNameMust') or not objCondition['sSearchUserNameMust']:
+                return FuncResult(fail='sSearchUserNameMust为必传参数！')
+
+        return self.search_all_checkin(objCondition, objPage)
+
+    def search_all_checkin(self, objCondition, objPage):
+        lsParams = []
+        dictParamsValue = {}
+        try:
+            if objCondition.has_key('sHotelNameLike') and objCondition['sHotelNameLike']:
+                sHotelName = '%' + objCondition['sHotelNameLike'] + '%'
+                lsParams.append('h_hotel.HotelName Like :sHotelName')
+                dictParamsValue['sHotelName'] = sHotelName
+
+            if objCondition.has_key('nProvinceID') and objCondition['nProvinceID']:
+                nProvinceID = objCondition['nProvinceID']
+                lsParams.append('h_hotel.ProvinceID = :nProvinceID')
+                dictParamsValue['nProvinceID'] = nProvinceID
+
+            if objCondition.has_key('nCityID') and objCondition['nCityID']:
+                nCityID = objCondition['nCityID']
+                lsParams.append('h_hotel.CityID = :nCityID')
+                dictParamsValue['nCityID'] = nCityID
+
+            if objCondition.has_key('nDistrictID') and objCondition['nDistrictID']:
+                nDistrictID = objCondition['nDistrictID']
+                lsParams.append('h_hotel.DistrictID = :nDistrictID')
+                dictParamsValue['nDistrictID'] = nDistrictID
+
+            if objCondition.has_key('sRoomNo') and objCondition['sRoomNo']:
+                sRoomNo = objCondition['sRoomNo']
+                lsParams.append('h_hotel.RoomNo = :sRoomNo')
+                dictParamsValue['sRoomNo'] = sRoomNo
+
+            dictCheckInParams = {}
+            if objCondition.has_key('sCheckInDateTimeStart') and objCondition['sCheckInDateTimeStart']:
+                dtCheckinDatetimeStart = to_datetime(objCondition['sCheckInDateTimeStart'])
+                lsParams.append('h_checkin.CheckInTime >= :dtCheckinDatetimeStart')
+                dictParamsValue['dtCheckinDatetimeStart'] = dtCheckinDatetimeStart
+                dictCheckInParams['CheckInTime'] = dtCheckinDatetimeStart
+
+            if objCondition.has_key('sCheckInDateTimeEnd') and objCondition['sCheckInDateTimeEnd']:
+                dtCheckinDatetimeEnd = to_datetime(objCondition['sCheckInDateTimeEnd'])
+                lsParams.append('h_checkin.CheckInTime <= :dtCheckinDatetimeEnd')
+                dictParamsValue['dtCheckinDatetimeEnd'] = dtCheckinDatetimeEnd
+
+            if objCondition.has_key('sNationality') and objCondition['sNationality']:
+                sNationality = objCondition['sNationality']
+                lsParams.append('g_foreigner.Nationality = :sNationality')
+                dictParamsValue['sNationality'] = sNationality
+                dictCheckInParams['Nationality'] = sNationality
+
+            if objCondition.has_key('nGuestState') and objCondition['nGuestState']:
+                nGuestState = objCondition['nGuestState']
+                lsParams.append('h_relation_checkin.GuestState = :nGuestState')
+                dictParamsValue['nGuestState'] = nGuestState
+
+            # 证件信息
+            # dictParams = {}
+            if objCondition.has_key('sHotelGuestNameLike') and objCondition['sHotelGuestNameLike']:
+                sHotelGuestName = '%' + objCondition['sHotelGuestNameLike'] + '%'
+                lsParams.append('g_guest_doc.GuestName Like :sHotelGuestName')
+                dictParamsValue['sHotelGuestName'] = sHotelGuestName
+                # dictParams['GuestName'] = sHotelGuestName
+
+            if objCondition.has_key('nHotelDocType') and objCondition['nHotelDocType']:
+                nHotelDocType = objCondition['nHotelDocType']
+                lsParams.append('g_guest_doc.DocType = :nHotelDocType')
+                dictParamsValue['nHotelDocType'] = nHotelDocType
+
+            if objCondition.has_key('sHotelDocNoLikeL') and objCondition['sHotelDocNoLikeL']:
+                sHotelDocNo = objCondition['sHotelDocNoLikeL'] + '%'
+                lsParams.append('g_guest_doc.DocNo Like :sHotelDocNo')
+                dictParamsValue['sHotelDocNo'] = sHotelDocNo
+
+            if objCondition.has_key('nHotelSex') and objCondition['nHotelSex']:
+                nHotelSex = objCondition['nHotelSex']
+                lsParams.append('g_guest_doc.Sex = :nHotelSex')
+                dictParamsValue['nHotelSex'] = nHotelSex
+
+            if objCondition.has_key('nHotelNation') and objCondition['nHotelNation']:
+                nHotelNation = objCondition['nHotelNation']
+                lsParams.append('g_guest_doc.Nation = :nHotelNation')
+                dictParamsValue['nHotelNation'] = nHotelNation
+
+            if objCondition.has_key('nHotelNationality') and objCondition['nHotelNationality']:
+                nHotelNationality = objCondition['nHotelNationality']
+                lsParams.append('g_guest_doc.Nationality = :nHotelNationality')
+                dictParamsValue['nHotelNationality'] = nHotelNationality
+
+            if objCondition.has_key('sHotelBornDateStart') and objCondition['sHotelBornDateStart']:
+                dtHotelBornDateStart = to_datetime(objCondition['sHotelBornDateStart'])
+                lsParams.append('g_guest_doc.BornDate >= :dtHotelBornDateStart')
+                dictParamsValue['dtHotelBornDateStart'] = dtHotelBornDateStart
+
+            if objCondition.has_key('sHotelBornDateEnd') and objCondition['sHotelBornDateEnd']:
+                dtHotelBornDateEnd = to_datetime(objCondition['sHotelBornDateEnd'])
+                lsParams.append('g_guest_doc.BornDate <= :dtHotelBornDateEnd')
+                dictParamsValue['dtHotelBornDateEnd'] = dtHotelBornDateEnd
+
+            # 入住出示证件信息
+            if objCondition.has_key('sGuestDocNameLike') and objCondition['sGuestDocNameLike']:
+                sGuestDocName = '%' + objCondition['sGuestDocNameLike'] + '%'
+                lsParams.append('g_guest_checkin.HotelGuestName Like :sGuestDocName')
+                dictParamsValue['sGuestDocName'] = sGuestDocName
+
+            if objCondition.has_key('nDocType') and objCondition['nDocType']:
+                nDocType = objCondition['nDocType']
+                lsParams.append('g_guest_checkin.HotelDocType = :nDocType')
+                dictParamsValue['nDocType'] = nDocType
+
+            if objCondition.has_key('sDocNoLikeL') and objCondition['sDocNoLikeL']:
+                sDocNo = objCondition['sDocNoLikeL'] + '%'
+                lsParams.append('g_guest_checkin.HotelDocNo Like :sDocNo')
+                dictParamsValue['sDocNo'] = sDocNo
+
+            if objCondition.has_key('nSex') and objCondition['nSex']:
+                nSex = objCondition['nSex']
+                lsParams.append('g_guest_checkin.HotelSex = :nSex')
+                dictParamsValue['nSex'] = nSex
+
+            if objCondition.has_key('nNation') and objCondition['nNation']:
+                nNation = objCondition['nNation']
+                lsParams.append('g_guest_checkin.HotelNation = :nNation')
+                dictParamsValue['nNation'] = nNation
+
+            if objCondition.has_key('nNationality') and objCondition['nNationality']:
+                nNationality = objCondition['nNationality']
+                lsParams.append('g_guest_checkin.HotelNationality = :nNationality')
+                dictParamsValue['nNationality'] = nNationality
+
+            if objCondition.has_key('nMatchResult') and objCondition['nMatchResult']:
+                nMatchResult = objCondition['nMatchResult']
+                lsParams.append('g_guest_checkin.MatchResult = :nMatchResult')
+                dictParamsValue['nMatchResult'] = nMatchResult
+
+            if objCondition.has_key('sBornDateStart') and objCondition['sBornDateStart']:
+                dtBornDateStart = to_datetime(objCondition['sBornDateStart'])
+                lsParams.append('g_guest_checkin.HotelBornDate >= :dtBornDateStart')
+                dictParamsValue['dtBornDateStart'] = dtBornDateStart
+
+            if objCondition.has_key('sBornDateEnd') and objCondition['sBornDateEnd']:
+                dtBornDateEnd= to_datetime(objCondition['sBornDateEnd'])
+                lsParams.append('g_guest_checkin.HotelBornDate <= :dtBornDateEnd')
+                dictParamsValue['dtBornDateEnd'] = dtBornDateEnd
+
+            objSql = web.ctx.cur_dbsession.query(CheckIn, RelationCheckIn, GuestCheckIn, GuestDoc, Foreigner, Hotel).\
+                filter(and_(CheckIn.HotelID == Hotel.HotelID,
+                            RelationCheckIn.CheckInID == CheckIn.CheckInID,
+                            RelationCheckIn.HotelGuestID == GuestCheckIn.HotelGuestID,
+                            RelationCheckIn.GuestDocID == GuestDoc.GuestDocID,
+                            RelationCheckIn.GuestDocID == Foreigner.GuestDocID))
+
+            lsQueryData = []
+            nPageCount = 0
+            nRowCount = 0
+            objResult = get_data(objSql, lsParams, dictParamsValue, objPage)
+
+            if objResult:
+                if objResult.success and objResult.data is not None:
+                    lsQueryData = objResult.data['DataList']
+                    nPageCount = objResult.data['PageCount']
+                    nRowCount = objResult.data['RowCount']
+
+                lsData = []
+                if len(lsQueryData) > 0:
+                    for objData in lsQueryData:
+                        dictCheckIn = obj_to_dict(objData[0])
+                        dictRelationCheckIn = obj_to_dict(objData[1])
+                        dictGuestCheckIn = obj_to_dict(objData[2])
+                        dictGuestDoc = obj_to_dict(objData[3])
+                        dictForeigner = obj_to_dict(objData[4])
+                        dictHotel = obj_to_dict(objData[5])
+
+                        del dictCheckIn['IsNew'], dictCheckIn['TableID'],\
+                            dictForeigner['GuestDocID'], dictForeigner['CreateTime'], \
+                            dictForeigner['TableID'], dictGuestCheckIn['TableID'], \
+                            dictGuestDoc['TableID']
+                        dictGuestCheckIn['CheckInTime'] = dictRelationCheckIn['CheckInTime']
+                        dictGuestCheckIn['CheckOutTime'] = dictRelationCheckIn['CheckOutTime']
+                        dictGuestCheckIn['GuestState'] = dictRelationCheckIn['GuestState']
+                        dictCheckIn['HotelName'] = dictHotel['HotelName']
+                        dictCheckIn['HotelAddr'] = dictHotel['HotelAddr']
+
+                        # 返回字典类型字段对应名称
+                        # 客人状态名
+                        dictGuestCheckIn['GuestStateName'] = dict_to_name(dictRelationCheckIn['GuestState'],'checkin_state')
+                        # 性别
+                        dictGuestCheckIn['HotelSexName'] = dict_to_name(dictGuestCheckIn['HotelSex'],'sex')
+                        # 民族
+                        dictGuestCheckIn['HotelNationName'] = dict_to_name(dictGuestCheckIn['HotelNation'], 'gres_nation')
+                        # 证件类型
+                        dictGuestCheckIn['HotelDocTypeName'] = dict_to_name(dictGuestCheckIn['HotelDocType'], 'doc_type')
+                        # 国籍
+                        dictGuestCheckIn['HotelNationalityName'] = dict_to_name(dictGuestCheckIn['HotelNationality'], 'gres_country')
+
+                        # 证件类型
+                        dictGuestDoc['DocTypeName'] = dict_to_name(dictGuestDoc['DocType'], 'doc_type')
+                        # 性别
+                        dictGuestDoc['SexName'] = dict_to_name(dictGuestDoc['Sex'], 'sex')
+                        # 民族
+                        dictGuestDoc['NationName'] = dict_to_name(dictGuestDoc['Nation'], 'gres_nation')
+                        # 客人状态
+                        dictGuestDoc['StateName'] = dict_to_name(dictGuestDoc['State'],'checkin_state')
+
+                        # 签证类型
+                        dictForeigner['VisaTypeName'] = dict_to_name(dictForeigner['VisaType'], 'visa_type')
+                        # 外国人国籍
+                        dictForeigner['NationalityName'] = dict_to_name(dictForeigner['Nationality'], 'gres_country')
+
+                        dictData = {'GuestCheckIn': dictGuestCheckIn, 'GuestDoc': dictGuestDoc,
+                                    'Foreigner': dictForeigner, 'CheckinInfo': dictCheckIn}
+                        lsData.append(dictData)
+
+                    return FuncResult(success=True, data={'PageNo': objPage['nPageNo'], 'PageSize': objPage['nPageSize'],
+                                                  'PageCount': nPageCount, 'RowCount': nRowCount, 'DataSet': lsData})
+
+        except Exception,ce:
+            return FuncResult(fail=ce)
+        finally:
+            pass
+            # lsCheckInLog = CheckIn().GetLogDescription(dictCheckInParams)
+            # lsRelationCheckInLog = RelationCheckIn().GetLogDescription()
+            # lsGuestCheckInLog = GuestCheckIn().GetLogDescription()
+            # lsGuestDocLog = GuestDoc().GetLogDescription(dictParams)
+            # lsForeignerLog = Foreigner().GetLogDescription()
+        return FuncResult(data='', msg='无查询结果！')
+
+
+
+
+

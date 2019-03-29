@@ -1,0 +1,216 @@
+@import "styles.less";
+
+.mg(@t:0px,@r:0px,@b:0px,@l:0px) {
+    margin-top: @t;
+    margin-right: @r;
+    margin-bottom: @b;
+    margin-left: @l;
+}
+
+.pd(@t:0px,@r:0px,@b:0px,@l:0px) {
+    padding-top: @t;
+    padding-right: @r;
+    padding-bottom: @b;
+    padding-left: @l;
+}
+
+.ha-breadcrumb {
+    .mg(@t:6px,@b:8px);
+}
+
+.ha-area-add {
+    .pd(@l:20px);
+    .add-title {
+        .pd(@t:10px);
+        display: flex;
+        div {
+            /*width: 30%;*/
+            span {
+                .pd(@l:6px,@r:6px,@t:6px)
+            }
+        }
+    }
+    .line {
+        position: relative;
+        .mg(@t:6px,@b:40px);
+        height: 1px;
+        width: 95%;
+        background-color: #ccc;
+    }
+    .add-body-f1 {
+        display: flex;
+        .add-body-f {
+            .mg(@t:5px,@b:5px,@r:20px);
+            > div {
+                .mg(@t:6px,@b:6px)
+            }
+        }
+    }
+
+    .add-body-s {
+        display: flex;
+        > div {
+            .mg(@t:5px,@b:5px,@r:20px);
+            > div {
+                .pd(@t:6px,@b:6px)
+            }
+        }
+    }
+    .add-body-th {
+        display: flex;
+        > div {
+            .mg(@t:5px,@b:5px,@r:20px);
+            > div {
+                .pd(@t:6px,@b:6px)
+            }
+        }
+        .th-tel {
+            width: 30%;
+
+        }
+    }
+    .add-body-fif {
+        .mg(@t:14px,@b:14px);
+        div {
+            .mg(@t:5px,@b:5px,@r:20px);
+        }
+        > textarea {
+            .pd(@r:12px,@l:12px,@t:12px);
+        }
+    }
+}
+
+.ha-area-btn {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    .pd(@r:10%,@b:20px);
+    .btn-verify {
+        width: 8%;
+        .mg(@l:5%,@r:5%);
+        button {
+
+        }
+    }
+    .btn-logoff {
+        button {
+        }
+    }
+    .btn-submit {
+        button {
+        }
+    }
+    .btn-cencel {
+        button {
+        }
+    }
+}
+
+nz-select {
+    width: 50%;
+}
+
+.ha-body {
+    overflow-y: scroll;
+    height: 100%;
+}
+
+.buttom-width-80 {
+    width: 80px;
+}
+
+.buttom-width-120 {
+    width: 120px;
+}
+
+.buttom-width-160 {
+    width: 160px;
+}
+
+.buttom-width-500 {
+    width: 1060px;
+}
+
+.upload-width-1060 {
+    width: 1060px;
+}
+
+.ha-upload {
+    //display: flex;
+    //justify-content: space-around;
+    padding-left: 20px;
+    margin-left: 20px;
+    .add-body-f {
+        align-items: flex-start;
+        display: flex;
+        text-align: center;
+        width: 40%;
+        div {
+            .mg(@t:6px,@b:6px,@r:20px);
+            display: flex;
+            align-items: center;
+        }
+        .mg(@t:5px,@b:5px,@r:20px);
+        .pd(@b:30px,@t:20px)
+    }
+}
+
+.ha-dash-line {
+    //border-top: #ccc 1px dashed;
+    .mg(@l:20px,@r:20px)
+}
+
+.color-red {
+    color: red;
+}
+
+.position {
+    position: relative;
+    left: 40px;
+    top: 4px;
+}
+
+.ha-flex {
+    display: flex;
+    justify-content: left;
+    //border: 1px #ccc dashed;
+    //border-top: 1px #fff solid;
+}
+
+.ant-upload-list-item-error {
+    border-color: #fff !important;
+}
+
+.ha-upload {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.ant-upload.ant-upload-select-picture-card {
+    background-color: #fff;
+    border: #fff solid 1px;
+}
+
+.ant-calendar-picker {
+    width: 160px !important;
+
+}
+
+.upload-dash {
+    width: 1040px;
+    height: 400px;
+    border: 1px dashed #ccc;
+    position: absolute;
+    top: 70px;
+    left: 1px;
+}
+.po-relative{
+    position: relative;
+}
+
+.condition-list li:first-child{
+    margin-right: 0px !important;
+}
+.ha-reg-data{
+    margin-left: -20px !important;
+}

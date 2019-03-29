@@ -1,0 +1,20 @@
+<div class="sidebar">
+    <div class="title">{{title}}</div>
+    <ul class="subtab-list">
+        <li class="flex" *ngFor="let item of subtab;let i = index" 
+            [ngClass]="{'actived':item.routerName===m_sRoutePath}"
+            routerLink="{{item.routerName}}">
+            <div class="flex">
+                <img src="assets/img/{{item.subtabIcon}}" alt="">
+                <p>{{item.subtabName}}</p>
+            </div>
+            <i *ngIf="item.count">{{item.count}}</i>
+        </li>
+    </ul>
+    <ul class="subbtn">
+        <li class="flex" *ngFor="let item of subbtn">
+            <p>{{item.subbtnName}}</p>
+            <img src="assets/img/{{item.subbtnIcon}}" alt="">
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,13 @@
+import { CheckinInfo } from '../class/checkinInfo';
+import { GuestCheckinInfo } from '../class/guestCheckinInfo';
+import { GuestDocInfo } from '../class/guestDocInfo';
+
+export class AllGuestCheckinDetailsResult {
+    CheckinInfo: CheckinInfo;
+    GuestInfo: Array<GuestInfo>;
+}
+
+class GuestInfo {
+    GuestCheckIn: GuestCheckinInfo;
+    GusetDoc: GuestDocInfo;
+}

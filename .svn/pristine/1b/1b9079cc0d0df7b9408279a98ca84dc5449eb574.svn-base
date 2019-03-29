@@ -1,0 +1,39 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from libs.orm.ormutils import dbtranscoped
+from models.hps.u_data_role import DataRole
+from utils.func_api import FuncResult
+
+
+class handler(object):
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    @dbtranscoped()
+    def data_handle(self):
+        '''
+        获取请求参数
+        '''
+        input = web.input()
+        try:
+            UpdateUserIDMust = input.get('sUpdateUserIDMust')
+            UpdateUserCodeMust = input.get('sUpdateUserCodeMust')
+            if not UpdateUserIDMust:
+                return FuncResult(fail='参数\'sUpdateUserIDMust\'不能为空')
+            elif not UpdateUserCodeMust:
+                return FuncResult(fail='参数\'sUpdateUserCodeMust\'不能为空')
+
+        except Exception, ce:
+            # 异常处理
+            return FuncResult(fail='参数有误!')
+
+        return self.get_date_code_list()
+
+    def get_date_code_list(self):
+        dateSet = DataRole().query().all()
+
+        return FuncResult(success=True, msg='操作成功！',data= dateSet)

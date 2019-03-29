@@ -1,0 +1,11 @@
+export class GuestCheckinCondition {
+    nSearchUserIDMust: number; // 搜索人id
+    sSearchUserNameMust: string; // 搜索人姓名
+    nCheckInID: number;       // 旅客ID *
+}
+
+export class GetCheckinLogListCondition {
+    nSearchUserIDMust: number; // 搜索人id
+    sSearchUserNameMust: string; // 搜索人姓名
+    nHotelGuestID: number; // 旅客ID *
+}

@@ -1,0 +1,30 @@
+<app-header></app-header>
+<div class="page">
+    <div class="welcome-bar">
+        欢迎您，{{m_objContextService.m_objUserInfo.UserName}}
+    </div>
+    <div class="info-bar flex">
+        <div class="system-notification">
+            <div class="title flex">
+                <span>系统公告</span><span>查看详情</span>
+            </div>
+            <ul class="sn-content">
+                <li class="flex">
+                    <span>2月5号系统维护升级通知</span>
+                    <span>2019-01-20</span>
+                </li>
+            </ul>
+        </div>
+        <div class="inspection-info">
+            <div class="title flex">
+                <span>巡检信息</span><span>查看详情</span>
+            </div>
+            <ul class="ii-content">
+                <li class="flex">
+                    <span>旅店异常协查通知</span>
+                    <span>2019-01-20</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

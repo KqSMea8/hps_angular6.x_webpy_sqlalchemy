@@ -1,0 +1,13 @@
+import { Injectable } from '@angular/core';
+import { Subtab } from '../class/sidebar';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class CheckinService {
+
+    m_objSubtab: Array<Subtab> = [
+        {subtabName: '开房信息查询', subtabIcon: 'guest-checkin.png', routerName: 'CheckinList'},
+    ];
+    constructor() { }
+}

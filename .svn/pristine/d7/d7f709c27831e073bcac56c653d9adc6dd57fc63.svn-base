@@ -1,0 +1,94 @@
+<app-header></app-header>
+<div class="content flex">
+    <div class="g-side">
+        <app-sidebar [title]="'系统管理'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div class="parameter-config g-main">
+        <app-breadcrumb [data]="m_lsBreadCrumbList"></app-breadcrumb>
+        <app-loading [m_bShowLoading]="m_bShowLoading"></app-loading>
+        <nz-tabset>
+            <nz-tab nzTitle="境内证件类型">
+                <div class="cont mt0">
+                    <p class="title mb10">
+                        境内证件类型配置
+                        <button class="btn-small" nz-button nzType="primary" (click)="fnShowHideAddPop(0)">新增</button>
+                    </p>
+                    <nz-table #basicTable [nzShowPagination]="false" [nzData]="m_objHaveData">
+                        <thead>
+                            <tr>
+                                <th>类型名称</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of m_objContextService.m_objAllDict.doc_type">
+                                <td>{{item.CodeName}}</td>
+                                <td>
+                                    <a href="javascript:;" (click)="fnModifyPop(item.CodeID, item.CodeName, item.Flag)">编辑</a>
+                                    <a href="javascript:;" (click)="fnUpdateStatePop(item.CodeID, item.CodeName, item.Flag)">{{item.Flag
+                                        === 1 ? '禁用' : '启用'}}</a>
+                                    <a href="javascript:;" (click)="fnRemovePop(item.CodeID, item.CodeName, item.Flag)">删除</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <nz-modal [(nzVisible)]="m_lsIsShow[0]" nzTitle="类型名称编辑" (nzOnCancel)="fnShowHidePop(0)" (nzOnOk)="fnUpdate()"
+                            [nzOkLoading]="m_bIsOkLoading">
+                            <div class='cont type-name'>
+                                <p>修改类型名称：</p>
+                                <input nz-input class="input-big" [(ngModel)]="m_objUpdateDict.sCodeName">
+                            </div>
+                        </nz-modal>
+                        <nz-modal [(nzVisible)]="m_lsIsShowAdd[0]" nzTitle="新增类型" (nzOnCancel)="fnShowHideAddPop(0)" (nzOnOk)="fnAddDict(0)"
+                            [nzOkLoading]="m_bIsOkLoading">
+                            <div class='cont type-name'>
+                                <p>新增类型名称：</p>
+                                <input nz-input class="input-big" [(ngModel)]="m_objAddDict.sCodeName">
+                            </div>
+                        </nz-modal>
+                    </nz-table>
+                </div>
+            </nz-tab>
+            <nz-tab nzTitle="境外证件类型">
+                    <div class="cont mt0">
+                        <p class="title mb10">
+                            境内证件类型配置
+                            <button class="btn-small" nz-button nzType="primary" (click)="fnShowHideAddPop(1)">新增</button>
+                        </p>
+                        <nz-table #basicTable [nzShowPagination]="false" [nzData]="m_objHaveData">
+                            <thead>
+                                <tr>
+                                    <th>类型名称</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of m_objContextService.m_objAllDict.doc_type">
+                                    <td>{{item.CodeName}}</td>
+                                    <td>
+                                        <a href="javascript:;" (click)="fnModifyPop(item.CodeID, item.CodeName, item.Flag)">编辑</a>
+                                        <a href="javascript:;" (click)="fnUpdateStatePop(item.CodeID, item.CodeName, item.Flag)">{{item.Flag
+                                            === 1 ? '禁用' : '启用'}}</a>
+                                        <a href="javascript:;" (click)="fnRemovePop(item.CodeID, item.CodeName, item.Flag)">删除</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <nz-modal [(nzVisible)]="m_lsIsShow[1]" nzTitle="类型名称编辑" (nzOnCancel)="fnShowHidePop(1)" (nzOnOk)="fnUpdate()"
+                                [nzOkLoading]="m_bIsOkLoading">
+                                <div class='cont type-name'>
+                                    <p>修改类型名称：</p>
+                                    <input nz-input class="input-big" [(ngModel)]="m_objUpdateDict.sCodeName">
+                                </div>
+                            </nz-modal>
+                            <nz-modal [(nzVisible)]="m_lsIsShowAdd[1]" nzTitle="新增类型" (nzOnCancel)="fnShowHideAddPop(1)" (nzOnOk)="fnAddDict(1)"
+                                [nzOkLoading]="m_bIsOkLoading">
+                                <div class='cont type-name'>
+                                    <p>新增类型名称：</p>
+                                    <input nz-input class="input-big" [(ngModel)]="m_objAddDict.sCodeName">
+                                </div>
+                            </nz-modal>
+                        </nz-table>
+                    </div>
+                </nz-tab>
+        </nz-tabset>
+    </div>
+</div>

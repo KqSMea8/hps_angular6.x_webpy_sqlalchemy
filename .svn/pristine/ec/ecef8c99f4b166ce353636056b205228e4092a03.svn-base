@@ -1,0 +1,6 @@
+@import "styles.less";
+
+.breadcrumb-bar{
+    background-color: #fff;
+    padding: 5px @defaultPadding;
+}

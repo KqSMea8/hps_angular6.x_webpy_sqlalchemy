@@ -1,0 +1,114 @@
+import {Component, NgModule, OnInit} from '@angular/core';
+import {ApiService} from '../../../../services/api.service';
+import {SearchHotelListCondition} from '../../../../class/searchHotelListCondition';
+import {SearchCondition} from '../../../../class/searchCondition';
+// import {MyHeaderComponent} from '../../../../components/my-header/my-header.component';
+import {FormsModule} from '@angular/forms';
+import {Subtab, Subbtn} from 'src/app/class/sidebar';
+import {BrowserModule} from '@angular/platform-browser';
+import {SearchHotelList} from '../../../../class/searchHotelList';
+import {NzMessageService} from 'ng-zorro-antd';
+import {Pagination} from '../../../../class/pagination';
+import {HotelCheckinLogList} from '../../../../class/hotelCheckinLogList';
+import {Router} from '@angular/router';
+
+
+@Component({
+    selector: 'app-hotel-search,nz-demo-select-search,nz-demo-input-basic,nz-demo-date-picker-start-end,nz-demo-button-basic,' +
+        'nz-demo-breadcrumb-separator,nz-demo-table-basic',
+    templateUrl: './hotel-search.component.html',
+    styleUrls: ['./hotel-search.component.less'],
+
+})
+@NgModule({
+    imports: [
+        FormsModule
+    ],
+})
+
+export class HotelSearchComponent implements OnInit {
+    m_objHotelListCondition: SearchCondition<SearchHotelListCondition>;
+    nHotelID: number; // 酒店ID
+    sHotelCodeLikeL: string; // 酒店编号
+    sHotelNameLike: string; // 酒店名
+    sHotelTel: string;	// 前台电话
+    nRoomCountStart: number; // 房间开始数量
+    nRoomCountEnd: number; // 房间结束数量
+    sResponPerson: string; // 责任人
+    sResponPersonTel: string; // 责任人电话
+    sLegalPerson: string; // 法人姓名
+    sLegalPersonNo: string; // 法人证件号
+    sLegalPersonMobile: string; // 法人联系电话
+    nProvinceID: number; //  省份ID
+    nCityID: number;
+    nDistrictID: number;
+    dtRegStartTime: string; // 登记时间起始
+    dtRegEndTime: string; // 登记时间结束
+    nState: number; // 酒店状态
+    sCreateuserCode: string; // 登记人
+    m_listHotelList: SearchHotelList;
+    m_listHotelLists: Array<any>;
+    private m_objMessage: NzMessageService;
+    public m_objSubtab: Array<Subtab> = [
+            {subtabName: '旅店查询', subtabIcon: 'guest-checkin.png', routerName: '/main/Hotel/HotelSearch'},
+            {subtabName: '待审核', subtabIcon: 'guest-checkin.png', routerName: '/main/Hotel/Verify'},
+            {subtabName: '未通过', subtabIcon: 'guest-checkin.png', routerName: '/main/Hotel/Offline'},
+            {subtabName: '添加酒店', subtabIcon: 'guest-checkin.png', routerName: '/main/Hotel/HotelAdd'},
+    ];
+    // private m_objMessage:Array<Subtab> =[
+    //     {}
+    // ]
+    public m_lsDataSet: Array<any> = [
+        {name: 'aa', index: '1'},
+        {name: 'bb', index: '2'},
+        {name: 'cc', index: '3'}
+    ]
+
+    constructor(
+        private m_objApiService: ApiService,
+        private m_objRouter: Router
+
+    ) {
+        this.m_objHotelListCondition = new SearchCondition<SearchHotelListCondition>(SearchHotelListCondition)
+    }
+
+    ngOnInit() {
+        this.m_objHotelListCondition.objPageInfo.nPageNo = 1;
+        this.m_objHotelListCondition.objPageInfo.nPageSize = 1;
+        this.m_objHotelListCondition.objPageInfo.nSort = 0;
+
+    }
+
+    fnSearch(): void {
+        this.m_objHotelListCondition.objCondition.nSearchUserIDMust = 1;
+        this.m_objHotelListCondition.objCondition.sSearchUserNameMust = 'aa';
+        this.m_objHotelListCondition.objCondition.sHotelCodeLikeL = this.sHotelCodeLikeL;
+        this.m_objHotelListCondition.objCondition.sHotelNameLike = this.sHotelNameLike;
+        this.m_objHotelListCondition.objCondition.sHotelTel = this.sHotelTel;
+        this.m_objHotelListCondition.objCondition.nRoomCountStart = this.nRoomCountStart;
+        this.m_objHotelListCondition.objCondition.sResponPerson = this.sResponPerson;
+        this.m_objHotelListCondition.objCondition.sResponPersonTel = this.sResponPersonTel;
+        this.m_objHotelListCondition.objCondition.sLegalPerson = this.sLegalPerson;
+        this.m_objHotelListCondition.objCondition.sLegalPersonNo = this.sLegalPersonNo;
+        this.m_objHotelListCondition.objCondition.sLegalPersonMobile = this.sLegalPersonMobile;
+        this.m_objHotelListCondition.objCondition.nProvinceID = this.nProvinceID;
+        this.m_objHotelListCondition.objCondition.nDistrictID = this.nDistrictID;
+        this.m_objHotelListCondition.objCondition.nCityID = this.nCityID;
+        this.m_objHotelListCondition.objCondition.nState = this.nState;
+        this.m_objHotelListCondition.objCondition.sCreateuserCode = this.sCreateuserCode;
+        this.m_objHotelListCondition.objCondition.sLegalPersonNo = this.sLegalPersonNo;
+        this.m_objHotelListCondition.objCondition.sLegalPersonMobile = this.sLegalPersonMobile;
+        this.m_objHotelListCondition.objCondition.dtRegStartTime = this.dtRegStartTime;
+        this.m_objHotelListCondition.objCondition.dtRegEndTime = this.dtRegEndTime;
+        console.log(this.m_objHotelListCondition);
+        this.m_objApiService.fnSearchHotelList(this.m_objHotelListCondition).subscribe(data => {
+            if (data.Code === 200) {
+                console.log(data.Data);
+                this.m_listHotelLists = data.Data.DataSet;
+            } else {
+                this.m_objMessage.create('error', data.Msg);
+            }
+        });
+    }
+
+}

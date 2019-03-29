@@ -1,0 +1,99 @@
+.mg(@t:0px,@r:0px,@b:0px,@l:0px) {
+    margin-top: @t;
+    margin-right: @r;
+    margin-bottom: @b;
+    margin-left: @l;
+}
+
+.pd(@t:0px,@r:0px,@b:0px,@l:0px) {
+    padding-top: @t;
+    padding-right: @r;
+    padding-bottom: @b;
+    padding-left: @l;
+}
+
+.Breadcrumb {
+    .mg(@t:6px,@b:8px,@l:20px);
+}
+.content{
+    height: ~"calc(100% - 70px)";
+
+    >div{
+        height: 100%;
+    }
+}
+.area-search {
+    border: 20px solid #eaf1f9;
+}
+
+.hs-input-f {
+    .mg(@t:8px,@b:8px);
+    position: relative;
+    left: 20px;
+    width: 90%;
+
+    display: flex;
+    justify-content: space-between;
+    > div {
+        div {
+            .mg(@t:6px,@b:6px)
+        }
+        width: 20%;
+        > nz-select {
+            width: 90%;
+        }
+        > input {
+            width: 90%;
+        }
+    }
+}
+
+.hs-date {
+    .mg(@t:8px,@b:8px);
+    position: relative;
+    left: 20px;
+    width: 90%;
+    .reg-data{
+        .mg(@t:8px,@b:8px);
+    }
+    display: flex;
+    nz-date-picker {
+        .pd(@l:8px,@r:8px)
+    }
+    .btn-search {
+        .mg(@l:10px);
+        .reg-data {
+            .mg(@t:8px,@b:8px);
+        }
+        button {
+            background-color: #f9b552;
+            border-color: #f9b552;
+            border-radius: 6px;
+        }
+    }
+}
+
+.area-sort {
+    width: 100%;
+    background-color: #eaf1f9;
+    border-bottom: 8px solid #eaf1f9;
+    nz-select {
+        .mg(@l:76%);
+        width: 14%;
+    }
+}
+
+.area-table {
+    border-left: 8px solid #eaf1f9;
+    border-bottom: 8px solid #eaf1f9;
+    border-top: 8px solid #eaf1f9;
+}
+
+.hs-body{
+    overflow-y: scroll;
+
+}
+.hs-checkin{
+    color:blue;
+    padding-right: 6px;
+}

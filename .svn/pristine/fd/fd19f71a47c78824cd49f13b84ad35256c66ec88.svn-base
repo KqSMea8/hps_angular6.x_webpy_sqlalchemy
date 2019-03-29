@@ -1,0 +1,38 @@
+export class SearchHotelList {
+    HotelID: number; // 酒店ID
+    HotelCode: string; //  酒店编号
+    HotelName: string;  // 酒店名
+    HotelAddr: string;  // 酒店地址
+    HotelTel: string;  // 前台电话
+    LegalTel: string;  // 法人电话
+    LegalPerson: string;  // 法人姓名
+    LegalDocNo: string; // (法人证件号码)
+    Latitude: string;  // 维度
+    Longitude: string;  // 经度
+    ProvinceID: number;  // 省份ID
+    Province: string;  // 省份
+    CityID: number;  // 城市ID
+    City: string;  // 城市
+    DistrictID: number;  // 地区 ID
+    District: string;  // 地区
+    State: number; // (酒店状态)
+    StateName: string; // (酒店状态名)
+    HotelType: number; // (酒店类型)
+    HotelTypeName: string; // (酒店类型名称)
+    CreatUserID: number; // (登记人ID;数据库关联UserID);
+    CreatuserCode: string; // (登记人);
+    ResponPersonTel: string; // (责任人联系电话);
+    ResponPerson: string; // (责任人)
+    ApplyTime: string; // (申请时间)
+    AuditTime: string; // (审核时间)
+    UserCode: string; // (审核用户编号)
+    RoomCount: number; // (房间数量)
+    BedCount: number; // (床位数量)
+    Auditstate: number; // (审核状态)
+    AuditstateName: string; // (审核状态名)
+    BusLicenseCode: string; // (营业执照号)
+    BusLicenseName: string; // (营业执照名称)
+    RegStartTime: string; // (登记时间)
+    Remark: string; // (备注)
+    CreateTime: string; // (新建时间)
+}

@@ -1,0 +1,48 @@
+# coding: utf-8
+
+import web
+
+from core.modules.module_handle import api_handle
+from models.hps.g_foreigner import Foreigner
+from utils import obj_to_dict
+from utils.func_api import FuncResult
+
+
+class handler(object):
+    '''外籍入住旅客详情查询'''
+
+    @api_handle(db=True)
+    def POST(self):
+        return self.data_handle()
+
+    def data_handle(self):
+        objInput = web.input()
+
+        try :
+            if not objInput.get('nSearchUserIDMust'):
+                return FuncResult(fail='nSearchUserIDMust为必传参数！')
+            if not objInput.get('sSearchUserNameMust'):
+                return FuncResult(fail='sSearchUserNameMust为必传参数！')
+
+            nGuestDocID = objInput.get('nGuestDocID')
+            if not nGuestDocID.strip():
+                return FuncResult(fail='nGuestDocID值不能为空！')
+
+        except Exception, ce:
+            return FuncResult(fail='参数有误！')
+
+        return self.get_foreigner_guest_detail(nGuestDocID)
+
+    def get_foreigner_guest_detail(self, nGuestDocID):
+        objForeigner = Foreigner().query.\
+            filter(Foreigner.GuestDocID == nGuestDocID).\
+            first()
+
+        if not objForeigner:
+            return FuncResult(msg='无查询结果！')
+
+        dictData = obj_to_dict(objForeigner)
+        del dictData['GuestDocID']
+        del dictData['CreateTime']
+
+        return FuncResult(success=True, msg='', data=dictData)

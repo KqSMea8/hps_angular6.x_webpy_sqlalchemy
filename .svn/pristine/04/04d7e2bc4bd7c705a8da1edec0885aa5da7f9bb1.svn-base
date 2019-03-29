@@ -1,0 +1,109 @@
+<app-header></app-header>
+<div class="content flex">
+    <div class="g-side">
+        <app-sidebar [title]="'系统管理'" [subtab]="m_objSubtab"></app-sidebar>
+    </div>
+    <div class="log g-main">
+        <app-loading [m_bShowLoading]="m_bShowLoading"></app-loading>
+        <app-breadcrumb [data]="m_lsBreadCrumbList"></app-breadcrumb>
+        <div class="cont">
+            <div class="search-condition">
+                <div class="item">
+                    <p class="title">按用户信息查询</p>
+                    <ul class="condition-list">
+                        <li>
+                            <p>用户编号</p>
+                            <input class="input-big" nz-input [(ngModel)]="m_objSearchLogCondition.objCondition.sWorkCode">
+                        </li>
+                        <li>
+                            <p>账号</p>
+                            <input class="input-big" nz-input [(ngModel)]="m_objSearchLogCondition.objCondition.sUserCode">
+                        </li>
+                        <li>
+                            <p>姓名</p>
+                            <input class="input-big" nz-input [(ngModel)]="m_objSearchLogCondition.objCondition.sUserName">
+                        </li>
+                        <!-- <li>
+                            <p>岗位</p>
+                            <input class="input-big" nz-input [(ngModel)]="m_objSearchLogCondition.objCondition.sPost">
+                        </li> -->
+                        <li>
+                            <p>日志类型</p>
+                            <nz-select class="input-big" [(ngModel)]="m_objSearchLogCondition.objCondition.nOperaType"
+                                nzAllowClear nzPlaceHolder="">
+                                <nz-option *ngFor="let item of m_objContextService.m_objAllDict.log_type" nzValue="{{item.CodeNo}}"
+                                    nzLabel="{{item.CodeName}}"></nz-option>
+                            </nz-select>
+                        </li>
+                    </ul>
+                </div>
+                <div class="item">
+                    <p class="title">按时间查询</p>
+                    <ul class="condition-list">
+                        <li>
+                            <p>时间</p>
+                            <nz-date-picker class="input-big" [nzDisabledDate]="m_objContextService.fnDisabledDate"
+                                nzPlaceHolder="请选择日期" [(ngModel)]="m_objSearchLogCondition.objCondition.sDateStart"></nz-date-picker>
+                            <span>至</span>
+                            <nz-date-picker class="input-big" [nzDisabledDate]="m_objContextService.fnDisabledDate"
+                                nzPlaceHolder="请选择日期" [(ngModel)]="m_objSearchLogCondition.objCondition.sDateEnd"></nz-date-picker>
+                        </li>
+                        <li>
+                            <p>&nbsp;</p>
+                            <span>选择</span>
+                            <nz-radio-group [(ngModel)]="m_sPeriod" (ngModelChange)="fnChangePeriod()">
+                                <label nz-radio nzValue="0">今天</label>
+                                <label nz-radio nzValue="1">一周</label>
+                                <label nz-radio nzValue="2">一个月</label>
+                            </nz-radio-group>
+                        </li>
+                    </ul>
+                </div>
+                <div class="text-center relative">
+                    <button class="btn-middle" nz-button nzType="primary" (click)="fnSearchLogList()">
+                        <i nz-icon type="search" class="fl mt3"></i>
+                        查询
+                    </button>
+                    <nz-dropdown [nzTrigger]="'click'" class="absolute-r">
+                        <button nz-button nz-dropdown>
+                            <span>默认排序</span>
+                            <i nz-icon type="down"></i>
+                        </button>
+                        <ul nz-menu>
+                            <li nz-menu-item *ngFor="let item of m_objContextService.m_objAllDict.sort" (click)="fnSort(item.CodeNo)">{{item.CodeName}}</li>
+                        </ul>
+                    </nz-dropdown>
+                </div>
+            </div>
+            <div class="search-data-list mt20 relative">
+                <nz-table #basicTable [nzShowPagination]="false" [nzData]="m_lsSearchLogList.DataSet">
+                    <thead>
+                        <tr>
+                            <th>账号</th>
+                            <th>姓名</th>
+                            <th>日志类型</th>
+                            <th>日志详情</th>
+                            <th>登录IP</th>
+                            <th>操作时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of m_lsSearchLogList.DataSet">
+                            <td>{{item.UserCode}}</td>
+                            <td>{{item.UserName}}</td>
+                            <td>{{item.OperaTypeName}}</td>
+                            <td>{{item.KeyWord}}</td>
+                            <td>{{item.IP}}</td>
+                            <td>{{item.CreateTime}}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+            <div class="pagination mt10 mb10">
+                <nz-pagination [(nzPageIndex)]="m_objSearchLogCondition.objPageInfo.nPageNo" [(nzTotal)]="m_lsSearchLogList.RowCount"
+                    nzShowSizeChanger [(nzPageSize)]="m_objSearchLogCondition.objPageInfo.nPageSize"
+                    (nzPageIndexChange)="fnSearchLogList()" (nzPageSizeChange)="fnPageSizeChange()"></nz-pagination>
+            </div>
+        </div>
+    </div>
+</div>

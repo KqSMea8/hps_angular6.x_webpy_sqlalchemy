@@ -1,0 +1,124 @@
+import { Component, OnInit, ElementRef } from '@angular/core';
+import { SystemManagementService } from 'src/app/services/system-management.service';
+import { NzMessageService } from 'ng-zorro-antd';
+import { ApiService } from 'src/app/services/api.service';
+import { SearchCondition } from 'src/app/class/searchCondition';
+import { SearchLogCondition } from 'src/app/class/searchLogCondition';
+import { Pagination } from 'src/app/class/pagination';
+import { SearchLogList } from 'src/app/class/searchLogList';
+import { ToolsService } from 'src/app/services/tools.service';
+import { Period } from 'src/app/class/period';
+import { ContextService } from 'src/app/services/context.service';
+import { Subtab } from '../../class/sidebar';
+
+@Component({
+    selector: 'app-log',
+    templateUrl: './log.component.html',
+    styleUrls: ['./log.component.less']
+})
+export class LogComponent implements OnInit {
+    m_objSearchLogCondition: SearchCondition<SearchLogCondition> = new SearchCondition<SearchLogCondition>(SearchLogCondition);
+    m_lsSearchLogList: Pagination<SearchLogList> = new Pagination<SearchLogList>();
+    m_sPeriod: string;
+    /**面包屑导航信息 */
+    m_lsBreadCrumbList: Array<{name: string, routelink: string}> = [
+        {name: '首页', routelink: '/home'},
+        {name: '操作日志', routelink: ''},
+    ];
+    m_bShowLoading: boolean;
+    m_bErrorIsShow = false;
+    m_sErrorMsg: string;
+    m_lsSort: Array<any> = [
+        {
+            CodeNo: 1,
+            CodeName: '操作时间'
+        },
+        {
+            CodeNo: 2,
+            CodeName: '日志类型'
+        }
+    ];
+    constructor(
+        public m_objContextService: ContextService,
+        public m_objSystemManagementService: SystemManagementService,
+        private m_objApiService: ApiService,
+        private m_objToolsService: ToolsService,
+        private m_objElementRef: ElementRef
+    ) { }
+
+    ngOnInit() {
+        this.m_objSearchLogCondition.objCondition.nSearchUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+        this.m_objSearchLogCondition.objCondition.sSearchUserNameMust =  this.m_objContextService.m_objUserInfo.UserName;
+        /**初始化查询信息 */
+        this.m_objSearchLogCondition.objPageInfo.nPageNo = 1;
+        this.m_objSearchLogCondition.objPageInfo.nPageSize = 10;
+        this.m_objSearchLogCondition.objPageInfo.nSort = 1;
+        this.m_lsSearchLogList.RowCount = 0;
+    }
+    /**排序 */
+    fnSort(nSort: number): void {
+        this.m_objSearchLogCondition.objPageInfo.nSort = nSort;
+        this.fnSearchLogList();
+    }
+    /**分页显示数量改变触发 */
+    fnPageSizeChange(): void {
+        if (this.m_objSearchLogCondition.objPageInfo.nPageNo === 1) {
+            this.fnSearchLogList();
+        } else {
+            this.m_objSearchLogCondition.objPageInfo.nPageNo = 1;
+        }
+    }
+
+    /**时间区间 */
+    fnChangePeriod(): void {
+        const objDate: Period = this.m_objToolsService.fnChangePeriod(this.m_sPeriod);
+        this.m_objSearchLogCondition.objCondition.sDateStart = objDate.sDateStart;
+        this.m_objSearchLogCondition.objCondition.sDateEnd = objDate.sDateEnd;
+    }
+
+    /**日志查询 */
+    fnSearchLogList(): void {
+        this.m_bShowLoading = true;
+        this.m_objSearchLogCondition.objCondition.sDateStart =
+            this.m_objToolsService.fnFormatDate(this.m_objSearchLogCondition.objCondition.sDateStart, 0);
+        this.m_objSearchLogCondition.objCondition.sDateEnd =
+            this.m_objToolsService.fnFormatDate(this.m_objSearchLogCondition.objCondition.sDateEnd, 1);
+
+        if (this.m_objSearchLogCondition.objPageInfo.nPageNo === 0) {
+            this.m_objSearchLogCondition.objPageInfo.nPageNo = 1;
+        }
+        this.m_objApiService.fnSearchLogList(this.m_objSearchLogCondition).subscribe( data => {
+            this.m_bShowLoading = false;
+            if (data.Code === 200) {
+                if (data.Data.RowCount === 0) {
+                    this.m_sErrorMsg = '没有查询到数据！';
+                    this.m_bErrorIsShow = true;
+                } else {
+                    this.fnMoveToTable();
+                }
+                this.m_lsSearchLogList = data.Data;
+                for (const item of this.m_lsSearchLogList.DataSet) {
+                    item.LogInfo = item.LogInfo.replace('{', '').replace('}', '');
+                }
+            } else {
+                this.m_sErrorMsg = data.Msg;
+                return this.m_bErrorIsShow = true;
+            }
+        });
+    }
+
+    fnReset(): void {
+        this.m_objSearchLogCondition.objCondition = new SearchLogCondition();
+    }
+
+
+    /**滚动到数据表格 */
+    fnMoveToTable(): void {
+        setTimeout(() => {
+            const element = this.m_objElementRef.nativeElement.querySelector('#resultTable');
+            const height = element.offsetTop;
+            this.m_objElementRef.nativeElement.querySelector('.g-main').scrollTop = height - 90;
+        }, 300);
+    }
+}
+

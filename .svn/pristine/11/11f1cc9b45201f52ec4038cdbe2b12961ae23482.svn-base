@@ -1,0 +1,115 @@
+import { Component, OnInit } from '@angular/core';
+import { Subtab } from '../../../../class/sidebar';
+import { ApiService } from 'src/app/services/api.service';
+import { GuestCheckinCondition, GetCheckinLogListCondition } from '../../../../class/GuestCheckinDetailsCondition';
+import { ActivatedRoute, Params } from '@angular/router';
+import { ContextService } from 'src/app/services/context.service';
+import { AllGuestCheckinDetailsResult } from '../../../../class/AllGuestCheckinDetailsResult';
+import { ForeignerCheckinDetailsResult } from '../../../../class/ForeignerCheckinDetailsResult';
+import { ToolsService } from 'src/app/services/tools.service';
+import { GuestCheckinLogResult } from '../../../../class/GuestCheckinLogResult';
+
+@Component({
+    selector: 'app-guest-details',
+    templateUrl: './guest-details.component.html',
+    styleUrls: ['./guest-details.component.less']
+})
+export class GuestDetailsComponent implements OnInit {
+
+    /**侧边栏信息 */
+    m_objSubtab: Array<Subtab> = this.m_objContextService.m_objSideTabList.guestCheckin;
+    /**旅客入住查询参数 */
+    m_objGuestCheckinSearchCondition: GuestCheckinCondition = new GuestCheckinCondition();
+    /**旅客类型，1：境内，2：境外 */
+    m_nGuestType: number;
+    /**入住ID */
+    m_nCheckinId: number;
+    /**所有旅客入住查询结果 */
+    m_objAllGuestCheckinDetailsResult: AllGuestCheckinDetailsResult = new AllGuestCheckinDetailsResult();
+    /**境外旅客入住查询结果 */
+    m_objForeignerGuestCheckinDetailsResult: ForeignerCheckinDetailsResult = new ForeignerCheckinDetailsResult();
+    /**单条旅客入住记录查询结果 */
+    m_objGuestCheckinLog: GuestCheckinLogResult;
+    /**旅客入住记录查询结果 */
+    m_objGuestCheckinLogList: Array<GuestCheckinLogResult> = [];
+    /**旅客入住记录查询参数 */
+    m_objGuestCheckinLogListCondition: GetCheckinLogListCondition = new GetCheckinLogListCondition();
+    /**面包屑导航信息 */
+    m_aBreadCrumbList: Array<{name: string, routelink: string}> = [
+        {name: '首页', routelink: '/home'},
+        {name: '所有旅客入住查询', routelink: '/main/GuestCheckinList/allGuest'},
+        {name: '旅客入住详情', routelink: ''}
+    ];
+    constructor(
+        public m_objApiService: ApiService,
+        public m_objActivatedRoute: ActivatedRoute,
+        public m_objContextService: ContextService,
+        public m_objToolsService: ToolsService
+    ) { }
+
+    ngOnInit() {
+        this.m_objGuestCheckinSearchCondition.nSearchUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+        this.m_objGuestCheckinSearchCondition.sSearchUserNameMust = this.m_objContextService.m_objUserInfo.UserName;
+        this.m_objGuestCheckinLogListCondition.nSearchUserIDMust = this.m_objContextService.m_objUserInfo.UserID;
+        this.m_objGuestCheckinLogListCondition.sSearchUserNameMust = this.m_objContextService.m_objUserInfo.UserName;
+        this.m_objActivatedRoute.queryParams.subscribe((params: Params) => {
+            this.m_nGuestType = Number(params['type']);
+            this.m_nCheckinId = params['id'];
+            this.m_objGuestCheckinSearchCondition.nCheckInID = this.m_nCheckinId;
+            this.m_objGuestCheckinLogListCondition.nHotelGuestID = this.m_nCheckinId;
+            this.fnGetAllCheckinDetail();
+            this.fnGetCheckinLogList();
+            // this.fnGetCheckinLog();
+            if (this.m_nGuestType === 2) {
+                this.fnGetForeignerCheckinDetails();
+            }
+        });
+    }
+
+    /**旅客入住详情 */
+    fnGetAllCheckinDetail(): void {
+        this.m_objApiService.fnGetCheckinDetail(this.m_objGuestCheckinSearchCondition).subscribe(data => {
+            if (data.Code === 200) {
+                this.m_objAllGuestCheckinDetailsResult = data.Data;
+            } else {
+                this.m_objToolsService.fnErrorReturnTips(data.Msg);
+            }
+        });
+    }
+
+    /**境外旅客入住详情补充信息 */
+    fnGetForeignerCheckinDetails(): void {
+        this.m_objApiService.fnGetForeignerGuestDetail(this.m_objGuestCheckinSearchCondition).subscribe(data => {
+            if (data.Code === 200) {
+                this.m_objForeignerGuestCheckinDetailsResult = data.Data;
+            } else {
+                this.m_objToolsService.fnErrorReturnTips(data.Msg);
+            }
+        });
+    }
+
+    /**单条旅客入住记录历史查询 */
+    fnGetCheckinLog(): void {
+        this.m_objApiService.fnGetCheckinLog(this.m_objGuestCheckinSearchCondition).subscribe(data => {
+            if (data.Code === 200) {
+                this.m_objGuestCheckinLog = data.Data;
+            } else {
+                this.m_objToolsService.fnErrorReturnTips(data.Msg);
+            }
+        });
+    }
+
+    /**旅客入住记录历史查询 */
+    fnGetCheckinLogList(): void {
+        this.m_objApiService.fnGetCheckinLogList(this.m_objGuestCheckinLogListCondition).subscribe(data => {
+            if (data.Code === 200) {
+                this.m_objGuestCheckinLogList = data.Data;
+            }
+        });
+    }
+
+    /**返回上一页 */
+    fnGoBack(): void {
+        history.go(-1);
+    }
+}

@@ -1,0 +1,21 @@
+import { Component, OnInit } from '@angular/core';
+import { Subtab } from '../../../../class/sidebar';
+import { GuestCheckinService } from 'src/app/services/guest-checkin.service';
+
+@Component({
+    selector: 'app-guest-details',
+    templateUrl: './guest-details.component.html',
+    styleUrls: ['./guest-details.component.less']
+})
+export class GuestDetailsComponent implements OnInit {
+
+    public m_objSubtab: Array<Subtab> = this.m_objGuestCheckinService.m_objSubtab;
+
+    constructor(
+        public m_objGuestCheckinService: GuestCheckinService
+    ) { }
+
+    ngOnInit() {
+    }
+
+}

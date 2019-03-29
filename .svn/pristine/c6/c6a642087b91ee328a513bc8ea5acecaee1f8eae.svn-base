@@ -1,0 +1,68 @@
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
+@Component({
+    selector: 'app-error-bar',
+    templateUrl: './error-bar.component.html',
+    styleUrls: ['./error-bar.component.less']
+})
+export class ErrorBarComponent implements OnInit {
+    @Input() m_nDelayTime = this.m_nDelayTime ? this.m_nDelayTime : 3;
+    @Input() msg: string;
+    m_bCanClick = true;
+    m_bIsShow: boolean;
+    m_sMsg: string;
+    @Input()
+    get isShow() {
+        return this.m_bIsShow;
+    }
+    set isShow(value) {
+        this.m_bIsShow = value;
+        this.fnDelayHide();
+        this.isShowChange.emit(value);
+    }
+
+    @Output()
+    isShowChange: EventEmitter<any> = new EventEmitter();
+
+    // @Input()
+    // get msg() {
+    //     return this.m_sMsg;
+    // }
+    // set msg(value) {
+    //     this.m_sMsg = value;
+    //     this.msgChange.emit(value);
+    // }
+
+    // @Output()
+    // msgChange: EventEmitter<any> = new EventEmitter();
+    constructor() {
+     }
+
+    ngOnInit() {
+    }
+
+    ngOnChange() {
+        console.log(this.msg);
+    }
+        /**延迟关闭错误提示 */
+        fnDelayHide(): void {
+            if (this.m_bCanClick) {
+                debugger;
+                this.m_bCanClick = false;
+                const sMsg = this.msg;
+                let nDelayTime = this.m_nDelayTime;
+                this.m_sMsg = '(' + nDelayTime + 's),' + sMsg;
+                const interVal = setInterval(() => {
+                    if (nDelayTime > 0) {
+                        nDelayTime -= 1;
+                        this.m_sMsg = '(' + nDelayTime + 's),' + sMsg;
+                    } else {
+                        this.m_bIsShow = false;
+                        this.isShowChange.emit(this.m_bIsShow);
+                        this.m_bCanClick = true;
+                        clearInterval(interVal);
+                    }
+                }, 1000);
+            }
+        }
+}

@@ -1,0 +1,187 @@
+import {Component, OnInit} from '@angular/core';
+import {AddHotelCondition} from '../../../../class/addHotelCondition';
+import {ApiService} from '../../../../services/api.service';
+import {Subtab} from "../../../../class/sidebar";
+import {VerifyHotelCondition} from '../../../../class/verifyHotelCondition';
+import {OfflineHotelCondition} from "../../../../class/offlineHotelCondition";
+import {UpdateHotelCondition} from "../../../../class/updateHotelCondition";
+
+@Component({
+    selector: 'app-hotel-add,nz-demo-select-search,nz-demo-input-basic,nz-demo-date-picker-start-end,nz-demo-button-basic,nz-demo-breadcrumb-separator,nz-demo-table-basic',
+    templateUrl: './hotel-add.component.html',
+    styleUrls: ['./hotel-add.component.less']
+})
+export class HotelAddComponent implements OnInit {
+    nAddUserIDMust: number; //  操作者id
+    sAddUserNameMust: string; //  操作者姓名
+    sHotelCode: string; // 酒店编号
+    sHotelName: string; // 酒店名  *
+    sHotelAddr: string; // 酒店地址  *
+    sHotelTel: string; // 前台电话
+    sLegalTel: string; // 法人电话
+    sLegalPerson: string; // 法人姓名
+    sLegalDocNo: string; //  (法人证件号码)
+    sCoordinate: string; // 坐标
+    nProvinceID: number; // 省份ID  *
+    nCityID: number; // 城市ID  *
+    nDistrictID: number; // 地区ID  *
+    nHotelType: number; //  (酒店类型)
+    nCreatUserID: number; //  (登记人ID,数据库关联UserID),
+    sCreatuserCode: string; //  (登记人),
+    sResponPersonTel: string; //  (责任人联系电话),
+    sResponPerson: string; //  (责任人)
+    nRoomCount: number; //  (房间数量)
+    nBedCount: number; //  (床位数量)
+    sBusLicenseCode: string; //  (营业执照号)
+    sBusLicenseName: string; //  (营业执照名称)
+    sRegStartTime: string; //  (登记时间)
+    sRemark: string; //  (备注)
+
+    // 审核酒店条件
+    nVerHotelID: number;
+    nVerifyUserIDMust: number;
+    sVerifyuserCodeMust: string;
+    sVerifyDateTimeMust: string;
+    nVerState: number;
+    sVerRemark: string;
+    nAuditState: number;
+
+    // 注销酒店
+    nOffHotelIDMust: number; // 酒店编号
+    nOffLineUserIDMust: number; // 注销人ID
+    sOffLineuserCodeMust: string; // 注销人姓名
+    sOffLineDateTimeMust: string; // 注销时间
+    sOffRemark: string; // 备注
+
+    // 修改酒店
+    sHotelIDMust: number; // 酒店ID
+    nUpdateUserIDMust: number; // 修改人ID
+    sUpdateuserCodeMust: string; // 修改人姓名
+
+
+    objAddHotelCondition: AddHotelCondition; // 添加酒店条件
+    objVerifyHotelCondition: VerifyHotelCondition; // 审核酒店条件
+    OfflineHotelCondition: OfflineHotelCondition; // 注销酒店条件
+    objUpdateHotelCondition: UpdateHotelCondition; // 注销酒店条件
+
+
+    public m_objSubtab: Array<Subtab> = [
+        {subtabName: '旅店查询', subtabIcon: 'guest-checkin.png', routerName: 'a'},
+        {subtabName: '待审核', subtabIcon: 'guest-checkin.png', routerName: 'a'},
+        {subtabName: '未通过', subtabIcon: 'guest-checkin.png', routerName: 'a'},
+    ];
+    public m_lsDataSet: Array<any> = [
+        {name: 'aa', index: '1'},
+        {name: 'bb', index: '2'},
+        {name: 'cc', index: '3'}
+    ];
+
+    constructor(private m_objApiService: ApiService) {
+        this.objAddHotelCondition = new AddHotelCondition();
+        this.OfflineHotelCondition = new OfflineHotelCondition();
+        this.objVerifyHotelCondition = new VerifyHotelCondition();
+        this.objUpdateHotelCondition = new UpdateHotelCondition()
+    }
+
+    ngOnInit() {
+    }
+
+    // 添加酒店
+    fnAdd(): void {
+        this.nAddUserIDMust = 1;
+        this.sAddUserNameMust = 'a';
+        this.objAddHotelCondition.nAddUserIDMust = this.nAddUserIDMust;
+        this.objAddHotelCondition.sAddUserNameMust = this.sAddUserNameMust;
+        this.objAddHotelCondition.sHotelCode = this.sHotelCode;
+        this.objAddHotelCondition.sHotelName = this.sHotelName;
+        this.objAddHotelCondition.sHotelAddr = this.sHotelAddr;
+        this.objAddHotelCondition.sHotelTel = this.sHotelTel;
+        this.objAddHotelCondition.sLegalTel = this.sLegalTel;
+        this.objAddHotelCondition.sLegalPerson = this.sLegalPerson;
+        this.objAddHotelCondition.sLegalDocNo = this.sLegalDocNo;
+        this.objAddHotelCondition.nProvinceID = this.nProvinceID;
+        this.objAddHotelCondition.nCityID = this.nCityID;
+        this.objAddHotelCondition.nDistrictID = this.nDistrictID;
+        this.objAddHotelCondition.nHotelType = this.nHotelType;
+        this.objAddHotelCondition.nCreatUserID = this.nCreatUserID;
+        this.objAddHotelCondition.sCreatuserCode = this.sCreatuserCode;
+        this.objAddHotelCondition.sResponPersonTel = this.sResponPersonTel;
+        this.objAddHotelCondition.sResponPerson = this.sResponPerson;
+        this.objAddHotelCondition.nRoomCount = this.nRoomCount;
+        this.objAddHotelCondition.nBedCount = this.nBedCount;
+        this.objAddHotelCondition.sBusLicenseCode = this.sBusLicenseCode;
+        this.objAddHotelCondition.sBusLicenseName = this.sBusLicenseName;
+        this.objAddHotelCondition.sRegStartTime = this.sRegStartTime;
+        this.objAddHotelCondition.sRemark = this.sRemark;
+        console.log(this.objAddHotelCondition);
+        this.m_objApiService.fnAddHotel(this.objAddHotelCondition).subscribe(data => {
+            if (data.Code === 200) {
+                console.log(data.Data);
+                // this.m_listHotelLists = data.Data.DataSet;
+            } else {
+                // this.m_objMessage.create('error', data.Msg);
+            }
+        });
+    }
+
+    // 审核酒店
+    fnVerifyHotel(): void {
+        this.sVerifyuserCodeMust = '1';
+        this.objVerifyHotelCondition.nHotelID = this.nVerHotelID;
+        this.objVerifyHotelCondition.nVerifyUserIDMust = this.nVerifyUserIDMust;
+        this.objVerifyHotelCondition.sVerifyUserCodeMust = this.sVerifyuserCodeMust;
+        this.objVerifyHotelCondition.sVerifyDateTimeMust = this.sVerifyDateTimeMust;
+        this.objVerifyHotelCondition.nState = this.nVerState;
+        this.objVerifyHotelCondition.sRemark = this.sVerRemark;
+        this.objVerifyHotelCondition.nAuditState = this.nAuditState;
+        this.m_objApiService.fnVerifyHotel(this.objVerifyHotelCondition).subscribe(data => {
+            if (data.Code === 200) {
+                console.log(data)
+            }
+        })
+    }
+
+    // 注销酒店
+    OfflineHotel(): void {
+        this.OfflineHotelCondition.nHotelIDMust = this.nOffHotelIDMust;
+        this.OfflineHotelCondition.nOffLineUserIDMust = this.nOffLineUserIDMust;
+        this.OfflineHotelCondition.sOffLineUserNameMust = this.sOffLineuserCodeMust;
+        this.OfflineHotelCondition.sOffLineDateTimeMust = this.sOffLineDateTimeMust;
+        this.OfflineHotelCondition.sRemark = this.sOffRemark;
+        this.m_objApiService.fnOfflineHotel(this.OfflineHotelCondition).subscribe(data => {
+            if (data.Code === 200) {
+                console.log(data)
+            }
+        })
+    }
+
+    // 修改酒店
+    fnUpdateHotel(): void {
+        this.objUpdateHotelCondition.sHotelIDMust = this.sHotelIDMust;
+        this.objUpdateHotelCondition.nUpdateUserIDMust = this.nUpdateUserIDMust;
+        this.objUpdateHotelCondition.sUpdateuserCodeMust = this.sUpdateuserCodeMust;
+        this.objUpdateHotelCondition.sHotelCode = this.sHotelCode;
+        this.objUpdateHotelCondition.sHotelName = this.sHotelName;
+        this.objUpdateHotelCondition.sHotelAddr = this.sHotelAddr;
+        this.objUpdateHotelCondition.sHotelTel = this.sHotelTel;
+        this.objUpdateHotelCondition.sLegalTel = this.sLegalTel;
+        this.objUpdateHotelCondition.sLegalPerson = this.sLegalPerson;
+        this.objUpdateHotelCondition.sLegalDocNo = this.sLegalDocNo;
+        this.objUpdateHotelCondition.nProvinceID = this.nProvinceID;
+        this.objUpdateHotelCondition.nCityID = this.nCityID;
+        this.objUpdateHotelCondition.nDistrictID = this.nDistrictID;
+        this.objUpdateHotelCondition.nHotelType = this.nHotelType;
+        this.objUpdateHotelCondition.sResponPersonTel = this.sResponPersonTel;
+        this.objUpdateHotelCondition.sResponPerson = this.sResponPerson;
+        this.objUpdateHotelCondition.nRoomCount = this.nRoomCount;
+        this.objUpdateHotelCondition.nBedCount = this.nBedCount;
+        this.objUpdateHotelCondition.sBusLicenseCode = this.sBusLicenseCode;
+        this.objUpdateHotelCondition.sBusLicenseName = this.sBusLicenseName;
+        this.objUpdateHotelCondition.sRemark = this.sRemark;
+        this.m_objApiService.fnUpdateHotel(this.objUpdateHotelCondition).subscribe(data => {
+            if (data.Code === 200) {
+                console.log(data)
+            }
+        })
+    }
+}

@@ -1,0 +1,10 @@
+import { PageInfo } from './pageInfo';
+
+
+export class SearchCondition<T> {
+    objCondition: T;
+    objPageInfo: PageInfo = new PageInfo();
+    constructor(objCondition) {
+        this.objCondition = new objCondition();
+    }
+}

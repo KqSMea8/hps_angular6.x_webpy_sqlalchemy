@@ -1,0 +1,10 @@
+import { Routes } from '@angular/router';
+import {HotelSearchComponent} from '../pages/main/hotel-management/hotel-search/hotel-search.component';
+import { GuestCheckinListPageComponent } from '../pages/main/guest-checkin-list-page/guest-checkin-list-page.component';
+
+export const appRoutes: Routes = [
+    { path: '', redirectTo: 'guestCheckinList', pathMatch: 'full' },
+    { path: 'guestCheckinList', component: GuestCheckinListPageComponent},
+    { path: 'HotelSearch', component: HotelSearchComponent}
+
+];

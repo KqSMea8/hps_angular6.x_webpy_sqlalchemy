@@ -1,0 +1,75 @@
+import { Routes } from '@angular/router';
+import { HotelSearchComponent } from '../pages/main/hotel-management/hotel-search/hotel-search.component';
+import { HotelAddComponent } from '../pages/main/hotel-management/hotel-add/hotel-add.component';
+import { LoginComponent } from '../pages/login/login.component';
+import { CheckinLogListComponent } from '../pages/main/search-checkin-list/checkin-log-list/checkin-log-list.component';
+import { AllGuestComponent } from '../pages/main/guest-checkin-list/all-guest/all-guest.component';
+import { ForeignGuestComponent } from '../pages/main/guest-checkin-list/foreign-guest/foreign-guest.component';
+import { CheckinListComponent } from '../pages/main/search-checkin-list/checkin-list/checkin-list.component';
+import { UserInfoComponent } from './../pages/main/system-management/user-info/user-info.component';
+
+
+export const appRoutes: Routes = [
+    {
+        path: '',
+        redirectTo: 'Login',
+        pathMatch: 'full'
+    },
+    {
+        path: 'Login',
+        component: LoginComponent
+    },
+    {
+        path: 'main',
+        children: [
+            {
+                path: 'GuestSearch',
+                children: [
+                    {
+                        path: '',
+                        redirectTo: 'allGuest',
+                        pathMatch: 'full'
+                    },
+                    {
+                        path: 'allGuest',
+                        component: AllGuestComponent
+                    },
+                    {
+                        path: 'foreignGuest',
+                        component: ForeignGuestComponent
+                    }
+                ]
+            },
+            {
+                path: 'HotelSearch',
+                component: HotelSearchComponent
+            },
+            {
+                path: 'CheckinLogList',
+                component: CheckinLogListComponent
+            },
+            {
+                path: 'HotelAdd',
+                component: HotelAddComponent
+            },
+            {
+                path: 'CheckinList',
+                component: CheckinListComponent
+            },
+            {
+                path: 'SystemManagement',
+                children: [
+                    {
+                        path: '',
+                        redirectTo: 'UserInfo',
+                        pathMatch: 'full'
+                    },
+                    {
+                        path: 'UserInfo',
+                        component: UserInfoComponent
+                    },
+                ]
+            }
+        ]
+    },
+];

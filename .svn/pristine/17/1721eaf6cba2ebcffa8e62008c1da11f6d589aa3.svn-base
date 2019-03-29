@@ -1,0 +1,55 @@
+.checkin-log-list {
+
+    overflow: hidden;
+    background: #eaf1f9;
+
+    .hotel-info {
+        background: #fff;
+        margin: @defaultPadding;
+        height: 360px;
+
+        h2 {
+            font-weight: bold !important;
+        }
+
+        .hotel-name {
+            margin: @defaultPadding;
+            padding: @defaultPadding;
+
+            border-bottom: 1px dashed #c3c3c3;
+        }
+
+        .data-list {
+            overflow: hidden;
+            display: flex;
+            padding: @defaultPadding;
+
+            li {
+                position: relative;
+                
+                width: 23%;
+                height: 164px;
+
+                .absolute {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+
+                img {
+                    .absolute;
+                    z-index: 0;
+
+                    width: 100%;
+                }
+
+                div{
+                    .absolute;
+                    z-index:1;
+                }
+            }
+        }
+    }
+
+}
+

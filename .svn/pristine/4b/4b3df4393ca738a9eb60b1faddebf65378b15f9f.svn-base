@@ -1,0 +1,26 @@
+@import 'styles.less';
+.parameter-config {
+    .title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    tbody {
+        a {
+            margin-right: 10px;
+        }
+    }
+
+    .type-name {
+        display: flex;
+        align-items: center;
+
+    }
+
+    .config-list {
+        overflow: auto;
+        height: 100%;
+        padding-bottom: @defaultPadding;
+    }
+}

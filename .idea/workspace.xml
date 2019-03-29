@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e8580259-8212-4cd5-bb87-727f3da706eb" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/hps$main.coverage" NAME="main Coverage Results" MODIFIED="1553485198720" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="hps" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1824">
+              <caret line="96" selection-start-line="96" selection-end-line="96" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/models/hps/h_checkin.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="38">
+              <caret line="2" column="65" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="65" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/api/Hotel/SearchHotelCheckinList.py.mine">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="171">
+              <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>fnGetCerImgList</find>
+      <find>fnReset</find>
+      <find>m_objHotelListCondition</find>
+      <find>查询</find>
+      <find>m_objAllGuestCondition</find>
+      <find>btn-reset</find>
+      <find>重置</find>
+      <find>fnGoBack</find>
+      <find>返回</find>
+      <find>add-t</find>
+      <find>add</find>
+      <find>fnAdd</find>
+      <find>sRegStartTime</find>
+      <find>取消</find>
+      <find>Ver</find>
+      <find>Router</find>
+      <find>m_objRouter</find>
+      <find>StateName</find>
+      <find>Stat</find>
+      <find>编辑</find>
+      <find>状态</find>
+      <find>m_listHotelLists</find>
+      <find>登记</find>
+      <find>Verify</find>
+      <find>审核</find>
+      <find>show</find>
+      <find>getImgUrl</find>
+      <find>changeImgUrl</find>
+      <find>192.</find>
+      <find>create_engine</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>//</replace>
+      <replace>;</replace>
+      <replace>; //</replace>
+      <replace>]=&quot;this.</replace>
+      <replace>]=&quot;this.objAddHotelCondition</replace>
+      <replace>]=&quot;this.objAddHotelCondition.</replace>
+      <replace>objAddHotelCondition</replace>
+      <replace>)]=&quot;this.objAddHotelCondition.</replace>
+      <replace>this.m_objHotelListCondition.objCondition.</replace>
+      <replace>)]=&quot;this.m_objHotelListCondition.objCondition.</replace>
+      <replace>this.objAddHotelCondition.</replace>
+      <replace>'</replace>
+      <replace>fff</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>F:\hps\web_front\e2e</dir>
+      <dir>F:\hps</dir>
+    </dirStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/web_front/src/app/app.module.ts" />
+        <option value="$PROJECT_DIR$/src/api/Hotel/SearchHotelCheckinList.py" />
+        <option value="$PROJECT_DIR$/web_front/src/app/components/header/header.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/class/offlineHotelCondition.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/class/verifyHotelCondition.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/class/updateHotelCondition.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/guest-checkin-list/all-guest/all-guest.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/class/searchHotelListCondition.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/class/searchHotelList.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/class/addHotelCondition.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/components/sidebar/sidebar.component.html" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-offline/hotel-offline.component.less" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-verify/hotel-verify.component.less" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-offline/hotel-offline.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/services/tools.service.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/search-checkin-list/checkin-list/checkin-list.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/system-management/parameter-config/parameter-config.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/search-checkin-list/checkin-log-list/checkin-log-list.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-offline/hotel-offline.component.html" />
+        <option value="$PROJECT_DIR$/web_front/src/app/components/home/home.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/services/checkin.service.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/components/upload/upload.component.less" />
+        <option value="$PROJECT_DIR$/web_front/src/app/components/upload/upload.component.html" />
+        <option value="$PROJECT_DIR$/web_front/src/app/class/uploadImg.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/services/http.service.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/components/upload/upload.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/class/SaveImgPath.ts" />
+        <option value="$PROJECT_DIR$/src/static/styles.3070d00d4e776490ddb5.css" />
+        <option value="$PROJECT_DIR$/src/templates/styles.3070d00d4e776490ddb5.css" />
+        <option value="$PROJECT_DIR$/web_front/dist/HPS/styles.69e7724cfca23e41f2b9.css" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/system-management/log/log.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/environments/environment.prod.ts" />
+        <option value="$PROJECT_DIR$/web_front/node_modules/ng-zorro-antd/date-picker/style/Picker.less" />
+        <option value="$PROJECT_DIR$/web_front/src/app/services/context.service.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/services/api.service.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/styles/theme.less" />
+        <option value="$PROJECT_DIR$/web_front/node_modules/ng-zorro-antd/upload/style/index.less" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/login/login.component.html" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/login/login.component.less" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-search/hotel-search.component.html" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-search/hotel-search.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-search/hotel-search.component.less" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-verify/hotel-verify.component.html" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-add/hotel-add.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-add/hotel-add.component.html" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-verify/hotel-verify.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/routes/appRoutes.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-add/hotel-add.component.less" />
+        <option value="$PROJECT_DIR$/web_front/src/environments/environment.ts" />
+        <option value="$PROJECT_DIR$/web_front/src/app/components/guest-details/guest-details.component.ts" />
+        <option value="$PROJECT_DIR$/web_front/package.json" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="122" />
+    <option name="y" value="46" />
+    <option name="width" value="1366" />
+    <option name="height" value="675" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="hps" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hps" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hps" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hps" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hps" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hps" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hps" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hps" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
+              <item name="Hotel" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hps" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hps" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hps" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hps" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
+              <item name="orm" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hps" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hps" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hps" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hps" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
+              <item name="hps" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hps" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hps" type="462c0819:PsiDirectoryNode" />
+              <item name="web_front" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="ts.external.directory.path" value="F:\hps\web_front\node_modules\typescript\lib" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="hps" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Python27\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration" cleanupOnStartRun="true">
+    <configuration>C:\Users\Administrator\AppData\Roaming\Subversion</configuration>
+    <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e8580259-8212-4cd5-bb87-727f3da706eb" name="Default Changelist" comment="" />
+      <created>1546565705378</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1546565705378</updated>
+      <workItem from="1553560240116" duration="2407000" />
+      <workItem from="1553568754775" duration="599000" />
+      <workItem from="1553571381917" duration="280000" />
+      <workItem from="1553579005479" duration="598000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="3884000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1382" height="750" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49919486" visible="true" weight="0.28366113" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" sideWeight="0.50080514" side_tool="true" weight="0.2193646" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32850242" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3273906" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4019449" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49924356" weight="0.32850242" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50075644" side_tool="true" visible="true" weight="0.09223301" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.32850242" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
+      <window_info anchor="bottom" id="TypeScript" order="13" weight="0.32850242" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="Database" order="4" weight="0.32980332" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2065053" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32850242" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32850242" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49924356" weight="0.32901135" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50075644" side_tool="true" weight="0.10696921" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.32850242" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
+      <window_info anchor="bottom" id="TypeScript" order="13" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="Database" order="4" weight="0.32980332" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/web_front/node_modules/ng-zorro-antd/upload/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/node_modules/ng-zorro-antd/upload/interface.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1167" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/theme.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="97" selection-start-line="24" selection-start-column="52" selection-end-line="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/node_modules/ng-zorro-antd/time-picker/style/index.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1056" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/styles/theme.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="25" lean-forward="true" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/node_modules/ng-zorro-antd/ng-zorro-antd.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="1" column="21" lean-forward="true" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/node_modules/ng-zorro-antd/select/style/index.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="1" column="27" selection-start-line="1" selection-start-column="27" selection-end-line="1" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/node_modules/ng-zorro-antd/components.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="814">
+          <caret line="37" column="28" selection-start-line="37" selection-start-column="28" selection-end-line="37" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/node_modules/ng-zorro-antd/upload/style/index.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="321" column="27" selection-start-line="321" selection-start-column="27" selection-end-line="322" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/login/login.component.html.mine" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/login/login.component.less.mine" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/login/login.component.html" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/login/login.component.less" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/guest-checkin-list/all-guest/all-guest.component.html" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/guest-checkin-list/all-guest/all-guest.component.ts" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/guest-checkin-list/all-guest/all-guest.component.less" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/guest-checkin-list/guest-details/guest-details.component.less" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/guest-checkin-list/guest-details/guest-details.component.html" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/guest-checkin-list/guest-details/guest-details.component.ts" />
+    <entry file="file://$PROJECT_DIR$/src/api/User/SearchLogList.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2265">
+          <caret line="117" column="23" lean-forward="true" selection-start-line="117" selection-start-column="23" selection-end-line="117" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/Hotel/SearchHotelCheckinList.py.r377">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/node_modules/@angular/router/src/router.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="150" column="21" selection-start-line="150" selection-start-column="21" selection-end-line="150" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-search/hotel-search.component.html" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-search/hotel-search.component.ts" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-search/hotel-search.component.less" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-verify/hotel-verify.component.html" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-add/hotel-add.component.html" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-add/hotel-add.component.less" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-verify/hotel-verify.component.ts" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/pages/main/hotel-management/hotel-add/hotel-add.component.ts" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/environments/environment.ts.mine" />
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/components/guest-details/guest-details.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1900">
+          <caret line="112" column="22" selection-start-line="112" selection-start-column="22" selection-end-line="112" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/class/checkinInfo.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="35" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/components/hotel-add/hotel-add.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9937">
+          <caret line="542" column="51" selection-start-line="542" selection-start-column="33" selection-end-line="542" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/components/hotel-add/hotel-add.component.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/class/AllGuestCheckinDetailsResult.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/environments/environment.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="6" column="40" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/app.component.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/services/http.service.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/tsconfig.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/services/api.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-55">
+          <caret line="255" lean-forward="true" selection-start-line="255" selection-end-line="255" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="19" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/components/all-guest/all-guest.component.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_front/src/app/routes/appRoutes.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3610">
+          <caret line="215" column="13" selection-start-line="215" selection-start-column="13" selection-end-line="215" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/libs/orm/dbcontext.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1092">
+          <caret line="133" column="51" selection-start-line="133" selection-start-column="51" selection-end-line="133" selection-end-column="51" />
+          <folding>
+            <element signature="e#17#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/models/hps/s_city.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-200">
+          <caret line="20" column="17" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
+          <folding>
+            <element signature="e#16#44#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/Hotel/AddHotel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+          <folding>
+            <element signature="e#17#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/libs/orm/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1824">
+          <caret line="96" selection-start-line="96" selection-end-line="96" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/Hotel/SearchHotelCheckinList.py.mine">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/models/hps/h_checkin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="65" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
